@@ -191,14 +191,12 @@ def build_staruml_project():
         "_type": "Project",
         "_id": proj_id,
         "name": "DisasterOS_UML_Architecture",
-        "defaultDiagram": { "$ref": uc_diag_id },
         "ownedElements": [
             {
                 "_type": "UMLModel",
                 "_id": model_id,
                 "_parent": { "$ref": proj_id },
                 "name": "DisasterOS Engineering Models (BCSE301L)",
-                "defaultDiagram": { "$ref": uc_diag_id },
                 "ownedElements": [
                     # 1. USE CASE DIAGRAM & ELEMENTS
                     {
@@ -231,16 +229,7 @@ def build_staruml_project():
                         "ownedViews": []
                     },
 
-                    # 3. SEQUENCE DIAGRAM
-                    {
-                        "_type": "UMLSequenceDiagram",
-                        "_id": seq_diag_id,
-                        "_parent": { "$ref": model_id },
-                        "name": "DisasterOS - UML Sequence Diagram (Incident to Dispatch)",
-                        "ownedViews": []
-                    },
-
-                    # Sequence Collaboration & Interaction Model
+                    # 3. SEQUENCE DIAGRAM COLLABORATION
                     {
                         "_type": "UMLCollaboration",
                         "_id": collab_id,
@@ -252,7 +241,15 @@ def build_staruml_project():
                                 "_id": interaction_id,
                                 "_parent": { "$ref": collab_id },
                                 "name": "IncidentReportAndAutomatedDispatchFlow",
-                                "ownedElements": [],
+                                "ownedElements": [
+                                    {
+                                        "_type": "UMLSequenceDiagram",
+                                        "_id": seq_diag_id,
+                                        "_parent": { "$ref": interaction_id },
+                                        "name": "DisasterOS - UML Sequence Diagram (Incident to Dispatch)",
+                                        "ownedViews": []
+                                    }
+                                ],
                                 "participants": [],
                                 "messages": []
                             }
@@ -267,8 +264,8 @@ def build_staruml_project():
     uml_model = project["ownedElements"][0]
     uc_diag = uml_model["ownedElements"][0]
     comp_diag = uml_model["ownedElements"][1]
-    seq_diag = uml_model["ownedElements"][2]
-    interaction = uml_model["ownedElements"][3]["ownedElements"][0]
+    interaction = uml_model["ownedElements"][2]["ownedElements"][0]
+    seq_diag = interaction["ownedElements"][0]
 
     # --- Populate Use Case Diagram ---
     for a in actors:
@@ -500,9 +497,7 @@ if __name__ == "__main__":
     uc_proj = json.loads(json.dumps(proj))
     uc_proj["name"] = "DisasterOS_UseCase_Model"
     uc_model = uc_proj["ownedElements"][0]
-    uc_diag_ref = uc_model["ownedElements"][0]["_id"]
-    uc_proj["defaultDiagram"] = { "$ref": uc_diag_ref }
-    uc_model["defaultDiagram"] = { "$ref": uc_diag_ref }
+    # keep only use case diagram and its elements
     uc_model["ownedElements"] = [e for e in uc_model["ownedElements"] if e["_type"] in ["UMLUseCaseDiagram", "UMLActor", "UMLUseCase", "UMLAssociation"]]
     with open(r"C:\Users\SAMEER\.gemini\antigravity\scratch\disasteros\uml\DisasterOS_UseCase.mdj", "w", encoding="utf-8") as f:
         json.dump(uc_proj, f, indent=2)
@@ -511,9 +506,6 @@ if __name__ == "__main__":
     comp_proj = json.loads(json.dumps(proj))
     comp_proj["name"] = "DisasterOS_Component_Model"
     comp_model = comp_proj["ownedElements"][0]
-    comp_diag_ref = [e["_id"] for e in comp_model["ownedElements"] if e["_type"] == "UMLComponentDiagram"][0]
-    comp_proj["defaultDiagram"] = { "$ref": comp_diag_ref }
-    comp_model["defaultDiagram"] = { "$ref": comp_diag_ref }
     comp_model["ownedElements"] = [e for e in comp_model["ownedElements"] if e["_type"] in ["UMLComponentDiagram", "UMLComponent", "UMLDependency"]]
     with open(r"C:\Users\SAMEER\.gemini\antigravity\scratch\disasteros\uml\DisasterOS_Component.mdj", "w", encoding="utf-8") as f:
         json.dump(comp_proj, f, indent=2)
@@ -522,10 +514,7 @@ if __name__ == "__main__":
     seq_proj = json.loads(json.dumps(proj))
     seq_proj["name"] = "DisasterOS_Sequence_Model"
     seq_model = seq_proj["ownedElements"][0]
-    seq_diag_ref = [e["_id"] for e in seq_model["ownedElements"] if e["_type"] == "UMLSequenceDiagram"][0]
-    seq_proj["defaultDiagram"] = { "$ref": seq_diag_ref }
-    seq_model["defaultDiagram"] = { "$ref": seq_diag_ref }
-    seq_model["ownedElements"] = [e for e in seq_model["ownedElements"] if e["_type"] in ["UMLSequenceDiagram", "UMLCollaboration"]]
+    seq_model["ownedElements"] = [e for e in seq_model["ownedElements"] if e["_type"] in ["UMLCollaboration"]]
     with open(r"C:\Users\SAMEER\.gemini\antigravity\scratch\disasteros\uml\DisasterOS_Sequence.mdj", "w", encoding="utf-8") as f:
         json.dump(seq_proj, f, indent=2)
 
