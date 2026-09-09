@@ -1,0 +1,172 @@
+<!-- DisasterOS Application Shell: Complete command center interface integrating Leaflet GIS and multi-role dashboards. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisasterOS | Smart Disaster Early Warning & Response System</title>
+    
+    <!-- Leaflet CSS for GIS Mapping -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    
+    <!-- Application Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ================= LOGIN MODAL ================= -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <div class="login-logo">
+                <div class="logo-icon">⚡</div>
+                <h1>DisasterOS</h1>
+                <p>Smart Disaster Early Warning, Response & Relief Management</p>
+            </div>
+
+            <div class="form-group">
+                <label>Operator Name</label>
+                <input class="form-control" id="loginUser" value="Shaik Sameer">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input class="form-control" id="loginPassword" type="password" value="admin123">
+            </div>
+
+            <div class="form-group">
+                <label>Select Role</label>
+                <select class="form-control" id="loginRole">
+                    <option value="Disaster Manager">Disaster Manager (Emergency Command)</option>
+                    <option value="System Administrator">System Administrator</option>
+                    <option value="Emergency Responder">Emergency Responder (Field Operations)</option>
+                    <option value="Hospital Coordinator">Hospital Coordinator</option>
+                    <option value="Citizen">Citizen (Public Access)</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary login-btn" onclick="app.login()">
+                Sign In to Command Center
+            </button>
+
+            <div class="demo-note">
+                BCSE301L Software Engineering Project • Review 1 Verified Architecture
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MAIN APP ================= -->
+    <div class="app" id="application" style="display:none;">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                <div>
+                    <h1>DisasterOS</h1>
+                    <span>Early Warning Platform</span>
+                </div>
+            </div>
+
+            <div class="nav">
+                <div class="nav-section">COMMAND INTELLIGENCE</div>
+                <button class="nav-item active" onclick="app.navigate('dashboard', this)">
+                    <span class="nav-icon">▦</span> Command Dashboard
+                </button>
+                <button class="nav-item" onclick="app.navigate('risk-map', this)">
+                    <span class="nav-icon">⌖</span> Live GIS Risk Map
+                </button>
+                <button class="nav-item" onclick="app.navigate('early-warning', this)">
+                    <span class="nav-icon">⚠</span> Early Warning Feeds
+                    <span class="nav-badge" id="alertBadge">LIVE</span>
+                </button>
+                <button class="nav-item" onclick="app.navigate('decision-support', this)">
+                    <span class="nav-icon">◆</span> Decision Engine
+                </button>
+
+                <div class="nav-section">EMERGENCY OPERATIONS</div>
+                <button class="nav-item" onclick="app.navigate('incidents', this)">
+                    <span class="nav-icon">◉</span> Incidents Lifecycle
+                </button>
+                <button class="nav-item" onclick="app.navigate('emergency', this)">
+                    <span class="nav-icon">🚨</span> Help Requests
+                </button>
+                <button class="nav-item" onclick="app.navigate('dispatch', this)">
+                    <span class="nav-icon">🚑</span> Team Dispatch
+                </button>
+                <button class="nav-item" onclick="app.navigate('evacuation', this)">
+                    <span class="nav-icon">⇢</span> Evacuation Plan
+                </button>
+
+                <div class="nav-section">RESOURCES & RELIEF</div>
+                <button class="nav-item" onclick="app.navigate('shelters', this)">
+                    <span class="nav-icon">⌂</span> Shelters
+                </button>
+                <button class="nav-item" onclick="app.navigate('hospitals', this)">
+                    <span class="nav-icon">✚</span> Hospitals
+                </button>
+                <button class="nav-item" onclick="app.navigate('inventory', this)">
+                    <span class="nav-icon">▤</span> Warehouses & Relief
+                </button>
+
+                <div class="nav-section">CITIZEN PORTAL</div>
+                <button class="nav-item" onclick="app.navigate('citizen-report', this)">
+                    <span class="nav-icon">📷</span> Report Incident (GPS)
+                </button>
+
+                <div class="nav-section">SYSTEM GOVERNANCE</div>
+                <button class="nav-item" onclick="app.navigate('architecture', this)">
+                    <span class="nav-icon">◇</span> System Architecture
+                </button>
+                <button class="nav-item" onclick="app.navigate('audit', this)">
+                    <span class="nav-icon">▣</span> Audit Trails
+                </button>
+                <button class="nav-item" onclick="app.logout()">
+                    <span class="nav-icon">⇥</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN VIEWPORT -->
+        <main class="main">
+            <header class="topbar">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <button class="icon-btn mobile-menu" onclick="app.toggleSidebar()">☰</button>
+                    <div>
+                        <div class="page-title" id="pageTitle">Command Dashboard</div>
+                        <div class="page-subtitle" id="pageSubtitle">Real-time disaster telemetry and response coordination</div>
+                    </div>
+                </div>
+
+                <div class="top-actions">
+                    <button class="btn btn-primary" onclick="app.triggerLiveSync()">
+                        🔄 Sync Live Feeds
+                    </button>
+                    <div class="profile">
+                        <div class="avatar" id="avatar">SS</div>
+                        <div>
+                            <div style="font-size:11px;font-weight:bold;" id="profileName">Shaik Sameer</div>
+                            <div class="muted" style="font-size:9px;" id="profileRole">Disaster Manager</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Content Container -->
+            <section class="content" id="content"></section>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Modular Application Logic -->
+    <script src="js/store.js"></script>
+    <script src="js/gateway.js"></script>
+    <script src="js/risk-engine.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
