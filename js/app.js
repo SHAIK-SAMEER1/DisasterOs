@@ -90,6 +90,32 @@ class DisasterOSApp {
         }
     }
 
+    changeRegion(regionKey) {
+        const regions = {
+            chennai: { name: "Chennai", lat: 13.0827, lon: 80.2707 },
+            mumbai: { name: "Mumbai", lat: 19.0760, lon: 72.8777 },
+            kolkata: { name: "Kolkata", lat: 22.5726, lon: 88.3639 },
+            delhi: { name: "Delhi NCR", lat: 28.6139, lon: 77.2090 },
+            tokyo: { name: "Tokyo", lat: 35.6762, lon: 139.6503 }
+        };
+
+        const target = regions[regionKey] || regions.chennai;
+        this.currentRegion = target;
+
+        // Pan GIS map if open
+        if (window.gisMap && window.gisMap.map) {
+            window.gisMap.map.setView([target.lat, target.lon], 12);
+        }
+
+        // Update default zone coordinates to selected city
+        window.store.data.zones[0].lat = target.lat + 0.02;
+        window.store.data.zones[0].lon = target.lon - 0.02;
+        window.store.data.zones[0].name = `${target.name} North Zone`;
+
+        this.toast(`Panned to ${target.name}. Fetching live Open-Meteo & USGS telemetry...`);
+        this.syncLiveTelemetry();
+    }
+
     async syncLiveTelemetry() {
         const zones = window.store.data.zones;
         const shelterMap = {};

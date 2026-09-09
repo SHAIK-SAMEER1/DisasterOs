@@ -182,6 +182,13 @@
                 </div>
 
                 <div class="top-actions">
+                    <select class="form-control" id="regionSelector" style="width:160px;font-size:11px;padding:7px 10px;" onchange="app.changeRegion(this.value)">
+                        <option value="chennai">📍 Chennai (HQ)</option>
+                        <option value="mumbai">📍 Mumbai</option>
+                        <option value="kolkata">📍 Kolkata</option>
+                        <option value="delhi">📍 Delhi NCR</option>
+                        <option value="tokyo">📍 Tokyo (Seismic)</option>
+                    </select>
                     <input class="search" id="globalSearch" placeholder="Search incidents, shelters..." onkeyup="app.globalSearch()">
                     <button class="btn btn-primary" onclick="app.triggerLiveSync()">
                         🔄 Sync Live Feeds
