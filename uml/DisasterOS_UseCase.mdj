@@ -1,0 +1,1624 @@
+{
+  "_type": "Project",
+  "_id": "AAAAAAF0c7ad62380794104a",
+  "name": "DisasterOS_UseCase_Model",
+  "ownedElements": [
+    {
+      "_type": "UMLModel",
+      "_id": "AAAAAAFc9a708508a1f4e10b",
+      "_parent": {
+        "$ref": "AAAAAAF0c7ad62380794104a"
+      },
+      "name": "DisasterOS Engineering Models (BCSE301L)",
+      "ownedElements": [
+        {
+          "_type": "UMLUseCaseDiagram",
+          "_id": "AAAAAAFa4dfd441af2a4d2e8",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "DisasterOS - UML Use Case Diagram",
+          "ownedViews": [
+            {
+              "_type": "UMLTextView",
+              "_id": "AAAAAAF3a3283cc29d44140b",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "font": "Arial;14;1",
+              "left": 250,
+              "top": 50,
+              "width": 680,
+              "height": 680,
+              "text": "System Boundary: DisasterOS Command Platform"
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "AAAAAAFcdc120fc0311475b9",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF70dd9e0066c94eb38"
+              },
+              "font": "Arial;12;0",
+              "left": 60,
+              "top": 140,
+              "width": 60,
+              "height": 75,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF1ba321240ddf4cf59",
+                "_parent": {
+                  "$ref": "AAAAAAFcdc120fc0311475b9"
+                },
+                "model": {
+                  "$ref": "AAAAAAF70dd9e0066c94eb38"
+                },
+                "font": "Arial;12;1",
+                "left": 40,
+                "top": 220,
+                "width": 100,
+                "height": 13,
+                "text": "Citizen"
+              }
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "AAAAAAF615e8ce652de4ba0a",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF9ae69301836b4551b"
+              },
+              "font": "Arial;12;0",
+              "left": 60,
+              "top": 380,
+              "width": 60,
+              "height": 75,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAFc7c5cba91bce47338",
+                "_parent": {
+                  "$ref": "AAAAAAF615e8ce652de4ba0a"
+                },
+                "model": {
+                  "$ref": "AAAAAAF9ae69301836b4551b"
+                },
+                "font": "Arial;12;1",
+                "left": 40,
+                "top": 460,
+                "width": 100,
+                "height": 13,
+                "text": "Emergency Responder"
+              }
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "AAAAAAFacc72580c11541839",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF95624b157d5a4ed18"
+              },
+              "font": "Arial;12;0",
+              "left": 980,
+              "top": 140,
+              "width": 60,
+              "height": 75,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF0ad5df8ed2d94ec2b",
+                "_parent": {
+                  "$ref": "AAAAAAFacc72580c11541839"
+                },
+                "model": {
+                  "$ref": "AAAAAAF95624b157d5a4ed18"
+                },
+                "font": "Arial;12;1",
+                "left": 960,
+                "top": 220,
+                "width": 100,
+                "height": 13,
+                "text": "Disaster Manager"
+              }
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "AAAAAAF7215b07e995d48fb9",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFc45419dc34124ceca"
+              },
+              "font": "Arial;12;0",
+              "left": 980,
+              "top": 380,
+              "width": 60,
+              "height": 75,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF075f1337291a47a98",
+                "_parent": {
+                  "$ref": "AAAAAAF7215b07e995d48fb9"
+                },
+                "model": {
+                  "$ref": "AAAAAAFc45419dc34124ceca"
+                },
+                "font": "Arial;12;1",
+                "left": 960,
+                "top": 460,
+                "width": 100,
+                "height": 13,
+                "text": "Hospital Coordinator"
+              }
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "AAAAAAF75ecc63f1f704b349",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF38c2916df1c44ef28"
+              },
+              "font": "Arial;12;0",
+              "left": 980,
+              "top": 580,
+              "width": 60,
+              "height": 75,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAFebcfb963ec864d13a",
+                "_parent": {
+                  "$ref": "AAAAAAF75ecc63f1f704b349"
+                },
+                "model": {
+                  "$ref": "AAAAAAF38c2916df1c44ef28"
+                },
+                "font": "Arial;12;1",
+                "left": 960,
+                "top": 660,
+                "width": 100,
+                "height": 13,
+                "text": "External Weather & Seismic Feeds"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF8de686a8f7a4447db",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFd48ec727cbf240509"
+              },
+              "font": "Arial;12;0",
+              "left": 280,
+              "top": 100,
+              "width": 220,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF94195339db974cab8",
+                "_parent": {
+                  "$ref": "AAAAAAF8de686a8f7a4447db"
+                },
+                "model": {
+                  "$ref": "AAAAAAFd48ec727cbf240509"
+                },
+                "font": "Arial;12;0",
+                "left": 295,
+                "top": 118,
+                "width": 190,
+                "height": 13,
+                "text": "Report Incident with GPS"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAFf3dc052a7b1a4fa8a",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF49212fdfe7474fc08"
+              },
+              "font": "Arial;12;0",
+              "left": 280,
+              "top": 170,
+              "width": 220,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAFc7c2240115894d12a",
+                "_parent": {
+                  "$ref": "AAAAAAFf3dc052a7b1a4fa8a"
+                },
+                "model": {
+                  "$ref": "AAAAAAF49212fdfe7474fc08"
+                },
+                "font": "Arial;12;0",
+                "left": 295,
+                "top": 188,
+                "width": 190,
+                "height": 13,
+                "text": "Request Emergency Help"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF22ce429d74234c9fa",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFbb836b9c409143f79"
+              },
+              "font": "Arial;12;0",
+              "left": 280,
+              "top": 240,
+              "width": 220,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF22010ca549524e8ea",
+                "_parent": {
+                  "$ref": "AAAAAAF22ce429d74234c9fa"
+                },
+                "model": {
+                  "$ref": "AAAAAAFbb836b9c409143f79"
+                },
+                "font": "Arial;12;0",
+                "left": 295,
+                "top": 258,
+                "width": 190,
+                "height": 13,
+                "text": "View Dynamic GIS Risk Map"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAFe7cc53dbaae04dda9",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFc976e89890ab4d9d8"
+              },
+              "font": "Arial;12;0",
+              "left": 280,
+              "top": 310,
+              "width": 220,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAFe7c29e31b8a44031a",
+                "_parent": {
+                  "$ref": "AAAAAAFe7cc53dbaae04dda9"
+                },
+                "model": {
+                  "$ref": "AAAAAAFc976e89890ab4d9d8"
+                },
+                "font": "Arial;12;0",
+                "left": 295,
+                "top": 328,
+                "width": 190,
+                "height": 13,
+                "text": "Receive Early Warning Alerts"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF3b28ad1e19cd4cefa",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF5f47268a58434c7b8"
+              },
+              "font": "Arial;12;0",
+              "left": 280,
+              "top": 380,
+              "width": 220,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF8fd2cac1bb1e43f2a",
+                "_parent": {
+                  "$ref": "AAAAAAF3b28ad1e19cd4cefa"
+                },
+                "model": {
+                  "$ref": "AAAAAAF5f47268a58434c7b8"
+                },
+                "font": "Arial;12;0",
+                "left": 295,
+                "top": 398,
+                "width": 190,
+                "height": 13,
+                "text": "Accept Rescue Dispatch"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF6802d0468d0c4958a",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF99febffda41a4ccd8"
+              },
+              "font": "Arial;12;0",
+              "left": 280,
+              "top": 450,
+              "width": 220,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF7608f3aadb3c415fb",
+                "_parent": {
+                  "$ref": "AAAAAAF6802d0468d0c4958a"
+                },
+                "model": {
+                  "$ref": "AAAAAAF99febffda41a4ccd8"
+                },
+                "font": "Arial;12;0",
+                "left": 295,
+                "top": 468,
+                "width": 190,
+                "height": 13,
+                "text": "Update Incident Lifecycle State"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF419497236e274669b",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFabf3b6453c6c42589"
+              },
+              "font": "Arial;12;0",
+              "left": 280,
+              "top": 520,
+              "width": 220,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF09562f773b2d4a2eb",
+                "_parent": {
+                  "$ref": "AAAAAAF419497236e274669b"
+                },
+                "model": {
+                  "$ref": "AAAAAAFabf3b6453c6c42589"
+                },
+                "font": "Arial;12;0",
+                "left": 295,
+                "top": 538,
+                "width": 190,
+                "height": 13,
+                "text": "Access Turn-by-Turn Evac Route"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF13ed5c293b994091b",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF347abd85f54345ada"
+              },
+              "font": "Arial;12;0",
+              "left": 650,
+              "top": 100,
+              "width": 240,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF95f636d018b142e99",
+                "_parent": {
+                  "$ref": "AAAAAAF13ed5c293b994091b"
+                },
+                "model": {
+                  "$ref": "AAAAAAF347abd85f54345ada"
+                },
+                "font": "Arial;12;0",
+                "left": 665,
+                "top": 118,
+                "width": 210,
+                "height": 13,
+                "text": "Configure Risk Rules & Thresholds"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAFc4ad56f174f84f368",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF0dd60d65404c4c4f8"
+              },
+              "font": "Arial;12;0",
+              "left": 650,
+              "top": 170,
+              "width": 240,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF73c4ac4617ea4affb",
+                "_parent": {
+                  "$ref": "AAAAAAFc4ad56f174f84f368"
+                },
+                "model": {
+                  "$ref": "AAAAAAF0dd60d65404c4c4f8"
+                },
+                "font": "Arial;12;0",
+                "left": 665,
+                "top": 188,
+                "width": 210,
+                "height": 13,
+                "text": "Monitor Composite R_zone Scores"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF674ba963ce7645a2a",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF51cd2066217145418"
+              },
+              "font": "Arial;12;0",
+              "left": 650,
+              "top": 240,
+              "width": 240,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF4def4f00435747a98",
+                "_parent": {
+                  "$ref": "AAAAAAF674ba963ce7645a2a"
+                },
+                "model": {
+                  "$ref": "AAAAAAF51cd2066217145418"
+                },
+                "font": "Arial;12;0",
+                "left": 665,
+                "top": 258,
+                "width": 210,
+                "height": 13,
+                "text": "Execute Automated SOP Workflows"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF2a3f8f5404764a3ba",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFe7f24697ebc44a459"
+              },
+              "font": "Arial;12;0",
+              "left": 650,
+              "top": 310,
+              "width": 240,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF99db693b03914576a",
+                "_parent": {
+                  "$ref": "AAAAAAF2a3f8f5404764a3ba"
+                },
+                "model": {
+                  "$ref": "AAAAAAFe7f24697ebc44a459"
+                },
+                "font": "Arial;12;0",
+                "left": 665,
+                "top": 328,
+                "width": 210,
+                "height": 13,
+                "text": "Authorize Evacuation Orders"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAFa703044f6df84c608",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF3d96257b02e74de1b"
+              },
+              "font": "Arial;12;0",
+              "left": 650,
+              "top": 380,
+              "width": 240,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF626090d395a84f868",
+                "_parent": {
+                  "$ref": "AAAAAAFa703044f6df84c608"
+                },
+                "model": {
+                  "$ref": "AAAAAAF3d96257b02e74de1b"
+                },
+                "font": "Arial;12;0",
+                "left": 665,
+                "top": 398,
+                "width": 210,
+                "height": 13,
+                "text": "Manage Shelter Headroom & Stock"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF88262afe9ca440ea8",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFb8074b447264416cb"
+              },
+              "font": "Arial;12;0",
+              "left": 650,
+              "top": 450,
+              "width": 240,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAFc9c2d4e668d94e5f8",
+                "_parent": {
+                  "$ref": "AAAAAAF88262afe9ca440ea8"
+                },
+                "model": {
+                  "$ref": "AAAAAAFb8074b447264416cb"
+                },
+                "font": "Arial;12;0",
+                "left": 665,
+                "top": 468,
+                "width": 210,
+                "height": 13,
+                "text": "Inspect Audit Logs & Governance"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF2bd3ae0d8b6840da9",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF7af330b21c904c90b"
+              },
+              "font": "Arial;12;0",
+              "left": 650,
+              "top": 520,
+              "width": 240,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF8e1c50e3315545b39",
+                "_parent": {
+                  "$ref": "AAAAAAF2bd3ae0d8b6840da9"
+                },
+                "model": {
+                  "$ref": "AAAAAAF7af330b21c904c90b"
+                },
+                "font": "Arial;12;0",
+                "left": 665,
+                "top": 538,
+                "width": 210,
+                "height": 13,
+                "text": "Update Hospital Bed & ICU Capacity"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF285c176a91d042a69",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF7ca35f7920e2420eb"
+              },
+              "font": "Arial;12;0",
+              "left": 650,
+              "top": 590,
+              "width": 240,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAFc5c0085166d448859",
+                "_parent": {
+                  "$ref": "AAAAAAF285c176a91d042a69"
+                },
+                "model": {
+                  "$ref": "AAAAAAF7ca35f7920e2420eb"
+                },
+                "font": "Arial;12;0",
+                "left": 665,
+                "top": 608,
+                "width": 210,
+                "height": 13,
+                "text": "Coordinate Emergency Patient Transfer"
+              }
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "AAAAAAF42a4fcbba93c4cac9",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF64b7399d2cb04ada8"
+              },
+              "font": "Arial;12;0",
+              "left": 650,
+              "top": 660,
+              "width": 240,
+              "height": 50,
+              "nameLabel": {
+                "_type": "UMLNameCompartmentView",
+                "_id": "AAAAAAF52f462ff91644a1f9",
+                "_parent": {
+                  "$ref": "AAAAAAF42a4fcbba93c4cac9"
+                },
+                "model": {
+                  "$ref": "AAAAAAF64b7399d2cb04ada8"
+                },
+                "font": "Arial;12;0",
+                "left": 665,
+                "top": 678,
+                "width": 210,
+                "height": 13,
+                "text": "Ingest Real-Time Sensor Telemetry"
+              }
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAF1aa0fc54f20f4af7b",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF0cdb066f1c6c4a449"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF8de686a8f7a4447db"
+              },
+              "tail": {
+                "$ref": "AAAAAAFcdc120fc0311475b9"
+              },
+              "lineStyle": 1,
+              "points": "90,175;300,125"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAFc59407ff067842e3a",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFed92bb53d5ca4b6b9"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAFf3dc052a7b1a4fa8a"
+              },
+              "tail": {
+                "$ref": "AAAAAAFcdc120fc0311475b9"
+              },
+              "lineStyle": 1,
+              "points": "90,175;300,195"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAF8c1a6bd4b4674ee89",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF1c03d237828943bc9"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF22ce429d74234c9fa"
+              },
+              "tail": {
+                "$ref": "AAAAAAFcdc120fc0311475b9"
+              },
+              "lineStyle": 1,
+              "points": "90,175;300,265"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAFaf88e05cf2d34790b",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF4663069b18c942619"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF22ce429d74234c9fa"
+              },
+              "tail": {
+                "$ref": "AAAAAAF615e8ce652de4ba0a"
+              },
+              "lineStyle": 1,
+              "points": "90,415;300,265"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAF9d8edebf34f24fcca",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFd77f805dc8fb47ae9"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF22ce429d74234c9fa"
+              },
+              "tail": {
+                "$ref": "AAAAAAFacc72580c11541839"
+              },
+              "lineStyle": 1,
+              "points": "1010,175;300,265"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAF424d8c78fbed46dca",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFa0968182ab74481bb"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF22ce429d74234c9fa"
+              },
+              "tail": {
+                "$ref": "AAAAAAF7215b07e995d48fb9"
+              },
+              "lineStyle": 1,
+              "points": "1010,415;300,265"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAF82fed5404bdd46178",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF47145cd1721c45f29"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAFe7cc53dbaae04dda9"
+              },
+              "tail": {
+                "$ref": "AAAAAAFcdc120fc0311475b9"
+              },
+              "lineStyle": 1,
+              "points": "90,175;300,335"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAF0d95e0df0a8148d9b",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF1e50a36f2b4e42039"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF3b28ad1e19cd4cefa"
+              },
+              "tail": {
+                "$ref": "AAAAAAF615e8ce652de4ba0a"
+              },
+              "lineStyle": 1,
+              "points": "90,415;300,405"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAFfd98f1c9f5c8448ab",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF4d1567426a9242faa"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF6802d0468d0c4958a"
+              },
+              "tail": {
+                "$ref": "AAAAAAF615e8ce652de4ba0a"
+              },
+              "lineStyle": 1,
+              "points": "90,415;300,475"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAFf3895b11ae0744e39",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF1d8e32905cea435bb"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF419497236e274669b"
+              },
+              "tail": {
+                "$ref": "AAAAAAF615e8ce652de4ba0a"
+              },
+              "lineStyle": 1,
+              "points": "90,415;300,545"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAFc4dc435953474c478",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF64ac9c37e15240678"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF13ed5c293b994091b"
+              },
+              "tail": {
+                "$ref": "AAAAAAFacc72580c11541839"
+              },
+              "lineStyle": 1,
+              "points": "1010,175;670,125"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAFd6ea9f01c0dc4c7cb",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF8e18d5bd2301475ab"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAFc4ad56f174f84f368"
+              },
+              "tail": {
+                "$ref": "AAAAAAFacc72580c11541839"
+              },
+              "lineStyle": 1,
+              "points": "1010,175;670,195"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAF5b420fd665a94735b",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFb7953f0803764a1fa"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF674ba963ce7645a2a"
+              },
+              "tail": {
+                "$ref": "AAAAAAFacc72580c11541839"
+              },
+              "lineStyle": 1,
+              "points": "1010,175;670,265"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAFfdb4d7bf68334192b",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAFf223e184fc9540f2a"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF2a3f8f5404764a3ba"
+              },
+              "tail": {
+                "$ref": "AAAAAAFacc72580c11541839"
+              },
+              "lineStyle": 1,
+              "points": "1010,175;670,335"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAFf2888ce9479b4d05a",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF1cdc3aa57d8f45b59"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAFa703044f6df84c608"
+              },
+              "tail": {
+                "$ref": "AAAAAAFacc72580c11541839"
+              },
+              "lineStyle": 1,
+              "points": "1010,175;670,405"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAF5aaa580c6c6c4a458",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF01ea1e694851403fa"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF88262afe9ca440ea8"
+              },
+              "tail": {
+                "$ref": "AAAAAAFacc72580c11541839"
+              },
+              "lineStyle": 1,
+              "points": "1010,175;670,475"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAF71ddeeb58ff74d988",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF4524439502064517b"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF2bd3ae0d8b6840da9"
+              },
+              "tail": {
+                "$ref": "AAAAAAF7215b07e995d48fb9"
+              },
+              "lineStyle": 1,
+              "points": "1010,415;670,545"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAFc78255159cee4dbfb",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF2c1b1c64cfc5438bb"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF285c176a91d042a69"
+              },
+              "tail": {
+                "$ref": "AAAAAAF7215b07e995d48fb9"
+              },
+              "lineStyle": 1,
+              "points": "1010,415;670,615"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "AAAAAAF185e88b035724e8fb",
+              "_parent": {
+                "$ref": "AAAAAAFa4dfd441af2a4d2e8"
+              },
+              "model": {
+                "$ref": "AAAAAAF2dec1658c4f34f79a"
+              },
+              "font": "Arial;12;0",
+              "head": {
+                "$ref": "AAAAAAF42a4fcbba93c4cac9"
+              },
+              "tail": {
+                "$ref": "AAAAAAF75ecc63f1f704b349"
+              },
+              "lineStyle": 1,
+              "points": "1010,615;670,685"
+            }
+          ]
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "AAAAAAF70dd9e0066c94eb38",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Citizen",
+          "documentation": "Public user reporting incidents and requesting emergency help"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "AAAAAAF9ae69301836b4551b",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Emergency Responder",
+          "documentation": "Tactical rescue team in the field"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "AAAAAAF95624b157d5a4ed18",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Disaster Manager",
+          "documentation": "Incident commander managing overall response and SOPs"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "AAAAAAFc45419dc34124ceca",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Hospital Coordinator",
+          "documentation": "Medical triage and bed availability coordinator"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "AAAAAAF38c2916df1c44ef28",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "External Weather & Seismic Feeds",
+          "documentation": "Open-Meteo & USGS automated telemetry ingestion"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFd48ec727cbf240509",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Report Incident with GPS"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAF49212fdfe7474fc08",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Request Emergency Help"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFbb836b9c409143f79",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "View Dynamic GIS Risk Map"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFc976e89890ab4d9d8",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Receive Early Warning Alerts"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAF5f47268a58434c7b8",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Accept Rescue Dispatch"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAF99febffda41a4ccd8",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Update Incident Lifecycle State"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFabf3b6453c6c42589",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Access Turn-by-Turn Evac Route"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAF347abd85f54345ada",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Configure Risk Rules & Thresholds"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAF0dd60d65404c4c4f8",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Monitor Composite R_zone Scores"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAF51cd2066217145418",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Execute Automated SOP Workflows"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFe7f24697ebc44a459",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Authorize Evacuation Orders"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAF3d96257b02e74de1b",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Manage Shelter Headroom & Stock"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFb8074b447264416cb",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Inspect Audit Logs & Governance"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAF7af330b21c904c90b",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Update Hospital Bed & ICU Capacity"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAF7ca35f7920e2420eb",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Coordinate Emergency Patient Transfer"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAF64b7399d2cb04ada8",
+          "_parent": {
+            "$ref": "AAAAAAFc9a708508a1f4e10b"
+          },
+          "name": "Ingest Real-Time Sensor Telemetry"
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF0cdb066f1c6c4a449",
+          "_parent": {
+            "$ref": "AAAAAAF70dd9e0066c94eb38"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF99fb58f4957048059",
+            "reference": {
+              "$ref": "AAAAAAF70dd9e0066c94eb38"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF4d5bb75ff0704186a",
+            "reference": {
+              "$ref": "AAAAAAFd48ec727cbf240509"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFed92bb53d5ca4b6b9",
+          "_parent": {
+            "$ref": "AAAAAAF70dd9e0066c94eb38"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF77142d0b9d1d49d8b",
+            "reference": {
+              "$ref": "AAAAAAF70dd9e0066c94eb38"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF63944ce4efb84c59b",
+            "reference": {
+              "$ref": "AAAAAAF49212fdfe7474fc08"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF1c03d237828943bc9",
+          "_parent": {
+            "$ref": "AAAAAAF70dd9e0066c94eb38"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF1ad8141dc4e94ecb9",
+            "reference": {
+              "$ref": "AAAAAAF70dd9e0066c94eb38"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF6f8a6de28d6a43749",
+            "reference": {
+              "$ref": "AAAAAAFbb836b9c409143f79"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF4663069b18c942619",
+          "_parent": {
+            "$ref": "AAAAAAF9ae69301836b4551b"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF68b8121b063845faa",
+            "reference": {
+              "$ref": "AAAAAAF9ae69301836b4551b"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFdb7e9a0f6c944e758",
+            "reference": {
+              "$ref": "AAAAAAFbb836b9c409143f79"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFd77f805dc8fb47ae9",
+          "_parent": {
+            "$ref": "AAAAAAF95624b157d5a4ed18"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFb806762c2a764a4b8",
+            "reference": {
+              "$ref": "AAAAAAF95624b157d5a4ed18"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFe798355b9ba74767b",
+            "reference": {
+              "$ref": "AAAAAAFbb836b9c409143f79"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFa0968182ab74481bb",
+          "_parent": {
+            "$ref": "AAAAAAFc45419dc34124ceca"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFb1a0435663a8434c9",
+            "reference": {
+              "$ref": "AAAAAAFc45419dc34124ceca"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFd68f2de8d1ad4f32b",
+            "reference": {
+              "$ref": "AAAAAAFbb836b9c409143f79"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF47145cd1721c45f29",
+          "_parent": {
+            "$ref": "AAAAAAF70dd9e0066c94eb38"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF90648f7d3f844c93a",
+            "reference": {
+              "$ref": "AAAAAAF70dd9e0066c94eb38"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF6a91a1cc361c4e649",
+            "reference": {
+              "$ref": "AAAAAAFc976e89890ab4d9d8"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF1e50a36f2b4e42039",
+          "_parent": {
+            "$ref": "AAAAAAF9ae69301836b4551b"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFf0218dadcf414e36b",
+            "reference": {
+              "$ref": "AAAAAAF9ae69301836b4551b"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFbd9ba7a3dc6f45058",
+            "reference": {
+              "$ref": "AAAAAAF5f47268a58434c7b8"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF4d1567426a9242faa",
+          "_parent": {
+            "$ref": "AAAAAAF9ae69301836b4551b"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFa853c1ded52741cf9",
+            "reference": {
+              "$ref": "AAAAAAF9ae69301836b4551b"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF7568605230124038a",
+            "reference": {
+              "$ref": "AAAAAAF99febffda41a4ccd8"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF1d8e32905cea435bb",
+          "_parent": {
+            "$ref": "AAAAAAF9ae69301836b4551b"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF9a8fa22ed7b04c43b",
+            "reference": {
+              "$ref": "AAAAAAF9ae69301836b4551b"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFdfdcec651ede4381a",
+            "reference": {
+              "$ref": "AAAAAAFabf3b6453c6c42589"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF64ac9c37e15240678",
+          "_parent": {
+            "$ref": "AAAAAAF95624b157d5a4ed18"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFfd0abe8afe9744288",
+            "reference": {
+              "$ref": "AAAAAAF95624b157d5a4ed18"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFfd4a74cefd884f61a",
+            "reference": {
+              "$ref": "AAAAAAF347abd85f54345ada"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF8e18d5bd2301475ab",
+          "_parent": {
+            "$ref": "AAAAAAF95624b157d5a4ed18"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF4cab560a48434c5a8",
+            "reference": {
+              "$ref": "AAAAAAF95624b157d5a4ed18"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFa04e4df40b7745119",
+            "reference": {
+              "$ref": "AAAAAAF0dd60d65404c4c4f8"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFb7953f0803764a1fa",
+          "_parent": {
+            "$ref": "AAAAAAF95624b157d5a4ed18"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFe603068ac5dc4b7ba",
+            "reference": {
+              "$ref": "AAAAAAF95624b157d5a4ed18"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF532889094fa342fa8",
+            "reference": {
+              "$ref": "AAAAAAF51cd2066217145418"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFf223e184fc9540f2a",
+          "_parent": {
+            "$ref": "AAAAAAF95624b157d5a4ed18"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFe4a5e593e2094263b",
+            "reference": {
+              "$ref": "AAAAAAF95624b157d5a4ed18"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF3b8474e78d6d4173a",
+            "reference": {
+              "$ref": "AAAAAAFe7f24697ebc44a459"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF1cdc3aa57d8f45b59",
+          "_parent": {
+            "$ref": "AAAAAAF95624b157d5a4ed18"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFb3d2f52a3a5b45cab",
+            "reference": {
+              "$ref": "AAAAAAF95624b157d5a4ed18"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFa3204f9fd07e4d5fb",
+            "reference": {
+              "$ref": "AAAAAAF3d96257b02e74de1b"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF01ea1e694851403fa",
+          "_parent": {
+            "$ref": "AAAAAAF95624b157d5a4ed18"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF31a1a6b0daaa40b79",
+            "reference": {
+              "$ref": "AAAAAAF95624b157d5a4ed18"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF6c191bafb30a4a478",
+            "reference": {
+              "$ref": "AAAAAAFb8074b447264416cb"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF4524439502064517b",
+          "_parent": {
+            "$ref": "AAAAAAFc45419dc34124ceca"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF72aae2bbc2b441f99",
+            "reference": {
+              "$ref": "AAAAAAFc45419dc34124ceca"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF32a61f3f0bb74de48",
+            "reference": {
+              "$ref": "AAAAAAF7af330b21c904c90b"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF2c1b1c64cfc5438bb",
+          "_parent": {
+            "$ref": "AAAAAAFc45419dc34124ceca"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF4be2a1452d8c4c52b",
+            "reference": {
+              "$ref": "AAAAAAFc45419dc34124ceca"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF294c9e4444a846f08",
+            "reference": {
+              "$ref": "AAAAAAF7ca35f7920e2420eb"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAF2dec1658c4f34f79a",
+          "_parent": {
+            "$ref": "AAAAAAF38c2916df1c44ef28"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFb6552a7d4b72408f9",
+            "reference": {
+              "$ref": "AAAAAAF38c2916df1c44ef28"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAF70cae3b40dec4a818",
+            "reference": {
+              "$ref": "AAAAAAF64b7399d2cb04ada8"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
