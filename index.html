@@ -1,10 +1,10 @@
-<!-- DisasterOS Application Shell: Complete command center interface integrating Leaflet GIS and multi-role dashboards. -->
+<!-- DisasterOS Application Shell: Complete command center interface integrating Leaflet GIS and all 25 modular views. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DisasterOS | Smart Disaster Early Warning & Response System</title>
+    <title>DisasterOS | Smart Disaster Early Warning, Response & Relief Management System</title>
     
     <!-- Leaflet CSS for GIS Mapping -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -36,11 +36,14 @@
             <div class="form-group">
                 <label>Select Role</label>
                 <select class="form-control" id="loginRole">
-                    <option value="Disaster Manager">Disaster Manager (Emergency Command)</option>
+                    <option value="Disaster Manager">Disaster Manager (Command Operations)</option>
                     <option value="System Administrator">System Administrator</option>
                     <option value="Emergency Responder">Emergency Responder (Field Operations)</option>
                     <option value="Hospital Coordinator">Hospital Coordinator</option>
-                    <option value="Citizen">Citizen (Public Access)</option>
+                    <option value="NGO Coordinator">NGO Coordinator</option>
+                    <option value="Volunteer">Volunteer</option>
+                    <option value="Warehouse Manager">Warehouse Manager</option>
+                    <option value="Citizen">Citizen (Public Intake)</option>
                 </select>
             </div>
 
@@ -49,7 +52,7 @@
             </button>
 
             <div class="demo-note">
-                BCSE301L Software Engineering Project • Review 1 Verified Architecture
+                BCSE301L Software Engineering Project • Review 1 Verified Full Architecture
             </div>
         </div>
     </div>
@@ -63,27 +66,29 @@
                 <div class="logo-icon">⚡</div>
                 <div>
                     <h1>DisasterOS</h1>
-                    <span>Early Warning Platform</span>
+                    <span>Emergency Platform</span>
                 </div>
             </div>
 
             <div class="nav">
-                <div class="nav-section">COMMAND INTELLIGENCE</div>
+                <!-- COMMAND -->
+                <div class="nav-section">COMMAND</div>
                 <button class="nav-item active" onclick="app.navigate('dashboard', this)">
                     <span class="nav-icon">▦</span> Command Dashboard
                 </button>
-                <button class="nav-item" onclick="app.navigate('risk-map', this)">
-                    <span class="nav-icon">⌖</span> Live GIS Risk Map
-                </button>
                 <button class="nav-item" onclick="app.navigate('early-warning', this)">
-                    <span class="nav-icon">⚠</span> Early Warning Feeds
-                    <span class="nav-badge" id="alertBadge">LIVE</span>
+                    <span class="nav-icon">⚠</span> Early Warning
+                    <span class="nav-badge" id="alertBadge">3</span>
+                </button>
+                <button class="nav-item" onclick="app.navigate('risk-map', this)">
+                    <span class="nav-icon">⌖</span> Dynamic GIS Map
                 </button>
                 <button class="nav-item" onclick="app.navigate('decision-support', this)">
-                    <span class="nav-icon">◆</span> Decision Engine
+                    <span class="nav-icon">◆</span> Decision Support
                 </button>
 
-                <div class="nav-section">EMERGENCY OPERATIONS</div>
+                <!-- EMERGENCY RESPONSE -->
+                <div class="nav-section">EMERGENCY RESPONSE</div>
                 <button class="nav-item" onclick="app.navigate('incidents', this)">
                     <span class="nav-icon">◉</span> Incidents Lifecycle
                 </button>
@@ -91,34 +96,73 @@
                     <span class="nav-icon">🚨</span> Help Requests
                 </button>
                 <button class="nav-item" onclick="app.navigate('dispatch', this)">
-                    <span class="nav-icon">🚑</span> Team Dispatch
+                    <span class="nav-icon">🚑</span> Rescue Dispatch
+                </button>
+                <button class="nav-item" onclick="app.navigate('sop', this)">
+                    <span class="nav-icon">✓</span> SOP Automation
                 </button>
                 <button class="nav-item" onclick="app.navigate('evacuation', this)">
-                    <span class="nav-icon">⇢</span> Evacuation Plan
+                    <span class="nav-icon">⇢</span> Evacuation Planning
                 </button>
 
-                <div class="nav-section">RESOURCES & RELIEF</div>
+                <!-- RESOURCES -->
+                <div class="nav-section">RESOURCES</div>
                 <button class="nav-item" onclick="app.navigate('shelters', this)">
                     <span class="nav-icon">⌂</span> Shelters
                 </button>
                 <button class="nav-item" onclick="app.navigate('hospitals', this)">
                     <span class="nav-icon">✚</span> Hospitals
                 </button>
+                <button class="nav-item" onclick="app.navigate('volunteers', this)">
+                    <span class="nav-icon">♟</span> Volunteers
+                </button>
                 <button class="nav-item" onclick="app.navigate('inventory', this)">
-                    <span class="nav-icon">▤</span> Warehouses & Relief
+                    <span class="nav-icon">▤</span> Inventory
+                </button>
+                <button class="nav-item" onclick="app.navigate('relief', this)">
+                    <span class="nav-icon">▱</span> Relief Distribution
+                </button>
+                <button class="nav-item" onclick="app.navigate('infrastructure', this)">
+                    <span class="nav-icon">⌁</span> Infrastructure
                 </button>
 
-                <div class="nav-section">CITIZEN PORTAL</div>
+                <!-- INTELLIGENCE -->
+                <div class="nav-section">INTELLIGENCE</div>
+                <button class="nav-item" onclick="app.navigate('reports', this)">
+                    <span class="nav-icon">▥</span> AI Reports
+                </button>
+                <button class="nav-item" onclick="app.navigate('assistant', this)">
+                    <span class="nav-icon">🤖</span> AI Assistant
+                </button>
+                <button class="nav-item" onclick="app.navigate('analytics', this)">
+                    <span class="nav-icon">◫</span> Analytics
+                </button>
+
+                <!-- CITIZEN SERVICES -->
+                <div class="nav-section">CITIZEN SERVICES</div>
                 <button class="nav-item" onclick="app.navigate('citizen-report', this)">
                     <span class="nav-icon">📷</span> Report Incident (GPS)
                 </button>
+                <button class="nav-item" onclick="app.navigate('notifications', this)">
+                    <span class="nav-icon">🔔</span> Notifications
+                </button>
 
-                <div class="nav-section">SYSTEM GOVERNANCE</div>
+                <!-- SYSTEM -->
+                <div class="nav-section">SYSTEM</div>
                 <button class="nav-item" onclick="app.navigate('architecture', this)">
                     <span class="nav-icon">◇</span> System Architecture
                 </button>
+                <button class="nav-item" onclick="app.navigate('sources', this)">
+                    <span class="nav-icon">◎</span> API Sources
+                </button>
+                <button class="nav-item" onclick="app.navigate('rbac', this)">
+                    <span class="nav-icon">♙</span> RBAC & Users
+                </button>
                 <button class="nav-item" onclick="app.navigate('audit', this)">
-                    <span class="nav-icon">▣</span> Audit Trails
+                    <span class="nav-icon">▣</span> Audit Logs
+                </button>
+                <button class="nav-item" onclick="app.navigate('system', this)">
+                    <span class="nav-icon">⚙</span> System Health
                 </button>
                 <button class="nav-item" onclick="app.logout()">
                     <span class="nav-icon">⇥</span> Logout
@@ -138,8 +182,13 @@
                 </div>
 
                 <div class="top-actions">
+                    <input class="search" id="globalSearch" placeholder="Search incidents, shelters..." onkeyup="app.globalSearch()">
                     <button class="btn btn-primary" onclick="app.triggerLiveSync()">
                         🔄 Sync Live Feeds
+                    </button>
+                    <button class="icon-btn" onclick="app.navigate('notifications')">
+                        🔔
+                        <span class="notification-dot"></span>
                     </button>
                     <div class="profile">
                         <div class="avatar" id="avatar">SS</div>
@@ -159,10 +208,10 @@
     <!-- Toast Notifications -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Leaflet JS -->
+    <!-- Leaflet JS for GIS Mapping -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <!-- Modular Application Logic -->
+    <!-- Modular Scripts -->
     <script src="js/store.js"></script>
     <script src="js/gateway.js"></script>
     <script src="js/risk-engine.js"></script>

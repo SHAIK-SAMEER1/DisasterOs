@@ -1,4 +1,4 @@
-/* Stylesheet: High-contrast responsive dark theme and Leaflet map overrides for DisasterOS Command Center. */
+/* Stylesheet: High-contrast responsive dark theme, chart widgets, chatbot, and Leaflet map overrides for DisasterOS. */
 
 :root {
     --bg: #07111f;
@@ -108,11 +108,12 @@ button {
     border: 0;
     background: transparent;
     color: #9db1c7;
-    padding: 11px 13px;
+    padding: 10px 13px;
     margin: 2px 0;
     border-radius: 9px;
     text-align: left;
     transition: .2s;
+    font-size: 12px;
 }
 
 .nav-item:hover {
@@ -127,7 +128,7 @@ button {
 }
 
 .nav-icon {
-    width: 22px;
+    width: 20px;
     text-align: center;
 }
 
@@ -187,7 +188,7 @@ button {
     color: white;
     border-radius: 8px;
     padding: 9px 13px;
-    width: 240px;
+    width: 220px;
     outline: none;
 }
 
@@ -267,9 +268,7 @@ button {
 .muted { color: var(--muted); }
 .small { font-size: 11px; }
 
-.stat {
-    min-height: 135px;
-}
+.stat { min-height: 135px; }
 
 .stat-top {
     display: flex;
@@ -334,8 +333,9 @@ button {
 .badge-warning { color: #ffd184; background: rgba(255, 184, 77, .14); border: 1px solid rgba(255, 184, 77, .3); }
 .badge-success { color: #7cebc3; background: rgba(53, 212, 154, .14); border: 1px solid rgba(53, 212, 154, .3); }
 .badge-info { color: #81d2ff; background: rgba(53, 167, 255, .14); border: 1px solid rgba(53, 167, 255, .3); }
+.badge-purple { color: #c3b2ff; background: rgba(157, 124, 255, .14); border: 1px solid rgba(157, 124, 255, .3); }
 
-/* ================= LEAFLET CONTAINER ================= */
+/* ================= LEAFLET GIS CONTAINER ================= */
 #gisMapContainer {
     height: 520px;
     width: 100%;
@@ -410,9 +410,7 @@ tr:hover td {
     gap: 6px;
 }
 
-.form-group.full {
-    grid-column: 1 / -1;
-}
+.form-group.full { grid-column: 1 / -1; }
 
 .form-group label {
     color: #89a1ba;
@@ -430,9 +428,7 @@ tr:hover td {
     outline: none;
 }
 
-.form-control:focus {
-    border-color: var(--primary);
-}
+.form-control:focus { border-color: var(--primary); }
 
 textarea.form-control {
     min-height: 90px;
@@ -448,24 +444,9 @@ textarea.form-control {
     margin-bottom: 20px;
 }
 
-.hero h2 {
-    font-size: 23px;
-    margin-bottom: 7px;
-}
-
-.hero p {
-    color: var(--muted);
-    font-size: 12px;
-    max-width: 700px;
-    line-height: 1.7;
-}
-
-.hero-actions {
-    margin-top: 17px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
+.hero h2 { font-size: 23px; margin-bottom: 7px; }
+.hero p { color: var(--muted); font-size: 12px; max-width: 750px; line-height: 1.7; }
+.hero-actions { margin-top: 17px; display: flex; gap: 8px; flex-wrap: wrap; }
 
 /* ================= ALERT ================= */
 .alert {
@@ -478,20 +459,9 @@ textarea.form-control {
     margin-bottom: 9px;
 }
 
-.alert.danger {
-    border-color: rgba(255, 82, 99, .35);
-    background: rgba(255, 82, 99, .06);
-}
-
-.alert.warning {
-    border-color: rgba(255, 184, 77, .3);
-    background: rgba(255, 184, 77, .05);
-}
-
-.alert.success {
-    border-color: rgba(53, 212, 154, .3);
-    background: rgba(53, 212, 154, .05);
-}
+.alert.danger { border-color: rgba(255, 82, 99, .35); background: rgba(255, 82, 99, .06); }
+.alert.warning { border-color: rgba(255, 184, 77, .3); background: rgba(255, 184, 77, .05); }
+.alert.success { border-color: rgba(53, 212, 154, .3); background: rgba(53, 212, 154, .05); }
 
 /* ================= TIMELINE ================= */
 .timeline {
@@ -519,6 +489,143 @@ textarea.form-control {
 
 .timeline-item h4 { font-size: 12px; }
 .timeline-item p { color: var(--muted); font-size: 10px; margin-top: 4px; }
+
+/* ================= ARCHITECTURE & FLOW ================= */
+.flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    padding: 25px 10px;
+}
+
+.flow-box {
+    min-width: 145px;
+    padding: 16px 12px;
+    background: #11263d;
+    border: 1px solid #285071;
+    border-radius: 9px;
+    text-align: center;
+    font-size: 11px;
+}
+
+.flow-box strong {
+    display: block;
+    color: #64c5ff;
+    margin-bottom: 5px;
+}
+
+.arrow {
+    color: #4e7698;
+    font-size: 18px;
+}
+
+/* ================= CHATBOT ================= */
+.chat {
+    height: 440px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.message {
+    max-width: 78%;
+    padding: 10px 12px;
+    border-radius: 9px;
+    font-size: 11px;
+    line-height: 1.6;
+    margin-bottom: 9px;
+}
+
+.message.bot {
+    background: #142941;
+    color: #c7d7e7;
+}
+
+.message.user {
+    background: #176ca8;
+    margin-left: auto;
+    color: white;
+}
+
+.chat-input {
+    display: flex;
+    gap: 7px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+}
+
+.chat-input input { flex: 1; }
+
+/* ================= CHART & ANALYTICS ================= */
+.chart {
+    display: flex;
+    height: 170px;
+    align-items: end;
+    gap: 12px;
+    padding: 10px 5px;
+}
+
+.bar {
+    flex: 1;
+    background: linear-gradient(to top, #1679c0, #43c7ed);
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    min-width: 15px;
+}
+
+.bar span {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    color: #8fa5bd;
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-around;
+    color: #667e96;
+    font-size: 9px;
+    margin-top: 8px;
+}
+
+.health {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-bottom: 1px solid rgba(35, 59, 87, .5);
+}
+
+.health-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.health-dot.ok { background: var(--success); }
+.health-dot.warn { background: var(--warning); }
+.health-dot.error { background: var(--danger); }
+
+.tag {
+    border: 1px solid var(--border);
+    background: #102238;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 9px;
+    color: #8da7c0;
+    display: inline-block;
+}
+
+.kpi { font-size: 13px; font-weight: bold; }
 
 /* ================= TOAST ================= */
 .toast-container {
@@ -566,11 +673,7 @@ textarea.form-control {
     box-shadow: 0 30px 80px rgba(0, 0, 0, .5);
 }
 
-.login-logo {
-    text-align: center;
-    margin-bottom: 25px;
-}
-
+.login-logo { text-align: center; margin-bottom: 25px; }
 .login-logo .logo-icon { margin: auto; }
 .login-logo h1 { margin-top: 12px; font-size: 25px; }
 .login-logo p { color: var(--muted); font-size: 11px; margin-top: 5px; }
