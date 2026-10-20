@@ -1,0 +1,3630 @@
+{
+  "_type": "Project",
+  "_id": "P1ME299TNRc2vRQ==",
+  "name": "DisasterOS DFD Level 2",
+  "ownedElements": [
+    {
+      "_type": "DFDDataFlowModel",
+      "_id": "FM10gQd96GS-aWhg==",
+      "_parent": {
+        "$ref": "P1ME299TNRc2vRQ=="
+      },
+      "name": "DisasterOS DFD Level 2 Data Flow Model",
+      "ownedElements": [
+        {
+          "_type": "DFDDiagram",
+          "_id": "DZsG5mJmASfyYmA==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "DFD Level 2 \u2013 Risk, Triage and Response Detail",
+          "defaultDiagram": true,
+          "ownedViews": [
+            {
+              "_type": "DFDExternalEntityView",
+              "_id": "VJFyHt2SITKKy4g==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "M9Yx5Xth7TrWUOA=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LKBKDitR6RXygQQ==",
+                  "_parent": {
+                    "$ref": "VJFyHt2SITKKy4g=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 60,
+                  "top": 392,
+                  "width": 160,
+                  "height": 40,
+                  "text": "Citizen",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 50,
+              "top": 360,
+              "width": 180,
+              "height": 80,
+              "nameLabel": {
+                "$ref": "LKBKDitR6RXygQQ=="
+              }
+            },
+            {
+              "_type": "DFDExternalEntityView",
+              "_id": "VjSPpTs59S02zpQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MTr9CBBdbR46AfA=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LlUuW77epQDSlNg==",
+                  "_parent": {
+                    "$ref": "VjSPpTs59S02zpQ=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 60,
+                  "top": 122,
+                  "width": 210,
+                  "height": 40,
+                  "text": "Weather & Seismic APIs",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 50,
+              "top": 90,
+              "width": 230,
+              "height": 80,
+              "nameLabel": {
+                "$ref": "LlUuW77epQDSlNg=="
+              }
+            },
+            {
+              "_type": "DFDExternalEntityView",
+              "_id": "V6iQTZxsCQa6TWQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "M6r4p5xTCRvurWg=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LyhA3VAMpQ866MA==",
+                  "_parent": {
+                    "$ref": "V6iQTZxsCQa6TWQ=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1260,
+                  "top": 132,
+                  "width": 170,
+                  "height": 40,
+                  "text": "Disaster Manager",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 1250,
+              "top": 100,
+              "width": 190,
+              "height": 80,
+              "nameLabel": {
+                "$ref": "LyhA3VAMpQ866MA=="
+              }
+            },
+            {
+              "_type": "DFDExternalEntityView",
+              "_id": "VSTQx5ilwQNyL5A==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "M49CwF0xkS7CaxA=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LoVYiJGQrRWqX2Q==",
+                  "_parent": {
+                    "$ref": "VSTQx5ilwQNyL5A=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1230,
+                  "top": 732,
+                  "width": 230,
+                  "height": 40,
+                  "text": "Emergency Responder / Rescue Team",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 1220,
+              "top": 700,
+              "width": 250,
+              "height": 80,
+              "nameLabel": {
+                "$ref": "LoVYiJGQrRWqX2Q=="
+              }
+            },
+            {
+              "_type": "DFDExternalEntityView",
+              "_id": "VKadAaocpSLKyHA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MIkG6LgyRQG-XMQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LnKiOvSiRSNqLsQ==",
+                  "_parent": {
+                    "$ref": "VKadAaocpSLKyHA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 900,
+                  "top": 852,
+                  "width": 270,
+                  "height": 40,
+                  "text": "Hospital / Shelter Coordinators",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 890,
+              "top": 820,
+              "width": 290,
+              "height": 80,
+              "nameLabel": {
+                "$ref": "LnKiOvSiRSNqLsQ=="
+              }
+            },
+            {
+              "_type": "DFDExternalEntityView",
+              "_id": "VuFBcuuxsTASmTw==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "M98XlGyKgS-qanA=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LM7yL3DtxSJ-UOg==",
+                  "_parent": {
+                    "$ref": "VuFBcuuxsTASmTw=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1270,
+                  "top": 392,
+                  "width": 180,
+                  "height": 40,
+                  "text": "AI LLM Services",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 1260,
+              "top": 360,
+              "width": 200,
+              "height": 80,
+              "nameLabel": {
+                "$ref": "LM7yL3DtxSJ-UOg=="
+              }
+            },
+            {
+              "_type": "DFDExternalEntityView",
+              "_id": "VKfZ2cnk_QV6i6Q==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MQteEc-4SSBCEvw=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LOw5QwFJtT_OVhw==",
+                  "_parent": {
+                    "$ref": "VKfZ2cnk_QV6i6Q=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1270,
+                  "top": 552,
+                  "width": 190,
+                  "height": 40,
+                  "text": "SMS / Siren Gateway",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 1260,
+              "top": 520,
+              "width": 210,
+              "height": 80,
+              "nameLabel": {
+                "$ref": "LOw5QwFJtT_OVhw=="
+              }
+            },
+            {
+              "_type": "DFDProcessView",
+              "_id": "V99UwZwlkQ_KpiA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "M9wjRrEtZQPW7SA=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LGgLIgPSDTRGICw==",
+                  "_parent": {
+                    "$ref": "V99UwZwlkQ_KpiA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 342,
+                  "top": 104,
+                  "width": 211,
+                  "height": 36,
+                  "text": "2.1 Normalize Rainfall Reading",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "LjP_V9zBySr6UBQ==",
+                  "_parent": {
+                    "$ref": "V99UwZwlkQ_KpiA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 432,
+                  "top": 88,
+                  "width": 30,
+                  "height": 16,
+                  "text": "2.1",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 330,
+              "top": 80,
+              "width": 235,
+              "height": 85,
+              "nameLabel": {
+                "$ref": "LGgLIgPSDTRGICw=="
+              },
+              "idLabel": {
+                "$ref": "LjP_V9zBySr6UBQ=="
+              }
+            },
+            {
+              "_type": "DFDProcessView",
+              "_id": "VahDBZwgzTu6_1w==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "Mn-N0WWYXRfCbVQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LAihAmra5TAunMg==",
+                  "_parent": {
+                    "$ref": "VahDBZwgzTu6_1w=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 652,
+                  "top": 104,
+                  "width": 211,
+                  "height": 36,
+                  "text": "2.2 Normalize Seismic Reading",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "LoTlNPqflSM6LmA==",
+                  "_parent": {
+                    "$ref": "VahDBZwgzTu6_1w=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 742,
+                  "top": 88,
+                  "width": 30,
+                  "height": 16,
+                  "text": "2.2",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 640,
+              "top": 80,
+              "width": 235,
+              "height": 85,
+              "nameLabel": {
+                "$ref": "LAihAmra5TAunMg=="
+              },
+              "idLabel": {
+                "$ref": "LoTlNPqflSM6LmA=="
+              }
+            },
+            {
+              "_type": "DFDProcessView",
+              "_id": "Vy5jwFgkyQgml7A==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MXx87Mf9wRQarGQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LzU4zf-T4QWWTOg==",
+                  "_parent": {
+                    "$ref": "Vy5jwFgkyQgml7A=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 512,
+                  "top": 259,
+                  "width": 241,
+                  "height": 36,
+                  "text": "2.3 Calculate Composite R_zone",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "L8ojJTGpQRkqlJA==",
+                  "_parent": {
+                    "$ref": "Vy5jwFgkyQgml7A=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 617,
+                  "top": 238,
+                  "width": 30,
+                  "height": 16,
+                  "text": "2.3",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 500,
+              "top": 230,
+              "width": 265,
+              "height": 95,
+              "nameLabel": {
+                "$ref": "LzU4zf-T4QWWTOg=="
+              },
+              "idLabel": {
+                "$ref": "L8ojJTGpQRkqlJA=="
+              }
+            },
+            {
+              "_type": "DFDProcessView",
+              "_id": "VExr61ZGQTzeayQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "M4YRxmlfBSROXnQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "Lwv_KUcjySlWdiw==",
+                  "_parent": {
+                    "$ref": "VExr61ZGQTzeayQ=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 862,
+                  "top": 259,
+                  "width": 246,
+                  "height": 36,
+                  "text": "2.4 Classify Risk & Trigger Alert",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "LT2O7unhGSGexGQ==",
+                  "_parent": {
+                    "$ref": "VExr61ZGQTzeayQ=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 970,
+                  "top": 238,
+                  "width": 30,
+                  "height": 16,
+                  "text": "2.4",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 850,
+              "top": 230,
+              "width": 270,
+              "height": 95,
+              "nameLabel": {
+                "$ref": "Lwv_KUcjySlWdiw=="
+              },
+              "idLabel": {
+                "$ref": "LT2O7unhGSGexGQ=="
+              }
+            },
+            {
+              "_type": "DFDProcessView",
+              "_id": "VniOyk5l7QDqzMg==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MUFIj6rtKRcGEkw=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LtnphtTDQR5KfIQ==",
+                  "_parent": {
+                    "$ref": "VniOyk5l7QDqzMg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 312,
+                  "top": 457,
+                  "width": 231,
+                  "height": 36,
+                  "text": "2.5 Validate Emergency Request",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "Lx5AQsTYmRsaoiw==",
+                  "_parent": {
+                    "$ref": "VniOyk5l7QDqzMg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 412,
+                  "top": 438,
+                  "width": 30,
+                  "height": 16,
+                  "text": "2.5",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 300,
+              "top": 430,
+              "width": 255,
+              "height": 90,
+              "nameLabel": {
+                "$ref": "LtnphtTDQR5KfIQ=="
+              },
+              "idLabel": {
+                "$ref": "Lx5AQsTYmRsaoiw=="
+              }
+            },
+            {
+              "_type": "DFDProcessView",
+              "_id": "VPelqfyIFQXiP-g==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MCcmF5BlKTA6wag=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LIKZbNmxzS7OoYg==",
+                  "_parent": {
+                    "$ref": "VPelqfyIFQXiP-g=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 622,
+                  "top": 457,
+                  "width": 211,
+                  "height": 36,
+                  "text": "2.6 Compute Priority Score",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "LJBm43vyrRxCqfQ==",
+                  "_parent": {
+                    "$ref": "VPelqfyIFQXiP-g=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 712,
+                  "top": 438,
+                  "width": 30,
+                  "height": 16,
+                  "text": "2.6",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 610,
+              "top": 430,
+              "width": 235,
+              "height": 90,
+              "nameLabel": {
+                "$ref": "LIKZbNmxzS7OoYg=="
+              },
+              "idLabel": {
+                "$ref": "LJBm43vyrRxCqfQ=="
+              }
+            },
+            {
+              "_type": "DFDProcessView",
+              "_id": "VDjz2XRxwSVGkIg==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LkoQO4OqRTlG7cA==",
+                  "_parent": {
+                    "$ref": "VDjz2XRxwSVGkIg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 912,
+                  "top": 457,
+                  "width": 226,
+                  "height": 36,
+                  "text": "2.7 Build Dispatch Plan",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "L__lNB_c0Qb6F4A==",
+                  "_parent": {
+                    "$ref": "VDjz2XRxwSVGkIg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1010,
+                  "top": 438,
+                  "width": 30,
+                  "height": 16,
+                  "text": "2.7",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 900,
+              "top": 430,
+              "width": 250,
+              "height": 90,
+              "nameLabel": {
+                "$ref": "LkoQO4OqRTlG7cA=="
+              },
+              "idLabel": {
+                "$ref": "L__lNB_c0Qb6F4A=="
+              }
+            },
+            {
+              "_type": "DFDProcessView",
+              "_id": "VJT8ONe3cRRyH-w==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "L7QMtAZrrQqeWZw==",
+                  "_parent": {
+                    "$ref": "VJT8ONe3cRRyH-w=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 862,
+                  "top": 649,
+                  "width": 266,
+                  "height": 36,
+                  "text": "2.8 Coordinate Hospital / Shelter",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "LZUoVqx2TSQSksg==",
+                  "_parent": {
+                    "$ref": "VJT8ONe3cRRyH-w=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 980,
+                  "top": 628,
+                  "width": 30,
+                  "height": 16,
+                  "text": "2.8",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 850,
+              "top": 620,
+              "width": 290,
+              "height": 95,
+              "nameLabel": {
+                "$ref": "L7QMtAZrrQqeWZw=="
+              },
+              "idLabel": {
+                "$ref": "LZUoVqx2TSQSksg=="
+              }
+            },
+            {
+              "_type": "DFDProcessView",
+              "_id": "VuY6tx-MGRziCrg==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "Ln9bnH2BHQ5i6tw==",
+                  "_parent": {
+                    "$ref": "VuY6tx-MGRziCrg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1162,
+                  "top": 259,
+                  "width": 251,
+                  "height": 36,
+                  "text": "2.9 Generate Situation Report",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "LjEbg_GJlQtaAPw==",
+                  "_parent": {
+                    "$ref": "VuY6tx-MGRziCrg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1272,
+                  "top": 238,
+                  "width": 30,
+                  "height": 16,
+                  "text": "2.9",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 1150,
+              "top": 230,
+              "width": 275,
+              "height": 95,
+              "nameLabel": {
+                "$ref": "Ln9bnH2BHQ5i6tw=="
+              },
+              "idLabel": {
+                "$ref": "LjEbg_GJlQtaAPw=="
+              }
+            },
+            {
+              "_type": "DFDDataStoreView",
+              "_id": "VnFkjtSDZTASKFg==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "M13-OqsqqScCBBg=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LSkpQQ175TjKEhQ==",
+                  "_parent": {
+                    "$ref": "VnFkjtSDZTASKFg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 262,
+                  "top": 714,
+                  "width": 236,
+                  "height": 32,
+                  "text": "D1 Incident & Request Records",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "LHgKH51EsTIihFw==",
+                  "_parent": {
+                    "$ref": "VnFkjtSDZTASKFg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 365,
+                  "top": 696,
+                  "width": 30,
+                  "height": 16,
+                  "text": "1",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 250,
+              "top": 690,
+              "width": 260,
+              "height": 65,
+              "nameLabel": {
+                "$ref": "LSkpQQ175TjKEhQ=="
+              },
+              "idLabel": {
+                "$ref": "LHgKH51EsTIihFw=="
+              }
+            },
+            {
+              "_type": "DFDDataStoreView",
+              "_id": "V8S_5HqNpQuqAog==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MXShHqUsfTz-VlA=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LoxA4t05CR4-xhQ==",
+                  "_parent": {
+                    "$ref": "V8S_5HqNpQuqAog=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 542,
+                  "top": 714,
+                  "width": 221,
+                  "height": 32,
+                  "text": "D2 Zone & Telemetry History",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "LBXUtlYDFQOSf_A==",
+                  "_parent": {
+                    "$ref": "V8S_5HqNpQuqAog=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 637,
+                  "top": 696,
+                  "width": 30,
+                  "height": 16,
+                  "text": "2",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 530,
+              "top": 690,
+              "width": 245,
+              "height": 65,
+              "nameLabel": {
+                "$ref": "LoxA4t05CR4-xhQ=="
+              },
+              "idLabel": {
+                "$ref": "LBXUtlYDFQOSf_A=="
+              }
+            },
+            {
+              "_type": "DFDDataStoreView",
+              "_id": "VPsdraHZCTPiH-g==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "MGipVPKT-QkS_Kg=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "L_hiAwlJIScir8w==",
+                  "_parent": {
+                    "$ref": "VPsdraHZCTPiH-g=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 812,
+                  "top": 714,
+                  "width": 256,
+                  "height": 32,
+                  "text": "D3 Teams, Shelters & Hospitals",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "Lassjyte5Tralow==",
+                  "_parent": {
+                    "$ref": "VPsdraHZCTPiH-g=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 925,
+                  "top": 696,
+                  "width": 30,
+                  "height": 16,
+                  "text": "3",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 800,
+              "top": 690,
+              "width": 280,
+              "height": 65,
+              "nameLabel": {
+                "$ref": "L_hiAwlJIScir8w=="
+              },
+              "idLabel": {
+                "$ref": "Lassjyte5Tralow=="
+              }
+            },
+            {
+              "_type": "DFDDataStoreView",
+              "_id": "VgET5Y0bRRbG-wA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "M1VA_bU4OQxKTVw=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "LH7hIE_MiT8OMtg==",
+                  "_parent": {
+                    "$ref": "VgET5Y0bRRbG-wA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1102,
+                  "top": 714,
+                  "width": 261,
+                  "height": 32,
+                  "text": "D4 Alerts, SOP & Audit Records",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "LY-immlEGQWeOjQ==",
+                  "_parent": {
+                    "$ref": "VgET5Y0bRRbG-wA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1217,
+                  "top": 696,
+                  "width": 30,
+                  "height": 16,
+                  "text": "4",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 1090,
+              "top": 690,
+              "width": 285,
+              "height": 65,
+              "nameLabel": {
+                "$ref": "LH7hIE_MiT8OMtg=="
+              },
+              "idLabel": {
+                "$ref": "LY-immlEGQWeOjQ=="
+              }
+            },
+            {
+              "_type": "DFDDataStoreView",
+              "_id": "VjbzOXmRcR2e2gA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "Mzotoo1MZQemFMQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "L-tBTUoMJRLyNmw==",
+                  "_parent": {
+                    "$ref": "VjbzOXmRcR2e2gA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 472,
+                  "top": 844,
+                  "width": 226,
+                  "height": 32,
+                  "text": "D5 Inventory & Relief Resources",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "LvG2osI9uR92-4g==",
+                  "_parent": {
+                    "$ref": "VjbzOXmRcR2e2gA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 570,
+                  "top": 826,
+                  "width": 30,
+                  "height": 16,
+                  "text": "5",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "left": 460,
+              "top": 820,
+              "width": 250,
+              "height": 65,
+              "nameLabel": {
+                "$ref": "L-tBTUoMJRLyNmw=="
+              },
+              "idLabel": {
+                "$ref": "LvG2osI9uR92-4g=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VP5qMD8gLQC6enw==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FtLF3_Mh9TTKNaA=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELmaxSkeB_R3uxhQ==",
+                  "_parent": {
+                    "$ref": "VP5qMD8gLQC6enw=="
+                  },
+                  "model": {
+                    "$ref": "FtLF3_Mh9TTKNaA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 270,
+                  "top": 118,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VP5qMD8gLQC6enw=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Current rainfall / precipitation",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "V99UwZwlkQ_KpiA=="
+              },
+              "tail": {
+                "$ref": "VjSPpTs59S02zpQ=="
+              },
+              "lineStyle": 2,
+              "points": "280:130;305:130;305:122.5;330:122.5",
+              "nameLabel": {
+                "$ref": "ELmaxSkeB_R3uxhQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VKHVRJNP3RGOxSw==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "Fp8GrONKERvKXpQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELQGqMUFLQQI24Zw==",
+                  "_parent": {
+                    "$ref": "VKHVRJNP3RGOxSw=="
+                  },
+                  "model": {
+                    "$ref": "Fp8GrONKERvKXpQ=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 425,
+                  "top": 118,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VKHVRJNP3RGOxSw=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Recent earthquake magnitude",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VahDBZwgzTu6_1w=="
+              },
+              "tail": {
+                "$ref": "VjSPpTs59S02zpQ=="
+              },
+              "lineStyle": 2,
+              "points": "280:130;460:130;460:122.5;640:122.5",
+              "nameLabel": {
+                "$ref": "ELQGqMUFLQQI24Zw=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "Vi5bsFg21QQCy5Q==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FAKyNTd1wQ6ms7w=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELBAg6p3u9R16gDA==",
+                  "_parent": {
+                    "$ref": "Vi5bsFg21QQCy5Q=="
+                  },
+                  "model": {
+                    "$ref": "FAKyNTd1wQ6ms7w=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 497,
+                  "top": 192,
+                  "width": 155,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "Vi5bsFg21QQCy5Q=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Rain_norm",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "Vy5jwFgkyQgml7A=="
+              },
+              "tail": {
+                "$ref": "V99UwZwlkQ_KpiA=="
+              },
+              "lineStyle": 2,
+              "points": "565:122.5;565:200;500:200;500:277.5",
+              "nameLabel": {
+                "$ref": "ELBAg6p3u9R16gDA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VWyQrN8kIQ4SetA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "Fh9_322PZTp-Kew=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "EL3gl35kaGTbm72g==",
+                  "_parent": {
+                    "$ref": "VWyQrN8kIQ4SetA=="
+                  },
+                  "model": {
+                    "$ref": "Fh9_322PZTp-Kew=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 660,
+                  "top": 189,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VWyQrN8kIQ4SetA=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Seismic_norm",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "Vy5jwFgkyQgml7A=="
+              },
+              "tail": {
+                "$ref": "VahDBZwgzTu6_1w=="
+              },
+              "lineStyle": 2,
+              "points": "757.5:165;695:165;695:230;632.5:230",
+              "nameLabel": {
+                "$ref": "EL3gl35kaGTbm72g=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VzwULS3eLTlWB3w==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FX3nrsOZMSi64Dg=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELGZB-uIwKSeCc4w==",
+                  "_parent": {
+                    "$ref": "VzwULS3eLTlWB3w=="
+                  },
+                  "model": {
+                    "$ref": "FX3nrsOZMSi64Dg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 471,
+                  "top": 499,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VzwULS3eLTlWB3w=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Zone vulnerability",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "Vy5jwFgkyQgml7A=="
+              },
+              "tail": {
+                "$ref": "VnFkjtSDZTASKFg=="
+              },
+              "lineStyle": 2,
+              "points": "380:690;380:507.5;632.5:507.5;632.5:325",
+              "nameLabel": {
+                "$ref": "ELGZB-uIwKSeCc4w=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VKqb2MyoZSz2XTA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FWKRjW70JTC6r7w=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELiVfEK1GgRziNGA==",
+                  "_parent": {
+                    "$ref": "VKqb2MyoZSz2XTA=="
+                  },
+                  "model": {
+                    "$ref": "FWKRjW70JTC6r7w=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 751,
+                  "top": 499,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VKqb2MyoZSz2XTA=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Shelter occupancy / headroom",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "Vy5jwFgkyQgml7A=="
+              },
+              "tail": {
+                "$ref": "VPsdraHZCTPiH-g=="
+              },
+              "lineStyle": 2,
+              "points": "940:690;940:507.5;632.5:507.5;632.5:325",
+              "nameLabel": {
+                "$ref": "ELiVfEK1GgRziNGA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VzqhcrJmPShutig==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FvH_PRhFiQWq3FA=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "EL8m3Q4TsZQ3Syzg==",
+                  "_parent": {
+                    "$ref": "VzqhcrJmPShutig=="
+                  },
+                  "model": {
+                    "$ref": "FvH_PRhFiQWq3FA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 607,
+                  "top": 499,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VzqhcrJmPShutig=="
+                  },
+                  "edgePosition": 1,
+                  "text": "R_zone history",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "V8S_5HqNpQuqAog=="
+              },
+              "tail": {
+                "$ref": "Vy5jwFgkyQgml7A=="
+              },
+              "lineStyle": 2,
+              "points": "632.5:325;632.5:507.5;652.5:507.5;652.5:690",
+              "nameLabel": {
+                "$ref": "EL8m3Q4TsZQ3Syzg=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "V2J0_212VSsqkew==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FkSE_5q4GSA-gEQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELJiOXfsNDSAaBuA==",
+                  "_parent": {
+                    "$ref": "V2J0_212VSsqkew=="
+                  },
+                  "model": {
+                    "$ref": "FkSE_5q4GSA-gEQ=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 772,
+                  "top": 269,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "V2J0_212VSsqkew=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Composite zone risk",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VExr61ZGQTzeayQ=="
+              },
+              "tail": {
+                "$ref": "Vy5jwFgkyQgml7A=="
+              },
+              "lineStyle": 2,
+              "points": "765:277.5;807.5:277.5;807.5:277.5;850:277.5",
+              "nameLabel": {
+                "$ref": "ELJiOXfsNDSAaBuA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "V20oIksTuT_qHBQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FuciLxnjJRTufQA=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELIk20RKM2SKyqdQ==",
+                  "_parent": {
+                    "$ref": "V20oIksTuT_qHBQ=="
+                  },
+                  "model": {
+                    "$ref": "FuciLxnjJRTufQA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1073,
+                  "top": 499,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "V20oIksTuT_qHBQ=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Risk class and early-warning event",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VgET5Y0bRRbG-wA=="
+              },
+              "tail": {
+                "$ref": "VExr61ZGQTzeayQ=="
+              },
+              "lineStyle": 2,
+              "points": "985:325;985:507.5;1232.5:507.5;1232.5:690",
+              "nameLabel": {
+                "$ref": "ELIk20RKM2SKyqdQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VB3z3cMOXTRC9HA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FEtjkapIeTvGcvw=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "EL5IC9AC1HR8WHiQ==",
+                  "_parent": {
+                    "$ref": "VB3z3cMOXTRC9HA=="
+                  },
+                  "model": {
+                    "$ref": "FEtjkapIeTvGcvw=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1100,
+                  "top": 269,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VB3z3cMOXTRC9HA=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Risk summary and active alerts",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VuY6tx-MGRziCrg=="
+              },
+              "tail": {
+                "$ref": "VExr61ZGQTzeayQ=="
+              },
+              "lineStyle": 2,
+              "points": "1120:277.5;1135:277.5;1135:277.5;1150:277.5",
+              "nameLabel": {
+                "$ref": "EL5IC9AC1HR8WHiQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VoO1IclhFStmkUQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FZdOwxzU6QsagKw=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELgTGFDgDQQweQSQ==",
+                  "_parent": {
+                    "$ref": "VoO1IclhFStmkUQ=="
+                  },
+                  "model": {
+                    "$ref": "FZdOwxzU6QsagKw=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1150,
+                  "top": 200,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VoO1IclhFStmkUQ=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Alert rules / thresholds",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VExr61ZGQTzeayQ=="
+              },
+              "tail": {
+                "$ref": "V6iQTZxsCQa6TWQ=="
+              },
+              "lineStyle": 2,
+              "points": "1250:140;1250:208.75;1120:208.75;1120:277.5",
+              "nameLabel": {
+                "$ref": "ELgTGFDgDQQweQSQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VcRh-MvzATACFYA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "F2YciX45ZQa6qgg=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELi9PVzNu4SvSAFA==",
+                  "_parent": {
+                    "$ref": "VcRh-MvzATACFYA=="
+                  },
+                  "model": {
+                    "$ref": "F2YciX45ZQa6qgg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1155,
+                  "top": 410,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VcRh-MvzATACFYA=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Emergency warning / siren command",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VKfZ2cnk_QV6i6Q=="
+              },
+              "tail": {
+                "$ref": "VExr61ZGQTzeayQ=="
+              },
+              "lineStyle": 2,
+              "points": "1120:277.5;1120:418.75;1260:418.75;1260:560",
+              "nameLabel": {
+                "$ref": "ELi9PVzNu4SvSAFA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VOuO-8J3VQru0iA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FECN1ua4VR5iAnw=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELJ3y8SbnuSQKYDA==",
+                  "_parent": {
+                    "$ref": "VOuO-8J3VQru0iA=="
+                  },
+                  "model": {
+                    "$ref": "FECN1ua4VR5iAnw=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1291,
+                  "top": 414,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VOuO-8J3VQru0iA=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Broadcast delivery status",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VuY6tx-MGRziCrg=="
+              },
+              "tail": {
+                "$ref": "VKfZ2cnk_QV6i6Q=="
+              },
+              "lineStyle": 2,
+              "points": "1365:520;1365:422.5;1287.5:422.5;1287.5:325",
+              "nameLabel": {
+                "$ref": "ELJ3y8SbnuSQKYDA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VlCO7dLIGQ8yS-w==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FkWB8RUepSnKY4g=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELlYAZRbBeSXaBEA==",
+                  "_parent": {
+                    "$ref": "VlCO7dLIGQ8yS-w=="
+                  },
+                  "model": {
+                    "$ref": "FkWB8RUepSnKY4g=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 230,
+                  "top": 429,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VlCO7dLIGQ8yS-w=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Help request / incident details",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VniOyk5l7QDqzMg=="
+              },
+              "tail": {
+                "$ref": "VJFyHt2SITKKy4g=="
+              },
+              "lineStyle": 2,
+              "points": "230:400;230:437.5;300:437.5;300:475",
+              "nameLabel": {
+                "$ref": "ELlYAZRbBeSXaBEA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "V8af37qigTUCVQg==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FR4sT0PAXSCixkA=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELIqIDXga9RpqqmA==",
+                  "_parent": {
+                    "$ref": "V8af37qigTUCVQg=="
+                  },
+                  "model": {
+                    "$ref": "FR4sT0PAXSCixkA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 368,
+                  "top": 597,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "V8af37qigTUCVQg=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Existing request context",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VniOyk5l7QDqzMg=="
+              },
+              "tail": {
+                "$ref": "VnFkjtSDZTASKFg=="
+              },
+              "lineStyle": 2,
+              "points": "380:690;380:605;427.5:605;427.5:520",
+              "nameLabel": {
+                "$ref": "ELIqIDXga9RpqqmA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VXbKv-ym_SUyt8w==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FXOa8ogk3Qmu3WQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELFZN9o6gqTtGlAQ==",
+                  "_parent": {
+                    "$ref": "VXbKv-ym_SUyt8w=="
+                  },
+                  "model": {
+                    "$ref": "FXOa8ogk3Qmu3WQ=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 368,
+                  "top": 597,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VXbKv-ym_SUyt8w=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Validated request",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VnFkjtSDZTASKFg=="
+              },
+              "tail": {
+                "$ref": "VniOyk5l7QDqzMg=="
+              },
+              "lineStyle": 2,
+              "points": "427.5:520;427.5:605;380:605;380:690",
+              "nameLabel": {
+                "$ref": "ELFZN9o6gqTtGlAQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VAr5M8nTFTbW5EQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FJ1S8mAJGTo-JXA=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "EL9Ejr0AoVRMuInw==",
+                  "_parent": {
+                    "$ref": "VAr5M8nTFTbW5EQ=="
+                  },
+                  "model": {
+                    "$ref": "FJ1S8mAJGTo-JXA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 547,
+                  "top": 467,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VAr5M8nTFTbW5EQ=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Validated request + location",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VPelqfyIFQXiP-g=="
+              },
+              "tail": {
+                "$ref": "VniOyk5l7QDqzMg=="
+              },
+              "lineStyle": 2,
+              "points": "555:475;582.5:475;582.5:475;610:475",
+              "nameLabel": {
+                "$ref": "EL9Ejr0AoVRMuInw=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VLn_5zSnARuS5wA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "F7QqGW6kvQNWHpw=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELqfU71HIpQ-mEJA==",
+                  "_parent": {
+                    "$ref": "VLn_5zSnARuS5wA=="
+                  },
+                  "model": {
+                    "$ref": "F7QqGW6kvQNWHpw=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 655,
+                  "top": 597,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VLn_5zSnARuS5wA=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Zone risk score",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "V8S_5HqNpQuqAog=="
+              },
+              "tail": {
+                "$ref": "VPelqfyIFQXiP-g=="
+              },
+              "lineStyle": 2,
+              "points": "727.5:520;727.5:605;652.5:605;652.5:690",
+              "nameLabel": {
+                "$ref": "ELqfU71HIpQ-mEJA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "V3Fn-4vFeTcqxjg==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FX3di1754QGyu2w=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "EL-Kv1MRWLTNKp0Q==",
+                  "_parent": {
+                    "$ref": "V3Fn-4vFeTcqxjg=="
+                  },
+                  "model": {
+                    "$ref": "FX3di1754QGyu2w=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 655,
+                  "top": 597,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "V3Fn-4vFeTcqxjg=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Current R_zone",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VPelqfyIFQXiP-g=="
+              },
+              "tail": {
+                "$ref": "V8S_5HqNpQuqAog=="
+              },
+              "lineStyle": 2,
+              "points": "652.5:690;652.5:605;727.5:605;727.5:520",
+              "nameLabel": {
+                "$ref": "EL-Kv1MRWLTNKp0Q=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VGZAIyDc4Sv-_iQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "F580CLQ0CTsybfg=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELZ_ENsp_pSUKx_A==",
+                  "_parent": {
+                    "$ref": "VGZAIyDc4Sv-_iQ=="
+                  },
+                  "model": {
+                    "$ref": "F580CLQ0CTsybfg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 525,
+                  "top": 590,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VGZAIyDc4Sv-_iQ=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Priority score",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VnFkjtSDZTASKFg=="
+              },
+              "tail": {
+                "$ref": "VPelqfyIFQXiP-g=="
+              },
+              "lineStyle": 2,
+              "points": "610:475;610:598.75;510:598.75;510:722.5",
+              "nameLabel": {
+                "$ref": "ELZ_ENsp_pSUKx_A=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "V6gUq4iaAS4eNjg==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "F3OQ4jl1IQWy6DQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELmiKAoGFsRG-OSA==",
+                  "_parent": {
+                    "$ref": "V6gUq4iaAS4eNjg=="
+                  },
+                  "model": {
+                    "$ref": "F3OQ4jl1IQWy6DQ=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 837,
+                  "top": 467,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "V6gUq4iaAS4eNjg=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Ranked emergency queue",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VDjz2XRxwSVGkIg=="
+              },
+              "tail": {
+                "$ref": "VPelqfyIFQXiP-g=="
+              },
+              "lineStyle": 2,
+              "points": "845:475;872.5:475;872.5:475;900:475",
+              "nameLabel": {
+                "$ref": "ELmiKAoGFsRG-OSA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VS1gsB3pATMqxVA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FrCxFlkp4RIib1g=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "EL8-nWz8pqQmuUnA==",
+                  "_parent": {
+                    "$ref": "VS1gsB3pATMqxVA=="
+                  },
+                  "model": {
+                    "$ref": "FrCxFlkp4RIib1g=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 947,
+                  "top": 597,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VS1gsB3pATMqxVA=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Available teams",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VDjz2XRxwSVGkIg=="
+              },
+              "tail": {
+                "$ref": "VPsdraHZCTPiH-g=="
+              },
+              "lineStyle": 2,
+              "points": "940:690;940:605;1025:605;1025:520",
+              "nameLabel": {
+                "$ref": "EL8-nWz8pqQmuUnA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "V8K5OPfXaS26Nkw==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FlpzWCL7bTqeF4w=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELrayrgjMwTFejOQ==",
+                  "_parent": {
+                    "$ref": "V8K5OPfXaS26Nkw=="
+                  },
+                  "model": {
+                    "$ref": "FlpzWCL7bTqeF4w=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 770,
+                  "top": 655,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "V8K5OPfXaS26Nkw=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Relief resources",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VDjz2XRxwSVGkIg=="
+              },
+              "tail": {
+                "$ref": "VjbzOXmRcR2e2gA=="
+              },
+              "lineStyle": 2,
+              "points": "710:852.5;710:663.75;900:663.75;900:475",
+              "nameLabel": {
+                "$ref": "ELrayrgjMwTFejOQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VQDTq3BhRTJmZJw==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FoiYHbPhYRneW_w=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "EL6h2AxPmMSDeQhQ==",
+                  "_parent": {
+                    "$ref": "VQDTq3BhRTJmZJw=="
+                  },
+                  "model": {
+                    "$ref": "FoiYHbPhYRneW_w=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1093,
+                  "top": 597,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VQDTq3BhRTJmZJw=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Dispatch decision / SOP action",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VgET5Y0bRRbG-wA=="
+              },
+              "tail": {
+                "$ref": "VDjz2XRxwSVGkIg=="
+              },
+              "lineStyle": 2,
+              "points": "1025:520;1128.75:520;1128.75:690;1232.5:690",
+              "nameLabel": {
+                "$ref": "EL6h2AxPmMSDeQhQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "Vaaaa0PqiQA2kvg==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "Fe7OKj2k9TT26kA=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "EL0ByZ8VxzQaSLGg==",
+                  "_parent": {
+                    "$ref": "Vaaaa0PqiQA2kvg=="
+                  },
+                  "model": {
+                    "$ref": "Fe7OKj2k9TT26kA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1150,
+                  "top": 599,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "Vaaaa0PqiQA2kvg=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Rescue dispatch + route",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VSTQx5ilwQNyL5A=="
+              },
+              "tail": {
+                "$ref": "VDjz2XRxwSVGkIg=="
+              },
+              "lineStyle": 2,
+              "points": "1150:475;1150:607.5;1220:607.5;1220:740",
+              "nameLabel": {
+                "$ref": "EL0ByZ8VxzQaSLGg=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VMc8xFa-6RiO05w==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "F1uVEcgGYTCaajg=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELSrxgDSSpTziq5A==",
+                  "_parent": {
+                    "$ref": "VMc8xFa-6RiO05w=="
+                  },
+                  "model": {
+                    "$ref": "F1uVEcgGYTCaajg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1150,
+                  "top": 599,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VMc8xFa-6RiO05w=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Acknowledgement + ETA + status",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VDjz2XRxwSVGkIg=="
+              },
+              "tail": {
+                "$ref": "VSTQx5ilwQNyL5A=="
+              },
+              "lineStyle": 2,
+              "points": "1220:740;1220:607.5;1150:607.5;1150:475",
+              "nameLabel": {
+                "$ref": "ELSrxgDSSpTziq5A=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "Vehyh4jw2T2axjA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "F9g1jPLo1QnGBpA=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELjpKis3v2Qb6GPg==",
+                  "_parent": {
+                    "$ref": "Vehyh4jw2T2axjA=="
+                  },
+                  "model": {
+                    "$ref": "F9g1jPLo1QnGBpA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 975,
+                  "top": 562,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "Vehyh4jw2T2axjA=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Patient / evacuation requirement",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VJT8ONe3cRRyH-w=="
+              },
+              "tail": {
+                "$ref": "VDjz2XRxwSVGkIg=="
+              },
+              "lineStyle": 2,
+              "points": "1025:520;1025:570;995:570;995:620",
+              "nameLabel": {
+                "$ref": "ELjpKis3v2Qb6GPg=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VpW-2_FqrSe2wBQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FBYiwIHDBS06JHg=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELLapMy2N4SJCnxw==",
+                  "_parent": {
+                    "$ref": "VpW-2_FqrSe2wBQ=="
+                  },
+                  "model": {
+                    "$ref": "FBYiwIHDBS06JHg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 930,
+                  "top": 687,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VpW-2_FqrSe2wBQ=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Beds and shelter capacity",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VJT8ONe3cRRyH-w=="
+              },
+              "tail": {
+                "$ref": "VPsdraHZCTPiH-g=="
+              },
+              "lineStyle": 2,
+              "points": "1080:722.5;965:722.5;965:667.5;850:667.5",
+              "nameLabel": {
+                "$ref": "ELLapMy2N4SJCnxw=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "V73RiUCk_RWWUvw==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FyoaFjMzMS2yCRA=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELdZsTPixCQjqFxQ==",
+                  "_parent": {
+                    "$ref": "V73RiUCk_RWWUvw=="
+                  },
+                  "model": {
+                    "$ref": "FyoaFjMzMS2yCRA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 745,
+                  "top": 752,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "V73RiUCk_RWWUvw=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Medical / relief stock",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VJT8ONe3cRRyH-w=="
+              },
+              "tail": {
+                "$ref": "VjbzOXmRcR2e2gA=="
+              },
+              "lineStyle": 2,
+              "points": "710:852.5;710:760;850:760;850:667.5",
+              "nameLabel": {
+                "$ref": "ELdZsTPixCQjqFxQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VId_6GIekQa6Kbg==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FpT48EjmGRRCBww=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "EL6JlecBRVS3WOdg==",
+                  "_parent": {
+                    "$ref": "VId_6GIekQa6Kbg=="
+                  },
+                  "model": {
+                    "$ref": "FpT48EjmGRRCBww=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 980,
+                  "top": 759,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VId_6GIekQa6Kbg=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Transfer and admission instructions",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VKadAaocpSLKyHA=="
+              },
+              "tail": {
+                "$ref": "VJT8ONe3cRRyH-w=="
+              },
+              "lineStyle": 2,
+              "points": "995:715;995:767.5;1035:767.5;1035:820",
+              "nameLabel": {
+                "$ref": "EL6JlecBRVS3WOdg=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VZlVNCJPaT9mYTQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FGqpiffJUSeiUkg=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELOhmO--OGRpi8CQ==",
+                  "_parent": {
+                    "$ref": "VZlVNCJPaT9mYTQ=="
+                  },
+                  "model": {
+                    "$ref": "FGqpiffJUSeiUkg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 980,
+                  "top": 759,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VZlVNCJPaT9mYTQ=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Beds, shelter headroom, admission status",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VJT8ONe3cRRyH-w=="
+              },
+              "tail": {
+                "$ref": "VKadAaocpSLKyHA=="
+              },
+              "lineStyle": 2,
+              "points": "1035:820;1035:767.5;995:767.5;995:715",
+              "nameLabel": {
+                "$ref": "ELOhmO--OGRpi8CQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VAGOWvLOhTNeCGQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "Fjq15CfrqReufNQ=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELZzddvqvcRoqstw==",
+                  "_parent": {
+                    "$ref": "VAGOWvLOhTNeCGQ=="
+                  },
+                  "model": {
+                    "$ref": "Fjq15CfrqReufNQ=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 930,
+                  "top": 687,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VAGOWvLOhTNeCGQ=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Updated capacity",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VPsdraHZCTPiH-g=="
+              },
+              "tail": {
+                "$ref": "VJT8ONe3cRRyH-w=="
+              },
+              "lineStyle": 2,
+              "points": "850:667.5;965:667.5;965:722.5;1080:722.5",
+              "nameLabel": {
+                "$ref": "ELZzddvqvcRoqstw=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VijOVZp5SRXCocQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FYlLJz2T1TveTMw=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELsU6qWtECSFGNnw==",
+                  "_parent": {
+                    "$ref": "VijOVZp5SRXCocQ=="
+                  },
+                  "model": {
+                    "$ref": "FYlLJz2T1TveTMw=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 745,
+                  "top": 752,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VijOVZp5SRXCocQ=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Updated relief allocation",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VjbzOXmRcR2e2gA=="
+              },
+              "tail": {
+                "$ref": "VJT8ONe3cRRyH-w=="
+              },
+              "lineStyle": 2,
+              "points": "850:667.5;850:760;710:760;710:852.5",
+              "nameLabel": {
+                "$ref": "ELsU6qWtECSFGNnw=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VqncYvpB8R4ObUw==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "F9fnrXHbZQ4ilNA=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELOoPszQeIQky3NQ==",
+                  "_parent": {
+                    "$ref": "VqncYvpB8R4ObUw=="
+                  },
+                  "model": {
+                    "$ref": "F9fnrXHbZQ4ilNA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 795,
+                  "top": 492,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VqncYvpB8R4ObUw=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Incident and request history",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VuY6tx-MGRziCrg=="
+              },
+              "tail": {
+                "$ref": "VnFkjtSDZTASKFg=="
+              },
+              "lineStyle": 2,
+              "points": "510:722.5;830:722.5;830:277.5;1150:277.5",
+              "nameLabel": {
+                "$ref": "ELOoPszQeIQky3NQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "V4WfWu1nrQauvng==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "Fvkniaf3oTZehyw=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELQjUMki9gTZ-Fzw==",
+                  "_parent": {
+                    "$ref": "V4WfWu1nrQauvng=="
+                  },
+                  "model": {
+                    "$ref": "Fvkniaf3oTZehyw=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 927,
+                  "top": 492,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "V4WfWu1nrQauvng=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Telemetry and R_zone history",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VuY6tx-MGRziCrg=="
+              },
+              "tail": {
+                "$ref": "V8S_5HqNpQuqAog=="
+              },
+              "lineStyle": 2,
+              "points": "775:722.5;775:500;1150:500;1150:277.5",
+              "nameLabel": {
+                "$ref": "ELQjUMki9gTZ-Fzw=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VRN-oJucvR8C8iw==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FLTbzjxKdQw2TPg=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELDfjwCU5HS42BjA==",
+                  "_parent": {
+                    "$ref": "VRN-oJucvR8C8iw=="
+                  },
+                  "model": {
+                    "$ref": "FLTbzjxKdQw2TPg=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1225,
+                  "top": 499,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VRN-oJucvR8C8iw=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Alerts, SOP and decision history",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VuY6tx-MGRziCrg=="
+              },
+              "tail": {
+                "$ref": "VgET5Y0bRRbG-wA=="
+              },
+              "lineStyle": 2,
+              "points": "1232.5:690;1232.5:507.5;1287.5:507.5;1287.5:325",
+              "nameLabel": {
+                "$ref": "ELDfjwCU5HS42BjA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "V8iJGjrCSQIGDIA==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FyvbO7s6lT8y9qw=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELeMvBXKtZTkmFmA==",
+                  "_parent": {
+                    "$ref": "V8iJGjrCSQIGDIA=="
+                  },
+                  "model": {
+                    "$ref": "FyvbO7s6lT8y9qw=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1288,
+                  "top": 334,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "V8iJGjrCSQIGDIA=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Structured situation-report prompt",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VuFBcuuxsTASmTw=="
+              },
+              "tail": {
+                "$ref": "VuY6tx-MGRziCrg=="
+              },
+              "lineStyle": 2,
+              "points": "1287.5:325;1323.75:325;1323.75:360;1360:360",
+              "nameLabel": {
+                "$ref": "ELeMvBXKtZTkmFmA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VN0Z2if3YSI2KPg==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "Fei3k9x6uQ9O64w=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELojE3j1lMTN-R0g==",
+                  "_parent": {
+                    "$ref": "VN0Z2if3YSI2KPg=="
+                  },
+                  "model": {
+                    "$ref": "Fei3k9x6uQ9O64w=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1288,
+                  "top": 334,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VN0Z2if3YSI2KPg=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Generated report content",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VuY6tx-MGRziCrg=="
+              },
+              "tail": {
+                "$ref": "VuFBcuuxsTASmTw=="
+              },
+              "lineStyle": 2,
+              "points": "1360:360;1323.75:360;1323.75:325;1287.5:325",
+              "nameLabel": {
+                "$ref": "ELojE3j1lMTN-R0g=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "VEK92V96KRauA2w==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FdAE0RA0LRi-Urw=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELkyAppJfeSy2yBg==",
+                  "_parent": {
+                    "$ref": "VEK92V96KRauA2w=="
+                  },
+                  "model": {
+                    "$ref": "FdAE0RA0LRi-Urw=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1225,
+                  "top": 499,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "VEK92V96KRauA2w=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Report and notification record",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VgET5Y0bRRbG-wA=="
+              },
+              "tail": {
+                "$ref": "VuY6tx-MGRziCrg=="
+              },
+              "lineStyle": 2,
+              "points": "1287.5:325;1287.5:507.5;1232.5:507.5;1232.5:690",
+              "nameLabel": {
+                "$ref": "ELkyAppJfeSy2yBg=="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "ViqEz1oe-SFqghQ==",
+              "_parent": {
+                "$ref": "DZsG5mJmASfyYmA=="
+              },
+              "model": {
+                "$ref": "FtmnD2iJmQTqezA=="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "ELkKj9WAJUQ060QQ==",
+                  "_parent": {
+                    "$ref": "ViqEz1oe-SFqghQ=="
+                  },
+                  "model": {
+                    "$ref": "FtmnD2iJmQTqezA=="
+                  },
+                  "font": "Arial;13;0",
+                  "left": 655,
+                  "top": 330,
+                  "width": 170,
+                  "height": 28,
+                  "alpha": 0,
+                  "distance": 15,
+                  "hostEdge": {
+                    "$ref": "ViqEz1oe-SFqghQ=="
+                  },
+                  "edgePosition": 1,
+                  "text": "Status / alert / evacuation guidance",
+                  "wordWrap": true
+                }
+              ],
+              "font": "Arial;13;0",
+              "head": {
+                "$ref": "VJFyHt2SITKKy4g=="
+              },
+              "tail": {
+                "$ref": "VuY6tx-MGRziCrg=="
+              },
+              "lineStyle": 2,
+              "points": "1150:277.5;690:277.5;690:400;230:400",
+              "nameLabel": {
+                "$ref": "ELkKj9WAJUQ060QQ=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDExternalEntity",
+          "_id": "M9Yx5Xth7TrWUOA==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "Citizen",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FkWB8RUepSnKY4g==",
+              "_parent": {
+                "$ref": "M9Yx5Xth7TrWUOA=="
+              },
+              "name": "Help request / incident details",
+              "source": {
+                "$ref": "M9Yx5Xth7TrWUOA=="
+              },
+              "target": {
+                "$ref": "MUFIj6rtKRcGEkw=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDExternalEntity",
+          "_id": "MTr9CBBdbR46AfA==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "Weather & Seismic APIs",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FtLF3_Mh9TTKNaA==",
+              "_parent": {
+                "$ref": "MTr9CBBdbR46AfA=="
+              },
+              "name": "Current rainfall / precipitation",
+              "source": {
+                "$ref": "MTr9CBBdbR46AfA=="
+              },
+              "target": {
+                "$ref": "M9wjRrEtZQPW7SA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "Fp8GrONKERvKXpQ==",
+              "_parent": {
+                "$ref": "MTr9CBBdbR46AfA=="
+              },
+              "name": "Recent earthquake magnitude",
+              "source": {
+                "$ref": "MTr9CBBdbR46AfA=="
+              },
+              "target": {
+                "$ref": "Mn-N0WWYXRfCbVQ=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDExternalEntity",
+          "_id": "M6r4p5xTCRvurWg==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "Disaster Manager",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FZdOwxzU6QsagKw==",
+              "_parent": {
+                "$ref": "M6r4p5xTCRvurWg=="
+              },
+              "name": "Alert rules / thresholds",
+              "source": {
+                "$ref": "M6r4p5xTCRvurWg=="
+              },
+              "target": {
+                "$ref": "M4YRxmlfBSROXnQ=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDExternalEntity",
+          "_id": "M49CwF0xkS7CaxA==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "Emergency Responder / Rescue Team",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "F1uVEcgGYTCaajg==",
+              "_parent": {
+                "$ref": "M49CwF0xkS7CaxA=="
+              },
+              "name": "Acknowledgement + ETA + status",
+              "source": {
+                "$ref": "M49CwF0xkS7CaxA=="
+              },
+              "target": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDExternalEntity",
+          "_id": "MIkG6LgyRQG-XMQ==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "Hospital / Shelter Coordinators",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FGqpiffJUSeiUkg==",
+              "_parent": {
+                "$ref": "MIkG6LgyRQG-XMQ=="
+              },
+              "name": "Beds, shelter headroom, admission status",
+              "source": {
+                "$ref": "MIkG6LgyRQG-XMQ=="
+              },
+              "target": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDExternalEntity",
+          "_id": "M98XlGyKgS-qanA==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "AI LLM Services",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "Fei3k9x6uQ9O64w==",
+              "_parent": {
+                "$ref": "M98XlGyKgS-qanA=="
+              },
+              "name": "Generated report content",
+              "source": {
+                "$ref": "M98XlGyKgS-qanA=="
+              },
+              "target": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDExternalEntity",
+          "_id": "MQteEc-4SSBCEvw==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "SMS / Siren Gateway",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FECN1ua4VR5iAnw==",
+              "_parent": {
+                "$ref": "MQteEc-4SSBCEvw=="
+              },
+              "name": "Broadcast delivery status",
+              "source": {
+                "$ref": "MQteEc-4SSBCEvw=="
+              },
+              "target": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDProcess",
+          "_id": "M9wjRrEtZQPW7SA==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "2.1 Normalize Rainfall Reading",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FAKyNTd1wQ6ms7w==",
+              "_parent": {
+                "$ref": "M9wjRrEtZQPW7SA=="
+              },
+              "name": "Rain_norm",
+              "source": {
+                "$ref": "M9wjRrEtZQPW7SA=="
+              },
+              "target": {
+                "$ref": "MXx87Mf9wRQarGQ=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDProcess",
+          "_id": "Mn-N0WWYXRfCbVQ==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "2.2 Normalize Seismic Reading",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "Fh9_322PZTp-Kew==",
+              "_parent": {
+                "$ref": "Mn-N0WWYXRfCbVQ=="
+              },
+              "name": "Seismic_norm",
+              "source": {
+                "$ref": "Mn-N0WWYXRfCbVQ=="
+              },
+              "target": {
+                "$ref": "MXx87Mf9wRQarGQ=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDProcess",
+          "_id": "MXx87Mf9wRQarGQ==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "2.3 Calculate Composite R_zone",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FvH_PRhFiQWq3FA==",
+              "_parent": {
+                "$ref": "MXx87Mf9wRQarGQ=="
+              },
+              "name": "R_zone history",
+              "source": {
+                "$ref": "MXx87Mf9wRQarGQ=="
+              },
+              "target": {
+                "$ref": "MXShHqUsfTz-VlA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FkSE_5q4GSA-gEQ==",
+              "_parent": {
+                "$ref": "MXx87Mf9wRQarGQ=="
+              },
+              "name": "Composite zone risk",
+              "source": {
+                "$ref": "MXx87Mf9wRQarGQ=="
+              },
+              "target": {
+                "$ref": "M4YRxmlfBSROXnQ=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDProcess",
+          "_id": "M4YRxmlfBSROXnQ==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "2.4 Classify Risk & Trigger Alert",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FuciLxnjJRTufQA==",
+              "_parent": {
+                "$ref": "M4YRxmlfBSROXnQ=="
+              },
+              "name": "Risk class and early-warning event",
+              "source": {
+                "$ref": "M4YRxmlfBSROXnQ=="
+              },
+              "target": {
+                "$ref": "M1VA_bU4OQxKTVw=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FEtjkapIeTvGcvw==",
+              "_parent": {
+                "$ref": "M4YRxmlfBSROXnQ=="
+              },
+              "name": "Risk summary and active alerts",
+              "source": {
+                "$ref": "M4YRxmlfBSROXnQ=="
+              },
+              "target": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "F2YciX45ZQa6qgg==",
+              "_parent": {
+                "$ref": "M4YRxmlfBSROXnQ=="
+              },
+              "name": "Emergency warning / siren command",
+              "source": {
+                "$ref": "M4YRxmlfBSROXnQ=="
+              },
+              "target": {
+                "$ref": "MQteEc-4SSBCEvw=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDProcess",
+          "_id": "MUFIj6rtKRcGEkw==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "2.5 Validate Emergency Request",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FXOa8ogk3Qmu3WQ==",
+              "_parent": {
+                "$ref": "MUFIj6rtKRcGEkw=="
+              },
+              "name": "Validated request",
+              "source": {
+                "$ref": "MUFIj6rtKRcGEkw=="
+              },
+              "target": {
+                "$ref": "M13-OqsqqScCBBg=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FJ1S8mAJGTo-JXA==",
+              "_parent": {
+                "$ref": "MUFIj6rtKRcGEkw=="
+              },
+              "name": "Validated request + location",
+              "source": {
+                "$ref": "MUFIj6rtKRcGEkw=="
+              },
+              "target": {
+                "$ref": "MCcmF5BlKTA6wag=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDProcess",
+          "_id": "MCcmF5BlKTA6wag==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "2.6 Compute Priority Score",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "F7QqGW6kvQNWHpw==",
+              "_parent": {
+                "$ref": "MCcmF5BlKTA6wag=="
+              },
+              "name": "Zone risk score",
+              "source": {
+                "$ref": "MCcmF5BlKTA6wag=="
+              },
+              "target": {
+                "$ref": "MXShHqUsfTz-VlA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "F580CLQ0CTsybfg==",
+              "_parent": {
+                "$ref": "MCcmF5BlKTA6wag=="
+              },
+              "name": "Priority score",
+              "source": {
+                "$ref": "MCcmF5BlKTA6wag=="
+              },
+              "target": {
+                "$ref": "M13-OqsqqScCBBg=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "F3OQ4jl1IQWy6DQ==",
+              "_parent": {
+                "$ref": "MCcmF5BlKTA6wag=="
+              },
+              "name": "Ranked emergency queue",
+              "source": {
+                "$ref": "MCcmF5BlKTA6wag=="
+              },
+              "target": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDProcess",
+          "_id": "MyMgYMvz-SPadyA==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "2.7 Build Dispatch Plan",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FoiYHbPhYRneW_w==",
+              "_parent": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              },
+              "name": "Dispatch decision / SOP action",
+              "source": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              },
+              "target": {
+                "$ref": "M1VA_bU4OQxKTVw=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "Fe7OKj2k9TT26kA==",
+              "_parent": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              },
+              "name": "Rescue dispatch + route",
+              "source": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              },
+              "target": {
+                "$ref": "M49CwF0xkS7CaxA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "F9g1jPLo1QnGBpA==",
+              "_parent": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              },
+              "name": "Patient / evacuation requirement",
+              "source": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              },
+              "target": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDProcess",
+          "_id": "MEjQgXUytQm2rGQ==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "2.8 Coordinate Hospital / Shelter",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FpT48EjmGRRCBww==",
+              "_parent": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              },
+              "name": "Transfer and admission instructions",
+              "source": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              },
+              "target": {
+                "$ref": "MIkG6LgyRQG-XMQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "Fjq15CfrqReufNQ==",
+              "_parent": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              },
+              "name": "Updated capacity",
+              "source": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              },
+              "target": {
+                "$ref": "MGipVPKT-QkS_Kg=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FYlLJz2T1TveTMw==",
+              "_parent": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              },
+              "name": "Updated relief allocation",
+              "source": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              },
+              "target": {
+                "$ref": "Mzotoo1MZQemFMQ=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDProcess",
+          "_id": "MbaONtCzuR-OrTA==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "2.9 Generate Situation Report",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FyvbO7s6lT8y9qw==",
+              "_parent": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              },
+              "name": "Structured situation-report prompt",
+              "source": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              },
+              "target": {
+                "$ref": "M98XlGyKgS-qanA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FdAE0RA0LRi-Urw==",
+              "_parent": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              },
+              "name": "Report and notification record",
+              "source": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              },
+              "target": {
+                "$ref": "M1VA_bU4OQxKTVw=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FtmnD2iJmQTqezA==",
+              "_parent": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              },
+              "name": "Status / alert / evacuation guidance",
+              "source": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              },
+              "target": {
+                "$ref": "M9Yx5Xth7TrWUOA=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDDataStore",
+          "_id": "M13-OqsqqScCBBg==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "D1 Incident & Request Records",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FX3nrsOZMSi64Dg==",
+              "_parent": {
+                "$ref": "M13-OqsqqScCBBg=="
+              },
+              "name": "Zone vulnerability",
+              "source": {
+                "$ref": "M13-OqsqqScCBBg=="
+              },
+              "target": {
+                "$ref": "MXx87Mf9wRQarGQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FR4sT0PAXSCixkA==",
+              "_parent": {
+                "$ref": "M13-OqsqqScCBBg=="
+              },
+              "name": "Existing request context",
+              "source": {
+                "$ref": "M13-OqsqqScCBBg=="
+              },
+              "target": {
+                "$ref": "MUFIj6rtKRcGEkw=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "F9fnrXHbZQ4ilNA==",
+              "_parent": {
+                "$ref": "M13-OqsqqScCBBg=="
+              },
+              "name": "Incident and request history",
+              "source": {
+                "$ref": "M13-OqsqqScCBBg=="
+              },
+              "target": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDDataStore",
+          "_id": "MXShHqUsfTz-VlA==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "D2 Zone & Telemetry History",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FX3di1754QGyu2w==",
+              "_parent": {
+                "$ref": "MXShHqUsfTz-VlA=="
+              },
+              "name": "Current R_zone",
+              "source": {
+                "$ref": "MXShHqUsfTz-VlA=="
+              },
+              "target": {
+                "$ref": "MCcmF5BlKTA6wag=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "Fvkniaf3oTZehyw==",
+              "_parent": {
+                "$ref": "MXShHqUsfTz-VlA=="
+              },
+              "name": "Telemetry and R_zone history",
+              "source": {
+                "$ref": "MXShHqUsfTz-VlA=="
+              },
+              "target": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDDataStore",
+          "_id": "MGipVPKT-QkS_Kg==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "D3 Teams, Shelters & Hospitals",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FWKRjW70JTC6r7w==",
+              "_parent": {
+                "$ref": "MGipVPKT-QkS_Kg=="
+              },
+              "name": "Shelter occupancy / headroom",
+              "source": {
+                "$ref": "MGipVPKT-QkS_Kg=="
+              },
+              "target": {
+                "$ref": "MXx87Mf9wRQarGQ=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FrCxFlkp4RIib1g==",
+              "_parent": {
+                "$ref": "MGipVPKT-QkS_Kg=="
+              },
+              "name": "Available teams",
+              "source": {
+                "$ref": "MGipVPKT-QkS_Kg=="
+              },
+              "target": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FBYiwIHDBS06JHg==",
+              "_parent": {
+                "$ref": "MGipVPKT-QkS_Kg=="
+              },
+              "name": "Beds and shelter capacity",
+              "source": {
+                "$ref": "MGipVPKT-QkS_Kg=="
+              },
+              "target": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDDataStore",
+          "_id": "M1VA_bU4OQxKTVw==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "D4 Alerts, SOP & Audit Records",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FLTbzjxKdQw2TPg==",
+              "_parent": {
+                "$ref": "M1VA_bU4OQxKTVw=="
+              },
+              "name": "Alerts, SOP and decision history",
+              "source": {
+                "$ref": "M1VA_bU4OQxKTVw=="
+              },
+              "target": {
+                "$ref": "MbaONtCzuR-OrTA=="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDDataStore",
+          "_id": "Mzotoo1MZQemFMQ==",
+          "_parent": {
+            "$ref": "FM10gQd96GS-aWhg=="
+          },
+          "name": "D5 Inventory & Relief Resources",
+          "ownedElements": [
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FlpzWCL7bTqeF4w==",
+              "_parent": {
+                "$ref": "Mzotoo1MZQemFMQ=="
+              },
+              "name": "Relief resources",
+              "source": {
+                "$ref": "Mzotoo1MZQemFMQ=="
+              },
+              "target": {
+                "$ref": "MyMgYMvz-SPadyA=="
+              }
+            },
+            {
+              "_type": "DFDDataFlow",
+              "_id": "FyoaFjMzMS2yCRA==",
+              "_parent": {
+                "$ref": "Mzotoo1MZQemFMQ=="
+              },
+              "name": "Medical / relief stock",
+              "source": {
+                "$ref": "Mzotoo1MZQemFMQ=="
+              },
+              "target": {
+                "$ref": "MEjQgXUytQm2rGQ=="
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
