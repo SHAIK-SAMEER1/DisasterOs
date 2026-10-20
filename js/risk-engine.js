@@ -16,15 +16,19 @@ class RiskEngine {
      */
     evaluateZone(zone, weatherReading, seismicReading, sheltersInZone) {
         // 1. Rainfall normalized against IMD 50mm/3h heavy rainfall threshold
-        const trailingRain = weatherReading?.trailing_3h_mm || 0;
+        const trailingRain = (weatherReading && typeof weatherReading.trailing_3h_mm === 'number') 
+            ? weatherReading.trailing_3h_mm 
+            : 0.0;
         const rainNorm = Math.min(trailingRain / 50.0, 1.0);
 
         // 2. Seismic normalized against M7.0 benchmark
-        const maxMag = seismicReading?.max_magnitude || 0;
+        const maxMag = (seismicReading && typeof seismicReading.max_magnitude === 'number') 
+            ? seismicReading.max_magnitude 
+            : 0.0;
         const seismicNorm = Math.min(maxMag / 7.0, 1.0);
 
         // 3. Static vulnerability index [0, 1]
-        const vuln = zone.vulnerability || 0.5;
+        const vuln = (zone && typeof zone.vulnerability === 'number') ? zone.vulnerability : 0.5;
 
         // 4. Shelter capacity headroom ratio = 1 - (Occupied / Total)
         let totalCap = 0;
