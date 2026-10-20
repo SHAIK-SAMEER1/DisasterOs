@@ -11,20 +11,33 @@ class DisasterOSApp {
         this.syncLiveTelemetry();
     }
 
-    login() {
+    async login() {
         const username = document.getElementById("loginUser").value || "Operator";
+        const password = document.getElementById("loginPassword").value || "";
         const role = document.getElementById("loginRole").value;
-        this.currentUser = { name: username, role: role };
 
-        document.getElementById("profileName").innerText = username;
-        document.getElementById("profileRole").innerText = role;
-        document.getElementById("avatar").innerText = username.substring(0, 2).toUpperCase();
+        // Enforce real role authorization check via AuthManager
+        if (window.authManager) {
+            const authRes = await window.authManager.signIn(username, password, role);
+            if (!authRes.success) {
+                this.toast(`⚠️ Authentication Failed: ${authRes.error}`);
+                alert(`Authentication Error: ${authRes.error}`);
+                return;
+            }
+            this.currentUser = authRes.user;
+        } else {
+            this.currentUser = { name: username, role: role };
+        }
+
+        document.getElementById("profileName").innerText = this.currentUser.name;
+        document.getElementById("profileRole").innerText = this.currentUser.role;
+        document.getElementById("avatar").innerText = (this.currentUser.name || "OP").substring(0, 2).toUpperCase();
 
         document.getElementById("loginScreen").style.display = "none";
         document.getElementById("application").style.display = "flex";
 
         this.navigate("dashboard");
-        this.toast(`Welcome to DisasterOS Command Center, ${username}`);
+        this.toast(`Welcome to DisasterOS Command Center, ${this.currentUser.name}`);
     }
 
     logout() {
