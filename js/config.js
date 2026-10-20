@@ -2,7 +2,9 @@
 // Safely reads configuration without exposing secrets in browser bundles or public repositories.
 
 (function() {
-    window.DISASTEROS_CONFIG = {
+    const root = typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this);
+    
+    root.DISASTEROS_CONFIG = {
         SUPABASE_URL: null,         // e.g. "https://xyzcompany.supabase.co"
         SUPABASE_ANON_KEY: null,    // Public client anon key
         GEO_CACHE_TTL_MS: 300000,   // 5 minutes
@@ -13,9 +15,10 @@
     };
 
     // Helper to inspect configuration status safely
-    window.checkSystemConfig = function() {
-        const hasUrl = !!window.DISASTEROS_CONFIG.SUPABASE_URL;
-        const hasKey = !!window.DISASTEROS_CONFIG.SUPABASE_ANON_KEY;
+    root.checkSystemConfig = function() {
+        const cfg = root.DISASTEROS_CONFIG;
+        const hasUrl = !!cfg.SUPABASE_URL;
+        const hasKey = !!cfg.SUPABASE_ANON_KEY;
         return {
             databaseMode: (hasUrl && hasKey) ? "Supabase PostgreSQL" : "Local Storage (Schema-Enforced)",
             supabaseConfigured: hasUrl && hasKey,
