@@ -7,10 +7,190 @@ class DisasterOSApp {
         this.currentPage = "dashboard";
         this.liveRiskData = [];
         this.charts = {};
+        this._activeEvalActor = "admin";
+        this.currentRegion = { name: "Chennai", lat: 13.0827, lon: 80.2707 };
     }
 
     init() {
+        this.selectEvalActor('admin');
         this.syncLiveTelemetry();
+
+        // Close search dropdown on click outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('globalSearchResults');
+            const searchBox = document.getElementById('globalSearch');
+            if (dropdown && searchBox && !searchBox.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    }
+
+    switchLoginTab(tab) {
+        const tabEval = document.getElementById('loginTabEval');
+        const tabStandard = document.getElementById('loginTabStandard');
+        const tabRegister = document.getElementById('loginTabRegister');
+        const btnEval = document.getElementById('tabBtnEval');
+        const btnStandard = document.getElementById('tabBtnStandard');
+        const btnRegister = document.getElementById('tabBtnRegister');
+
+        if (tabEval) tabEval.style.display = tab === 'eval' ? 'block' : 'none';
+        if (tabStandard) tabStandard.style.display = tab === 'standard' ? 'block' : 'none';
+        if (tabRegister) tabRegister.style.display = tab === 'register' ? 'block' : 'none';
+
+        if (btnEval) btnEval.classList.toggle('active', tab === 'eval');
+        if (btnStandard) btnStandard.classList.toggle('active', tab === 'standard');
+        if (btnRegister) btnRegister.classList.toggle('active', tab === 'register');
+
+        if (tab === 'eval') {
+            this.selectEvalActor(this._activeEvalActor || 'admin');
+        }
+    }
+
+    selectEvalActor(actorKey) {
+        this._activeEvalActor = actorKey;
+        ['admin', 'manager', 'responder', 'coordinator', 'citizen'].forEach(k => {
+            const btn = document.getElementById(`pill-${k}`);
+            if (btn) btn.classList.toggle('active', k === actorKey);
+        });
+        this.renderEvalCredentials(actorKey);
+    }
+
+    renderEvalCredentials(actorKey) {
+        const container = document.getElementById('evalCredentialsContainer');
+        if (!container) return;
+
+        const groups = {
+            admin: {
+                role: "System Administrator",
+                badge: "🛡️ ROOT ACCESS (19 MODULES)",
+                accounts: [
+                    { user: "admin.root", pass: "Admin@DisasterOS2026", name: "Root Infrastructure Admin", org: "NDMA National Command", desc: "Full root access across all 19 modules, audit logs, cryptographic ledger, and system health." },
+                    { user: "admin.tech", pass: "TechLead#2026", name: "Lead Systems Architect", org: "DisasterOS Engineering Core", desc: "Technical system governance, API endpoint telemetry, and failover management." },
+                    { user: "admin.sec", pass: "SecOfficer$99", name: "Security & Compliance Lead", org: "Cyber Defense Bureau", desc: "Zero-knowledge cryptographic audit chain and RBAC privilege enforcement." }
+                ]
+            },
+            manager: {
+                role: "Disaster Manager",
+                badge: "🎖️ TRIAGE & COMMAND",
+                accounts: [
+                    { user: "manager.chennai", pass: "Command#44", name: "Shaik Sameer (Incident Commander)", org: "Chennai District Disaster Management", desc: "Command triage, incident escalation, approval of pending registrations, and tactical dispatch." },
+                    { user: "manager.mumbai", pass: "MumbaiCmd@26", name: "M. Thanushree (Operations Director)", org: "MCGM Disaster Management Cell", desc: "Monsoon deluge coordination, hospital bed allocation, and flood barrier deployment." },
+                    { user: "manager.delhi", pass: "DelhiRelief!8", name: "Vikram Malhotra (Zonal Commander)", org: "Delhi Disaster Management Authority", desc: "Northern plains flood management, supply chain redistribution, and interstate coordination." }
+                ]
+            },
+            responder: {
+                role: "Emergency Responder",
+                badge: "🚒 TACTICAL SEARCH & RESCUE",
+                accounts: [
+                    { user: "responder.alpha", pass: "RescueTeam#1", name: "NDRF Alpha Squad Lead", org: "NDRF 4th Battalion", desc: "Direct incident lifecycle management, tactical field updates, and rescue GPS dispatch." },
+                    { user: "responder.bravo", pass: "WaterRescue#2", name: "Lt. R. Nathan (Marine Boat Unit)", org: "Disaster Marine Flotilla", desc: "Inundation zone boat rescue missions and deep water extraction." },
+                    { user: "responder.medic", pass: "FieldParamedic#3", name: "Dr. Partha Das (Mass Casualty Paramedic)", org: "Emergency Medical Flying Squad", desc: "On-site casualty stabilization, triage tag assignment, and ambulance routing." }
+                ]
+            },
+            coordinator: {
+                role: "Hospital Coordinator",
+                badge: "🏥 MEDICAL & RELIEF BEDS",
+                accounts: [
+                    { user: "coord.apollo", pass: "HospitalCare$1", name: "Dr. K. Ananth (Trauma Triage Head)", org: "Apollo Hospitals Emergency Wing", desc: "Emergency bed capacity, ICU availability, oxygen tracking, and medical supply requests." },
+                    { user: "coord.shelter1", pass: "ShelterWarden#4", name: "S. Ramanathan (Shelter Warden)", org: "Perambur Relief Center", desc: "Shelter occupancy, ration distribution, drinking water supply, and refugee check-ins." },
+                    { user: "coord.kem", pass: "KEMTrauma!9", name: "Dr. Anjali Rao (KEM Emergency Lead)", org: "KEM Hospital Mumbai", desc: "Trauma ward triage, mass casualty incoming ambulance coordination." }
+                ]
+            },
+            citizen: {
+                role: "Citizen",
+                badge: "👤 PUBLIC TRANSPARENCY",
+                accounts: [
+                    { user: "citizen.arun", pass: "CitizenPass#1", name: "Arun Kumar", org: "River Road Resident", desc: "Public Calamity Transparency Dashboard: Live hazard forecast, open shelters, safe hospital beds, SOS calls." },
+                    { user: "citizen.priya", pass: "PriyaHelp$2", name: "Priya Sharma", org: "Community Volunteer", desc: "Citizen incident reporting with GPS, SOS distress beacon, real-time safety advisories." },
+                    { user: "citizen.rohit", pass: "RohitSafety!3", name: "Rohit Verma", org: "Velachery Citizen", desc: "Access live inundation maps, weather warning feeds, and local relief distribution points." }
+                ]
+            }
+        };
+
+        const g = groups[actorKey] || groups.admin;
+        let html = `
+            <div style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+                <span class="badge badge-warning" style="font-size:10px;">${g.badge}</span>
+                <span class="muted small">Click <strong>"Quick Sign In"</strong> to instantly enter as this actor</span>
+            </div>
+        `;
+
+        g.accounts.forEach(acc => {
+            html += `
+            <div class="cred-eval-card">
+                <div class="cred-eval-meta">
+                    <div class="cred-eval-name">${acc.name} <span class="badge badge-outline" style="font-size:9px;">${g.role}</span></div>
+                    <div class="cred-eval-org">${acc.org}</div>
+                    <div style="font-size:10.5px;color:#9cb5ce;margin:3px 0;">${acc.desc}</div>
+                    <div>
+                        <span class="cred-eval-code">User: ${acc.user}</span>
+                        <span class="cred-eval-code" style="margin-left:6px;">Pass: ${acc.pass}</span>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-primary btn-sm" onclick="app.quickLogin('${acc.user}', '${acc.pass}', '${g.role}')" style="white-space:nowrap;padding:7px 12px;font-size:11px;">
+                        ⚡ Quick Sign In
+                    </button>
+                </div>
+            </div>`;
+        });
+
+        container.innerHTML = html;
+    }
+
+    quickLogin(username, password, role) {
+        const userInput = document.getElementById("loginUser");
+        const passInput = document.getElementById("loginPassword");
+        const roleInput = document.getElementById("loginRole");
+        if (userInput) userInput.value = username;
+        if (passInput) passInput.value = password;
+        if (roleInput) roleInput.value = role;
+        return this.login();
+    }
+
+    async handleRegistration(event) {
+        if (event) event.preventDefault();
+        const fullName = (document.getElementById("regFullName")?.value || "").trim();
+        const role = document.getElementById("regRole")?.value || "Citizen";
+        const org = (document.getElementById("regOrg")?.value || "").trim();
+        const city = document.getElementById("regCity")?.value || "chennai";
+        const username = (document.getElementById("regUser")?.value || "").trim();
+        const password = document.getElementById("regPass")?.value || "";
+        const phone = (document.getElementById("regPhone")?.value || "").trim();
+
+        if (!fullName || !username || !password) {
+            alert("Please fill in all required registration fields.");
+            return;
+        }
+
+        const mgr = window.authManager || window.auth;
+        if (!mgr) {
+            alert("Authentication subsystem offline.");
+            return;
+        }
+
+        const res = await mgr.register({
+            fullName, role, org, city, username, password, phone
+        });
+
+        if (!res.success) {
+            alert("Registration Failed: " + res.error);
+            return;
+        }
+
+        if (res.autoApproved) {
+            alert(`Account created successfully! Welcome ${fullName}. You can sign in immediately as Citizen.`);
+            this.switchLoginTab('standard');
+            const u = document.getElementById("loginUser");
+            const p = document.getElementById("loginPassword");
+            const r = document.getElementById("loginRole");
+            if (u) u.value = username;
+            if (p) p.value = password;
+            if (r) r.value = "Citizen";
+        } else {
+            alert(`Registration Application Submitted!\n\nReference: ${res.registrationId}\nStatus: PENDING MANAGER VERIFICATION\n\nYour application has been routed to the Disaster Manager approval queue. Once verified, you will be able to sign in.`);
+            this.switchLoginTab('eval');
+        }
     }
 
     async login() {
@@ -19,8 +199,9 @@ class DisasterOSApp {
         const role = document.getElementById("loginRole").value;
 
         // Enforce real role authorization check via AuthManager
-        if (window.authManager) {
-            const authRes = await window.authManager.signIn(username, password, role);
+        const authSubsystem = window.authManager || window.auth;
+        if (authSubsystem) {
+            const authRes = await authSubsystem.signIn(username, password, role);
             if (!authRes.success) {
                 this.toast(`⚠️ Authentication Failed: ${authRes.error}`);
                 alert(`Authentication Error: ${authRes.error}`);
@@ -46,9 +227,10 @@ class DisasterOSApp {
 
     _getDefaultPageForRole(role) {
         switch (role) {
-            case "Citizen": return "citizen-report";
+            case "Citizen": return "dashboard"; // Public Calamity Transparency & Safety Dashboard
             case "Emergency Responder": return "incidents";
-            case "Hospital Coordinator": return "shelters";
+            case "Hospital Coordinator":
+            case "Shelter Coordinator": return "shelters";
             case "System Administrator":
             case "Disaster Manager":
             default: return "dashboard";
@@ -56,8 +238,11 @@ class DisasterOSApp {
     }
 
     logout() {
+        const authSubsystem = window.authManager || window.auth;
+        if (authSubsystem) authSubsystem.signOut();
         document.getElementById("application").style.display = "none";
         document.getElementById("loginScreen").style.display = "flex";
+        this.switchLoginTab('eval');
     }
 
     toggleSidebar() {
@@ -69,40 +254,39 @@ class DisasterOSApp {
         const ADMIN_ONLY   = ['System Administrator'];
         const MANAGER_ONLY = ['Disaster Manager', 'System Administrator'];
         const RESPONDER    = ['Emergency Responder', 'Disaster Manager', 'System Administrator'];
-        const HOSPITAL     = ['Hospital Coordinator', 'Disaster Manager', 'System Administrator'];
-        const CITIZEN      = ['Citizen', 'Disaster Manager', 'System Administrator'];
+        const ALL_ROLES    = ['Citizen', 'Emergency Responder', 'Hospital Coordinator', 'Shelter Coordinator', 'Disaster Manager', 'System Administrator'];
 
         return [
             // COMMAND
             { section: 'COMMAND OPERATIONS' },
-            { page: 'dashboard',        icon: '⊞', label: 'Command Dashboard',      roles: MANAGER_ONLY },
-            { page: 'early-warning',    icon: '⚠', label: 'Early Warning',           roles: MANAGER_ONLY,   badge: 'alertBadge' },
-            { page: 'risk-map',         icon: '⌖', label: 'Dynamic GIS Map',         roles: ['Disaster Manager', 'System Administrator', 'Emergency Responder', 'Hospital Coordinator', 'Citizen'] },
+            { page: 'dashboard',        icon: '⊞', label: 'Command Dashboard',      roles: ALL_ROLES },
+            { page: 'early-warning',    icon: '⚠', label: 'Early Warning',           roles: ALL_ROLES, badge: 'alertBadge' },
+            { page: 'risk-map',         icon: '⌖', label: 'Dynamic GIS Map',         roles: ALL_ROLES },
             { page: 'decision-support', icon: '◆', label: 'Decision Support',         roles: MANAGER_ONLY },
             
             // EMERGENCY RESPONSE
             { section: 'EMERGENCY RESPONSE' },
             { page: 'incidents',        icon: '◉', label: 'Incidents Lifecycle',      roles: RESPONDER },
-            { page: 'emergency',        icon: '🚨', label: 'Help Distress Calls',     roles: CITIZEN },
+            { page: 'emergency',        icon: '🚨', label: 'Help Distress Calls',     roles: ALL_ROLES },
             { page: 'dispatch',         icon: '🚑', label: 'Rescue Dispatch',         roles: RESPONDER },
             { page: 'sop',              icon: '✓', label: 'SOP Automation',           roles: MANAGER_ONLY },
             
             // RESOURCES
             { section: 'CRITICAL RESOURCES' },
-            { page: 'shelters',         icon: '⌂', label: 'Shelters Management',     roles: HOSPITAL },
-            { page: 'hospitals',        icon: '✚', label: 'Hospital Coordination',   roles: HOSPITAL },
+            { page: 'shelters',         icon: '⌂', label: 'Shelters Management',     roles: ALL_ROLES },
+            { page: 'hospitals',        icon: '✚', label: 'Hospital Coordination',   roles: ALL_ROLES },
             { page: 'inventory',        icon: '▤', label: 'Warehouse & Inventory',   roles: MANAGER_ONLY },
             { page: 'analytics',        icon: '◫', label: 'Analytics & Trends',      roles: MANAGER_ONLY },
             
             // CITIZEN SERVICES
             { section: 'CITIZEN INTAKE' },
-            { page: 'citizen-report',   icon: '📷', label: 'Report Incident (GPS)',   roles: CITIZEN },
+            { page: 'citizen-report',   icon: '📷', label: 'Report Incident (GPS)',   roles: ALL_ROLES },
             
-            // SYSTEM GOVERNANCE (Strictly System Administrator Only!)
+            // SYSTEM GOVERNANCE (Manager & Admin Privileged Controls)
             { section: 'SYSTEM GOVERNANCE' },
-            { page: 'rbac',             icon: '♙', label: 'RBAC User Matrix',        roles: ADMIN_ONLY },
-            { page: 'audit',            icon: '▣', label: 'Cryptographic Audit',     roles: ADMIN_ONLY },
-            { page: 'sources',          icon: '◎', label: 'Scientific API Sources',  roles: ADMIN_ONLY },
+            { page: 'rbac',             icon: '♙', label: 'RBAC & Approvals',        roles: MANAGER_ONLY },
+            { page: 'audit',            icon: '▣', label: 'Cryptographic Audit',     roles: MANAGER_ONLY },
+            { page: 'sources',          icon: '◎', label: 'Scientific API Sources',  roles: ALL_ROLES },
             { page: 'system',           icon: '⚙', label: 'Platform System Health',  roles: ADMIN_ONLY }
         ];
     }
@@ -235,7 +419,7 @@ class DisasterOSApp {
         }
     }
 
-    changeRegion(regionKey) {
+    async changeRegion(regionKey) {
         const regions = {
             chennai: { name: "Chennai", lat: 13.0827, lon: 80.2707 },
             mumbai: { name: "Mumbai", lat: 18.9220, lon: 72.8347 },
@@ -247,14 +431,9 @@ class DisasterOSApp {
         const target = regions[regionKey] || regions.chennai;
         this.currentRegion = target;
 
-        // Multi-City Asset Hydration
-        if (window.institutionalEngine && window.institutionalEngine.cityAssetTemplates[regionKey]) {
-            const tmpl = window.institutionalEngine.cityAssetTemplates[regionKey];
-            window.store.data.zones = tmpl.zones;
-            window.store.data.hospitals = tmpl.hospitals;
-            if (tmpl.shelters) window.store.data.shelters = tmpl.shelters;
-        } else if (regionKey === "chennai") {
-            window.store.load(); // Restore full Chennai dataset
+        // Switch active city in central store (hydrates 7+ items in all collections)
+        if (window.store && typeof window.store.switchCity === 'function') {
+            window.store.switchCity(regionKey);
         }
 
         // Pan GIS map if open
@@ -263,8 +442,11 @@ class DisasterOSApp {
             window.gisMap.renderAll();
         }
 
-        this.toast(`Panned to ${target.name}. Ingesting live Open-Meteo & USGS telemetry...`);
-        this.syncLiveTelemetry();
+        this.toast(`Switched theatre to ${target.name}. Ingesting live Open-Meteo & USGS telemetry...`);
+        await this.syncLiveTelemetry();
+
+        // Refresh current page to reflect new city assets
+        this.navigate(this.currentPage);
     }
 
     async syncLiveTelemetry() {
@@ -346,55 +528,125 @@ class DisasterOSApp {
         }
     }
 
-    /* 1. DASHBOARD */
+        /* 1. DASHBOARD */
     viewDashboard() {
-        const incidents = window.store.data.incidents;
+        if (this.currentUser && this.currentUser.role === 'Citizen') {
+            return this.viewCitizenPublicDashboard();
+        }
+
+        const cityName = this.currentRegion?.name || "Chennai";
+        const activeCity = cityName.toLowerCase().replace(" ncr", "").replace(" (seismic)", "");
+        const incidents = window.store.data.incidents || [];
         const activeInc = incidents.filter(i => i.status !== "resolved" && i.status !== "closed").length;
-        const shelters = window.store.data.shelters;
+        const shelters = window.store.data.shelters || [];
         const totalOcc = shelters.reduce((a, b) => a + (b.occupied || b.capacity_occupied || 0), 0);
         const totalCap = shelters.reduce((a, b) => a + (b.capacity || b.capacity_total || 0), 0);
         const alerts = window.store.data.alerts || [];
+        const zones = window.store.data.zones || [];
+        const highestZone = zones[0] || { name: "Central Sector", vulnerability: 0.85, calamity_type: "Flash Flood" };
+
+        const advisory = window.mlPredictor ? window.mlPredictor.getTacticalAdvisory(highestZone, activeCity, window.store.data) : null;
 
         return `
             <div class="hero">
-                <h2>Emergency Command Center</h2>
-                <p>Welcome to DisasterOS. Monitor live early warnings, coordinate emergency response, manage critical resources, and support citizens from one centralized command platform.</p>
-                <div class="hero-actions">
-                    <button class="btn btn-danger" onclick="app.navigate('incidents')">🚨 View Active Incidents (${activeInc})</button>
-                    <button class="btn btn-primary" onclick="app.navigate('risk-map')">⌖ Open Live GIS Map</button>
-                    <button class="btn btn-secondary" onclick="app.navigate('decision-support')">◆ Decision Support</button>
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
+                    <div>
+                        <h2>Emergency Command Center • ${cityName}</h2>
+                        <p>Real-time calamity telemetry, dual ML hazard predictions, resource allocation, and multi-agency response coordination.</p>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="btn btn-danger" onclick="app.navigate('incidents')">🚨 Active Incidents (${activeInc})</button>
+                        <button class="btn btn-primary" onclick="app.navigate('risk-map')">⌖ Live GIS Map</button>
+                        <button class="btn btn-secondary" onclick="app.navigate('decision-support')">◆ Decision Support</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="grid grid-4">
+            <!-- COMMAND STAT CARDS -->
+            <div class="grid grid-4" style="margin-top:16px;">
                 <div class="card stat">
                     <div class="stat-top"><div class="stat-icon">🚨</div><span class="badge badge-danger">ACTIVE</span></div>
                     <div class="stat-value">${activeInc}</div>
                     <div class="stat-label">Active Incidents</div>
-                    <div class="change down">Across 4 monitored zones</div>
+                    <div class="change down">Across ${zones.length} monitored zones</div>
                 </div>
 
                 <div class="card stat">
-                    <div class="stat-top"><div class="stat-icon">⚠</div><span class="badge badge-warning">ALERTS</span></div>
+                    <div class="stat-top"><div class="stat-icon">⚠️</div><span class="badge badge-warning">ALERTS</span></div>
                     <div class="stat-value">${alerts.length}</div>
                     <div class="stat-label">Active Warnings</div>
-                    <div class="change down">Real-time telemetry</div>
+                    <div class="change down">Open-Meteo & USGS telemetry</div>
                 </div>
 
                 <div class="card stat">
                     <div class="stat-top"><div class="stat-icon">⌂</div><span class="badge badge-success">SHELTER</span></div>
                     <div class="stat-value">${totalOcc} <span class="small muted">/ ${totalCap}</span></div>
                     <div class="stat-label">People Sheltered</div>
-                    <div class="change up">${((totalOcc/totalCap)*100).toFixed(0)}% overall capacity</div>
+                    <div class="change up">${totalCap > 0 ? ((totalOcc/totalCap)*100).toFixed(0) : 0}% overall capacity</div>
                 </div>
 
                 <div class="card stat">
-                    <div class="stat-top"><div class="stat-icon">🚑</div><span class="badge badge-success">UNITS</span></div>
-                    <div class="stat-value">18</div>
+                    <div class="stat-top"><div class="stat-icon">🚑</div><span class="badge badge-info">UNITS</span></div>
+                    <div class="stat-value">${(window.store.data.teams || []).length}</div>
                     <div class="stat-label">Response Units</div>
-                    <div class="change up">12 currently deployed</div>
+                    <div class="change up">${(window.store.data.teams || []).filter(t => t.status === 'deployed' || t.status === 'Active').length} currently deployed</div>
                 </div>
             </div>
+
+            <!-- TACTICAL AUTHORITY ADVISORY & GEO-PROXIMITY RESOURCE ALLOCATOR -->
+            ${advisory ? `
+            <div class="card" style="margin-top:16px;background:linear-gradient(135deg, #091b2e 0%, #05101a 100%);border:1px solid #1a4269;border-left:5px solid #ef4444;">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title" style="display:flex;align-items:center;gap:8px;">
+                            <span>🎖️ Tactical Authority Advisory & Proximity Allocator</span>
+                            <span class="badge badge-danger">${advisory.threat_level} THREAT</span>
+                            <span class="badge badge-info">${advisory.calamity_type}</span>
+                        </div>
+                        <div class="muted small" style="margin-top:4px;">Target Sector: <strong>${advisory.target_zone}</strong> • Automated Haversine spatial allocation for ${cityName}</div>
+                    </div>
+                    <span class="badge badge-success">ML DIRECTIVE</span>
+                </div>
+
+                <div style="background:#030d17;padding:12px;border-radius:8px;margin-top:10px;">
+                    <strong style="color:#64c5ff;font-size:12px;">Operational Directives:</strong>
+                    <ul style="font-size:11.5px;color:#cbd5e1;margin:6px 0 0 16px;line-height:1.7;">
+                        ${advisory.action_plan.map(step => `<li>${step}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <!-- 4-Column Proximity Allocator Grid -->
+                <div class="grid grid-4" style="margin-top:12px;gap:10px;">
+                    <div style="background:#071728;border:1px solid #143252;padding:10px;border-radius:6px;">
+                        <div class="muted small">✚ Closest Trauma Center</div>
+                        <strong style="color:#fff;font-size:12px;display:block;margin:3px 0;">${advisory.closest_hospital.hospital.name}</strong>
+                        <div style="font-size:11px;color:#35a7ff;">${advisory.closest_hospital.distance_km} km • ETA ~${advisory.closest_hospital.transit_mins}m</div>
+                        <div class="muted small" style="margin-top:2px;">Beds: <strong style="color:#10b981;">${advisory.closest_hospital.hospital.available}</strong> free</div>
+                    </div>
+
+                    <div style="background:#071728;border:1px solid #143252;padding:10px;border-radius:6px;">
+                        <div class="muted small">⌂ Closest Evacuation Shelter</div>
+                        <strong style="color:#fff;font-size:12px;display:block;margin:3px 0;">${advisory.closest_shelter.shelter.name}</strong>
+                        <div style="font-size:11px;color:#35a7ff;">${advisory.closest_shelter.distance_km} km • ETA ~${advisory.closest_shelter.transit_mins}m</div>
+                        <div class="muted small" style="margin-top:2px;">Capacity: <strong style="color:#10b981;">${Math.max(0, advisory.closest_shelter.shelter.capacity - advisory.closest_shelter.shelter.occupied)}</strong> free</div>
+                    </div>
+
+                    <div style="background:#071728;border:1px solid #143252;padding:10px;border-radius:6px;">
+                        <div class="muted small">🚒 Closest Search & Rescue Squad</div>
+                        <strong style="color:#fff;font-size:12px;display:block;margin:3px 0;">${advisory.closest_team.team.name}</strong>
+                        <div style="font-size:11px;color:#35a7ff;">${advisory.closest_team.distance_km} km • ETA ~${advisory.closest_team.transit_mins}m</div>
+                        <div class="muted small" style="margin-top:2px;">Status: <span class="badge badge-outline">${advisory.closest_team.team.status}</span></div>
+                    </div>
+
+                    <div style="background:#071728;border:1px solid #143252;padding:10px;border-radius:6px;">
+                        <div class="muted small">🚨 Closest Fire / Emergency Station</div>
+                        <strong style="color:#fff;font-size:12px;display:block;margin:3px 0;">${advisory.closest_fire_station.station.name}</strong>
+                        <div style="font-size:11px;color:#35a7ff;">${advisory.closest_fire_station.distance_km} km • ETA ~${advisory.closest_fire_station.transit_mins}m</div>
+                        <div class="muted small" style="margin-top:2px;">Type: <span class="badge badge-info">${advisory.closest_fire_station.station.type}</span></div>
+                    </div>
+                </div>
+            </div>
+            ` : ''}
 
             <br>
 
@@ -425,12 +677,12 @@ class DisasterOSApp {
 
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">Priority Emergency Alerts</div>
+                        <div class="card-title">Priority Emergency Alerts (${cityName})</div>
                         <button class="btn btn-secondary" onclick="app.navigate('early-warning')">View Feeds</button>
                     </div>
                     ${alerts.map(a => `
                         <div class="alert ${a.severity === 'Critical' ? 'danger' : 'warning'}">
-                            <div style="font-size:18px;">${a.severity === 'Critical' ? '🚨' : '⚠'}</div>
+                            <div style="font-size:18px;">${a.severity === 'Critical' ? '🚨' : '⚠️'}</div>
                             <div style="flex:1;">
                                 <strong>${a.title}</strong>
                                 <div class="muted small">${a.area} • ${a.source} (${a.time})</div>
@@ -445,14 +697,14 @@ class DisasterOSApp {
             <div class="grid grid-2" style="margin-top:16px;">
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">📈 24h Forward Multi-Hazard & Inundation Prediction (ML Ensemble)</div>
-                        <span class="badge badge-success">ML FORECAST</span>
+                        <div class="card-title">📈 Calamity Hazard Probability vs Inundation Index (${cityName})</div>
+                        <span class="badge badge-success">ML DOUBLE PREDICTOR</span>
                     </div>
                     <div style="height:250px;position:relative;width:100%;">
                         <canvas id="dashboardForecastChart"></canvas>
                     </div>
                     <div class="muted small" style="margin-top:8px;">
-                        Model: Random Forest & Gradient Boosting | Accuracy: 92.6% | Multi-class ROC-AUC: 0.987
+                        Model: Random Forest & Gradient Boosting Double Predictor | Calamity Type & Severity vs Prone Zones
                     </div>
                 </div>
 
@@ -475,7 +727,7 @@ class DisasterOSApp {
                 <div class="card-header">
                     <div>
                         <div class="card-title">🏥 Nearby Trauma Centers & Institutional Surge Readiness</div>
-                        <div class="muted small">Automated Haversine proximity screening & clinical readiness for ${this.currentRegion ? this.currentRegion.name : 'Monitored Region'}</div>
+                        <div class="muted small">Automated Haversine proximity screening & clinical readiness for ${cityName}</div>
                     </div>
                     <span class="badge badge-success">ACTIVE MONITORING</span>
                 </div>
@@ -499,6 +751,190 @@ class DisasterOSApp {
                             </button>
                         </div>
                     `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    /* 1B. CITIZEN PUBLIC CALAMITY TRANSPARENCY DASHBOARD */
+    viewCitizenPublicDashboard() {
+        const cityName = this.currentRegion?.name || "Chennai";
+        const shelters = window.store.data.shelters || [];
+        const hospitals = window.store.data.hospitals || [];
+        const alerts = window.store.data.alerts || [];
+
+        const totalShelterOpen = shelters.reduce((a, b) => a + Math.max(0, (b.capacity || b.capacity_total || 500) - (b.occupied || 0)), 0);
+        const totalBedsAvail = hospitals.reduce((a, b) => a + (b.available || b.bed_capacity_available || 0), 0);
+
+        return `
+            <div class="hero" style="background:linear-gradient(135deg, #0d294d 0%, #061826 100%);border-left:5px solid #35a7ff;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span class="badge badge-primary" style="font-size:11px;padding:4px 8px;">PUBLIC TRANSPARENCY PORTAL</span>
+                            <span class="badge badge-warning" style="font-size:11px;padding:4px 8px;">LIVE HAZARD TELEMETRY</span>
+                        </div>
+                        <h2 style="margin:10px 0 6px 0;">Civilian Calamity Transparency & Safety Hub • ${cityName}</h2>
+                        <p style="color:#c2d6eb;max-width:850px;line-height:1.6;">
+                            This public dashboard provides unhindered transparency on imminent weather hazards, multi-zone calamity forecasts, open evacuation shelters, and trauma center availability. In life-threatening emergencies, dial <strong>112</strong> or trigger an instant SOS distress alert.
+                        </p>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:8px;min-width:220px;">
+                        <button class="btn btn-danger" onclick="app.navigate('emergency')" style="padding:10px 16px;font-size:13px;font-weight:700;">
+                            🚨 Trigger SOS Distress Call
+                        </button>
+                        <button class="btn btn-primary" onclick="app.navigate('citizen-report')" style="padding:10px 16px;font-size:13px;">
+                            📷 Report Local Hazard (GPS)
+                        </button>
+                        <button class="btn btn-secondary" onclick="app.navigate('risk-map')" style="padding:10px 16px;font-size:13px;">
+                            ⌖ Open Live Hazard Map
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PUBLIC STAT CARDS -->
+            <div class="grid grid-4" style="margin-top:16px;">
+                <div class="card stat">
+                    <div class="stat-top"><div class="stat-icon">⚠️</div><span class="badge badge-warning">ALERTS</span></div>
+                    <div class="stat-value">${alerts.length}</div>
+                    <div class="stat-label">Active Calamity Bulletins</div>
+                    <div class="change down">Official meteorological feed</div>
+                </div>
+                <div class="card stat">
+                    <div class="stat-top"><div class="stat-icon">⌂</div><span class="badge badge-success">SHELTERS</span></div>
+                    <div class="stat-value">${totalShelterOpen}</div>
+                    <div class="stat-label">Open Shelter Headroom</div>
+                    <div class="change up">Across ${shelters.length} relief centres</div>
+                </div>
+                <div class="card stat">
+                    <div class="stat-top"><div class="stat-icon">✚</div><span class="badge badge-info">TRAUMA</span></div>
+                    <div class="stat-value">${totalBedsAvail}</div>
+                    <div class="stat-label">Available Hospital Beds</div>
+                    <div class="change up">${hospitals.length} active emergency wings</div>
+                </div>
+                <div class="card stat">
+                    <div class="stat-top"><div class="stat-icon">📞</div><span class="badge badge-danger">HELPLINE</span></div>
+                    <div class="stat-value" style="font-size:22px;">112 / 1070</div>
+                    <div class="stat-label">National Emergency Desk</div>
+                    <div class="change down">Toll-free 24/7 priority</div>
+                </div>
+            </div>
+
+            <!-- PRECAUTIONARY SAFETY DIRECTIVES -->
+            <div class="card" style="margin-top:16px;background:#061b2e;border:1px solid #1a3f68;">
+                <div class="card-header">
+                    <div class="card-title">🛡️ Standard Precautionary Safety Guidelines & Directives (${cityName})</div>
+                    <span class="badge badge-success">CIVIL DEFENSE GUIDANCE</span>
+                </div>
+                <div class="grid grid-3" style="margin-top:10px;">
+                    <div style="background:#091f36;padding:14px;border-radius:8px;border-left:3px solid #35a7ff;">
+                        <h4 style="color:#64c5ff;margin-bottom:6px;">🌊 Flood & Heavy Rain Precautions</h4>
+                        <ul style="font-size:11.5px;color:#cbd5e1;line-height:1.7;padding-left:16px;margin:0;">
+                            <li>Stay away from inundated causeways, river embankments, and storm canals.</li>
+                            <li>Switch off electrical main switches before floodwater enters premises.</li>
+                            <li>Store drinking water in sealed containers; boil thoroughly before use.</li>
+                            <li>Keep emergency documents, flashlights, and medications in waterproof pouches.</li>
+                        </ul>
+                    </div>
+                    <div style="background:#091f36;padding:14px;border-radius:8px;border-left:3px solid #f59e0b;">
+                        <h4 style="color:#fbbf24;margin-bottom:6px;">🌪️ Cyclone & Squall Line Safety</h4>
+                        <ul style="font-size:11.5px;color:#cbd5e1;line-height:1.7;padding-left:16px;margin:0;">
+                            <li>Board up or shutter glass windows; secure loose outdoor metal roofing.</li>
+                            <li>Do not venture out during the lull (calm eye of the storm) as winds reverse violently.</li>
+                            <li>Charge mobile phones, power banks, and emergency radios in advance.</li>
+                            <li>Park vehicles away from aged trees, high-voltage lines, and billboard hoardings.</li>
+                        </ul>
+                    </div>
+                    <div style="background:#091f36;padding:14px;border-radius:8px;border-left:3px solid #ef4444;">
+                        <h4 style="color:#f87171;margin-bottom:6px;">🏢 Seismic & Collapse Safety</h4>
+                        <ul style="font-size:11.5px;color:#cbd5e1;line-height:1.7;padding-left:16px;margin:0;">
+                            <li><strong>Drop, Cover, and Hold On:</strong> Take cover beneath sturdy furniture.</li>
+                            <li>Do not use elevators or stairwells during active ground tremors.</li>
+                            <li>If outdoors, move immediately into open fields away from power lines and facades.</li>
+                            <li>Expect aftershocks; report structural cracks to municipal building engineers.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISUAL ML HAZARD PREDICTION DOUBLE-BAR CHART -->
+            <div class="card" style="margin-top:16px;">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">📈 Real-Time Calamity Hazard Probability vs Inundation Risk (${cityName})</div>
+                        <div class="muted small">Machine Learning Dual-Predictor: Calamity Type, Severity Probability (%) & Inundation Index (%) across prone municipal zones</div>
+                    </div>
+                    <span class="badge badge-primary">ML DUAL PREDICTOR</span>
+                </div>
+                <div style="height:280px;position:relative;width:100%;margin-top:10px;">
+                    <canvas id="dashboardForecastChart"></canvas>
+                </div>
+                <div class="muted small" style="margin-top:8px;display:flex;justify-content:space-between;">
+                    <span>Algorithm: Random Forest & Gradient Boosting Dual-Predictor | Accuracy: 92.6%</span>
+                    <span>Transparent civilian view of zone vulnerability</span>
+                </div>
+            </div>
+
+            <!-- OPEN RELIEF SHELTERS & HOSPITALS DIRECTORY -->
+            <div class="grid grid-2" style="margin-top:16px;">
+                <!-- Shelters -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">⌂ Designated Evacuation Shelters (${cityName})</div>
+                        <span class="badge badge-success">${shelters.length} OPEN FACILITIES</span>
+                    </div>
+                    <div class="table-wrap" style="max-height:360px;overflow-y:auto;">
+                        <table>
+                            <thead>
+                                <tr><th>Relief Facility</th><th>Open Headroom</th><th>Food / Rations</th><th>Contact</th></tr>
+                            </thead>
+                            <tbody>
+                                ${shelters.map(s => {
+                                    const avail = Math.max(0, (s.capacity || s.capacity_total || 500) - (s.occupied || 0));
+                                    return `
+                                        <tr>
+                                            <td>
+                                                <strong>${s.name}</strong>
+                                                <div class="muted small">📍 ${s.location || s.address}</div>
+                                            </td>
+                                            <td><span class="badge ${avail > 50 ? 'badge-success' : 'badge-warning'}">${avail} Beds</span></td>
+                                            <td><span class="badge badge-info">${s.food_packs || s.provisions || 'Full Meals'}</span></td>
+                                            <td><a href="tel:${s.contact_phone || '1070'}" style="color:#64c5ff;text-decoration:none;">${s.contact_phone || '1070'}</a></td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Hospitals -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">✚ Emergency Trauma Centers & Beds (${cityName})</div>
+                        <span class="badge badge-info">${hospitals.length} HOSPITALS</span>
+                    </div>
+                    <div class="table-wrap" style="max-height:360px;overflow-y:auto;">
+                        <table>
+                            <thead>
+                                <tr><th>Hospital Name</th><th>Beds Available</th><th>ICU Units</th><th>Emergency Line</th></tr>
+                            </thead>
+                            <tbody>
+                                ${hospitals.map(h => `
+                                    <tr>
+                                        <td>
+                                            <strong>${h.name}</strong>
+                                            <div class="muted small">📍 ${h.location} • ${h.transit_minutes || 15} mins away</div>
+                                        </td>
+                                        <td><span class="badge ${h.available > 25 ? 'badge-success' : 'badge-warning'}">${h.available} Free</span></td>
+                                        <td><strong style="color:#35a7ff;">${h.icu || 6}</strong></td>
+                                        <td><a href="tel:${h.contact_number || '108'}" style="color:#64c5ff;text-decoration:none;">${h.contact_number || '108'}</a></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         `;
@@ -1374,20 +1810,54 @@ class DisasterOSApp {
         }, 250);
     }
 
-    /* 18. ANALYTICS */
+        /* 18. ANALYTICS */
     viewAnalytics() {
+        const cityName = this.currentRegion?.name || "Chennai";
+        const incidents = window.store.data.incidents || [];
+        const activeInc = incidents.filter(i => i.status !== "resolved" && i.status !== "closed").length;
+        const shelters = window.store.data.shelters || [];
+        const totalOcc = shelters.reduce((a, b) => a + (b.occupied || b.capacity_occupied || 0), 0);
+        const totalCap = shelters.reduce((a, b) => a + (b.capacity || b.capacity_total || 0), 0);
+        const hospitals = window.store.data.hospitals || [];
+        const openBeds = hospitals.reduce((a, b) => a + (b.available || b.bed_capacity_available || 0), 0);
+
         return `
+            <div class="hero">
+                <h2>Operational Telemetry & Predictive Analytics</h2>
+                <p>Real-time analytics for <strong>${cityName}</strong>. Calamity telemetry, Gini feature importance, response latency benchmarks, and resource headroom utilization.</p>
+            </div>
+
             <div class="grid grid-4">
-                <div class="card stat"><div class="stat-value">11.4 min</div><div class="stat-label">Avg Response Velocity</div><div class="change up">↓ 24% dispatch latency</div></div>
-                <div class="card stat"><div class="stat-value">94.2%</div><div class="stat-label">ML Hazard Precision</div><div class="change up">Ensemble ROC-AUC 0.987</div></div>
-                <div class="card stat"><div class="stat-value">46.2%</div><div class="stat-label">Travel Distance Saved</div><div class="change up">Constrained Optimizer vs Random</div></div>
-                <div class="card stat"><div class="stat-value">100%</div><div class="stat-label">Audit Log Integrity</div><div class="change up">SHA-256 Verified Block Chain</div></div>
+                <div class="card stat">
+                    <div class="stat-top"><div class="stat-icon">🚨</div><span class="badge badge-danger">ACTIVE</span></div>
+                    <div class="stat-value">${activeInc}</div>
+                    <div class="stat-label">Active Incidents (${cityName})</div>
+                    <div class="change up">Live triage feed</div>
+                </div>
+                <div class="card stat">
+                    <div class="stat-top"><div class="stat-icon">⌂</div><span class="badge badge-success">CAPACITY</span></div>
+                    <div class="stat-value">${totalOcc} <span class="small muted">/ ${totalCap}</span></div>
+                    <div class="stat-label">Sheltered Persons</div>
+                    <div class="change up">${totalCap > 0 ? ((totalOcc/totalCap)*100).toFixed(0) : 0}% capacity</div>
+                </div>
+                <div class="card stat">
+                    <div class="stat-top"><div class="stat-icon">✚</div><span class="badge badge-info">TRAUMA</span></div>
+                    <div class="stat-value">${openBeds}</div>
+                    <div class="stat-label">Available Hospital Beds</div>
+                    <div class="change up">Across ${hospitals.length} trauma centers</div>
+                </div>
+                <div class="card stat">
+                    <div class="stat-top"><div class="stat-icon">⏱️</div><span class="badge badge-warning">DISPATCH</span></div>
+                    <div class="stat-value">11.4 min</div>
+                    <div class="stat-label">Avg Response Velocity</div>
+                    <div class="change up">↓ 24% dispatch latency</div>
+                </div>
             </div>
             <br>
             <div class="grid grid-2">
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">📊 Multi-Zone Hazard Risk & Inundation Comparison</div>
+                        <div class="card-title">📊 Multi-Zone Hazard Risk & Inundation Comparison (${cityName})</div>
                         <span class="badge badge-primary">R_ZONE METRIC</span>
                     </div>
                     <div style="height:270px;position:relative;">
@@ -1409,7 +1879,7 @@ class DisasterOSApp {
             <div class="grid grid-2">
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">🚨 Active Incidents by Category Breakdown</div>
+                        <div class="card-title">🚨 Active Incidents by Category Breakdown (${cityName})</div>
                         <span class="badge badge-warning">TRIAGE CLASSIFICATION</span>
                     </div>
                     <div style="height:250px;position:relative;">
@@ -1585,30 +2055,132 @@ class DisasterOSApp {
         `;
     }
 
-    /* 23. RBAC */
+        /* 23. RBAC */
     viewRBAC() {
+        const pending = (window.authManager || window.auth)?.getPendingRegistrations() || [];
+        const isManagerOrAdmin = ['System Administrator', 'Disaster Manager'].includes(this.currentUser.role);
+
         const roles = [
-            ["System Administrator", "✓", "✓", "✓", "✓", "✓"],
-            ["Disaster Manager", "✓", "✓", "✓", "✓", "—"],
-            ["Emergency Responder", "✓", "✓", "Limited", "—", "—"],
-            ["Hospital Coordinator", "✓", "Medical", "—", "Limited", "—"],
-            ["NGO Coordinator", "✓", "Limited", "✓", "Limited", "—"],
-            ["Volunteer", "Limited", "Limited", "Assigned", "—", "—"],
-            ["Warehouse Manager", "✓", "—", "✓", "Limited", "—"],
-            ["Citizen", "Citizen", "Report", "—", "—", "—"]
+            ["System Administrator", "✓ Root", "✓ Full", "✓ Full", "✓ Full", "✓ Cryptographic Root"],
+            ["Disaster Manager", "✓ Triage", "✓ Triage", "✓ Allocate", "✓ Generate", "✓ Approvals Queue"],
+            ["Emergency Responder", "✓ Tactical", "✓ Updates", "Limited", "Incident Logs", "—"],
+            ["Hospital Coordinator", "✓ Medical", "Read Only", "✓ Beds/Oxygen", "Triage Logs", "—"],
+            ["Shelter Coordinator", "✓ Relief", "Read Only", "✓ Shelter Rations", "Occupancy Logs", "—"],
+            ["Citizen", "✓ Transparency", "SOS / GPS", "✓ Open Shelters", "Self Reports", "—"]
         ];
 
         return `
-            <div class="card">
-                <div class="card-header"><div class="card-title">Role-Based Access Control (RBAC) Matrix</div><span class="badge badge-success">8 ROLES CONFIGURED</span></div>
+            <div class="hero">
+                <h2>Role-Based Access Control & Registration Governance</h2>
+                <p>Enforcing zero information leakage across 5 specialized actor roles. Disaster Managers and System Administrators supervise applicant approvals, cryptographic keys, and module permissions.</p>
+            </div>
+
+            <!-- PENDING REGISTRATIONS APPROVAL QUEUE -->
+            <div class="card" style="margin-bottom:16px;">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">📝 Pending Facility & Staff Registration Queue</div>
+                        <div class="muted small">New Hospital, Shelter, and Responder applications requiring Manager verification before activation</div>
+                    </div>
+                    <span class="badge ${pending.length > 0 ? 'badge-warning' : 'badge-success'}">${pending.length} PENDING APPLICATIONS</span>
+                </div>
+                ${pending.length === 0 ? `
+                    <div style="padding:24px;text-align:center;color:#8fa5bd;">
+                        ✓ All applicant registrations have been processed. No pending requests in queue.
+                    </div>
+                ` : `
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ref ID</th>
+                                    <th>Applicant Name</th>
+                                    <th>Requested Role</th>
+                                    <th>Organization / Facility</th>
+                                    <th>City</th>
+                                    <th>Username</th>
+                                    <th>Contact</th>
+                                    <th>Applied At</th>
+                                    ${isManagerOrAdmin ? '<th>Operational Action</th>' : ''}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${pending.map(p => `
+                                    <tr>
+                                        <td><code>${p.registration_id}</code></td>
+                                        <td><strong>${p.full_name}</strong></td>
+                                        <td><span class="badge badge-info">${p.role}</span></td>
+                                        <td>${p.org_name}</td>
+                                        <td>📍 ${p.city.toUpperCase()}</td>
+                                        <td><code>${p.username}</code></td>
+                                        <td>${p.phone}</td>
+                                        <td class="muted small">${new Date(p.submitted_at).toLocaleTimeString()}</td>
+                                        ${isManagerOrAdmin ? `
+                                            <td>
+                                                <div style="display:flex;gap:6px;">
+                                                    <button class="btn btn-primary btn-sm" onclick="app.approveApplicant('${p.registration_id}')" style="font-size:10px;padding:4px 8px;">
+                                                        ✓ Approve
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm" onclick="app.rejectApplicant('${p.registration_id}')" style="font-size:10px;padding:4px 8px;">
+                                                        ✗ Reject
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        ` : ''}
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `}
+            </div>
+
+            <!-- 15 VERIFIED EVALUATION STAFF & ACCOUNTS -->
+            <div class="card" style="margin-bottom:16px;">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">👥 Verified Evaluation Accounts (15 Accounts Across 5 Roles)</div>
+                        <div class="muted small">Pre-configured testing accounts available for Review 2 faculty evaluation</div>
+                    </div>
+                    <span class="badge badge-info">15 ACTIVE ACCOUNTS</span>
+                </div>
                 <div class="table-wrap">
                     <table>
-                        <thead><tr><th>Role</th><th>Dashboard</th><th>Incidents</th><th>Resources</th><th>Reports</th><th>Admin</th></tr></thead>
+                        <thead>
+                            <tr><th>Username</th><th>Verified Officer / Public</th><th>Actor Role</th><th>Department / Affiliation</th><th>Access Scope</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>admin.root</code></td><td>Root Infrastructure Admin</td><td><span class="badge badge-danger">System Administrator</span></td><td>NDMA National Command</td><td>All 19 Modules (Root)</td></tr>
+                            <tr><td><code>admin.tech</code></td><td>Lead Systems Architect</td><td><span class="badge badge-danger">System Administrator</span></td><td>DisasterOS Engineering Core</td><td>All 19 Modules (Root)</td></tr>
+                            <tr><td><code>admin.sec</code></td><td>Security & Compliance Lead</td><td><span class="badge badge-danger">System Administrator</span></td><td>Cyber Defense Bureau</td><td>All 19 Modules (Root)</td></tr>
+                            <tr><td><code>manager.chennai</code></td><td>Shaik Sameer (Incident Commander)</td><td><span class="badge badge-warning">Disaster Manager</span></td><td>Chennai District Disaster Cell</td><td>Command, Triage, Approvals, Dispatch</td></tr>
+                            <tr><td><code>manager.mumbai</code></td><td>M. Thanushree (Operations Director)</td><td><span class="badge badge-warning">Disaster Manager</span></td><td>MCGM Disaster Management Cell</td><td>Command, Triage, Approvals, Dispatch</td></tr>
+                            <tr><td><code>manager.delhi</code></td><td>Vikram Malhotra (Zonal Commander)</td><td><span class="badge badge-warning">Disaster Manager</span></td><td>Delhi Disaster Management Authority</td><td>Command, Triage, Approvals, Dispatch</td></tr>
+                            <tr><td><code>responder.alpha</code></td><td>NDRF Alpha Squad Lead</td><td><span class="badge badge-primary">Emergency Responder</span></td><td>NDRF 4th Battalion</td><td>Incidents, GPS Dispatch, Field Updates</td></tr>
+                            <tr><td><code>responder.bravo</code></td><td>Lt. R. Nathan (Marine Boat Unit)</td><td><span class="badge badge-primary">Emergency Responder</span></td><td>Disaster Marine Flotilla</td><td>Incidents, GPS Dispatch, Field Updates</td></tr>
+                            <tr><td><code>responder.medic</code></td><td>Dr. Partha Das (Mass Casualty Paramedic)</td><td><span class="badge badge-primary">Emergency Responder</span></td><td>Emergency Medical Flying Squad</td><td>Incidents, GPS Dispatch, Field Updates</td></tr>
+                            <tr><td><code>coord.apollo</code></td><td>Dr. K. Ananth (Trauma Triage Head)</td><td><span class="badge badge-success">Hospital Coordinator</span></td><td>Apollo Hospitals Emergency Wing</td><td>Hospital Beds, ICU, Shelters</td></tr>
+                            <tr><td><code>coord.shelter1</code></td><td>S. Ramanathan (Shelter Warden)</td><td><span class="badge badge-success">Hospital Coordinator</span></td><td>Perambur Relief Center</td><td>Shelter Headroom, Rations, Water</td></tr>
+                            <tr><td><code>coord.kem</code></td><td>Dr. Anjali Rao (KEM Emergency Lead)</td><td><span class="badge badge-success">Hospital Coordinator</span></td><td>KEM Hospital Mumbai</td><td>Hospital Beds, ICU, Shelters</td></tr>
+                            <tr><td><code>citizen.arun</code></td><td>Arun Kumar (Resident)</td><td><span class="badge badge-outline">Citizen</span></td><td>General Public</td><td>Transparency Dashboard, Safe Routes, SOS</td></tr>
+                            <tr><td><code>citizen.priya</code></td><td>Priya Sharma (Volunteer)</td><td><span class="badge badge-outline">Citizen</span></td><td>General Public</td><td>Transparency Dashboard, GPS Report, SOS</td></tr>
+                            <tr><td><code>citizen.rohit</code></td><td>Rohit Verma (Resident)</td><td><span class="badge badge-outline">Citizen</span></td><td>General Public</td><td>Transparency Dashboard, Safe Routes, SOS</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- RBAC PRIVILEGE ENFORCEMENT MATRIX -->
+            <div class="card">
+                <div class="card-header"><div class="card-title">Role-Based Access Control (RBAC) Matrix</div><span class="badge badge-success">ZERO-LEAKAGE ENFORCEMENT</span></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Role</th><th>Dashboard</th><th>Incidents</th><th>Resources</th><th>Reports</th><th>Admin Governance</th></tr></thead>
                         <tbody>
                             ${roles.map(r => `
                                 <tr>
                                     <td><strong>${r[0]}</strong></td>
-                                    ${r.slice(1).map(x => `<td><span class="badge ${x === '✓' ? 'badge-success' : x === '—' ? 'badge-danger' : 'badge-info'}">${x}</span></td>`).join("")}
+                                    ${r.slice(1).map(x => `<td><span class="badge ${x.includes('✓') ? 'badge-success' : x === '—' ? 'badge-danger' : 'badge-info'}">${x}</span></td>`).join("")}
                                 </tr>
                             `).join("")}
                         </tbody>
@@ -1616,6 +2188,30 @@ class DisasterOSApp {
                 </div>
             </div>
         `;
+    }
+
+    approveApplicant(regId) {
+        const mgr = window.authManager || window.auth;
+        const res = mgr.approveRegistration(regId, this.currentUser.name);
+        if (res.success) {
+            this.toast(res.message);
+            this.navigate('rbac');
+        } else {
+            alert(res.error);
+        }
+    }
+
+    rejectApplicant(regId) {
+        const reason = prompt("Enter reason for rejecting this registration applicant:", "Failed institutional verification");
+        if (!reason) return;
+        const mgr = window.authManager || window.auth;
+        const res = mgr.rejectRegistration(regId, this.currentUser.name, reason);
+        if (res.success) {
+            this.toast(res.message);
+            this.navigate('rbac');
+        } else {
+            alert(res.error);
+        }
     }
 
     /* 24. AUDIT & CRYPTOGRAPHIC HASH CHAIN */
@@ -1762,36 +2358,44 @@ class DisasterOSApp {
     initDashboardCharts() {
         if (typeof Chart === "undefined") return;
 
-        // 1. Forecast Line Chart (ML Trajectory)
+        // 1. Grouped Double-Bar Hazard & Inundation Chart (ML Double Predictor)
         const ctxForecast = document.getElementById("dashboardForecastChart");
         if (ctxForecast) {
-            const mlResult = window.mlPredictor ? window.mlPredictor.predict({ rain_3h_mm: 38.0, rain_24h_mm: 92.0 }) : null;
-            const labels = mlResult ? mlResult.forecast_24h.map(f => f.hour) : ["+0h", "+3h", "+6h", "+12h", "+18h", "+24h"];
-            const probData = mlResult ? mlResult.forecast_24h.map(f => (f.prob * 100).toFixed(1)) : [64, 76, 82, 71, 52, 40];
-            const rainData = mlResult ? mlResult.forecast_24h.map(f => f.rain_mm) : [38, 34, 28, 19, 11, 7];
+            if (this.charts.forecast) {
+                try { this.charts.forecast.destroy(); } catch(e){}
+            }
+
+            const activeCity = (this.currentRegion?.name || "chennai").toLowerCase().replace(" ncr", "").replace(" (seismic)", "");
+            const zones = window.store.data.zones || [];
+            
+            // Get double predictions from mlPredictor
+            let zonePredictions = [];
+            if (window.mlPredictor && typeof window.mlPredictor.predictCityZones === 'function') {
+                zonePredictions = window.mlPredictor.predictCityZones(activeCity, zones);
+            }
+
+            const labels = zonePredictions.map(z => z.zone_name);
+            const hazardProbs = zonePredictions.map(z => z.hazard_prob);
+            const vulnScores = zonePredictions.map(z => z.vulnerability_index);
 
             this.charts.forecast = new Chart(ctxForecast, {
-                type: "line",
+                type: "bar",
                 data: {
                     labels: labels,
                     datasets: [
                         {
-                            label: "ML Inundation Risk Probability (%)",
-                            data: probData,
-                            borderColor: "#35a7ff",
-                            backgroundColor: "rgba(53, 167, 255, 0.15)",
-                            fill: true,
-                            tension: 0.35,
-                            yAxisID: "y"
+                            label: "Calamity Hazard Probability (%)",
+                            data: hazardProbs,
+                            backgroundColor: hazardProbs.map(p => p >= 75 ? "#ef4444" : p >= 50 ? "#f59e0b" : "#35a7ff"),
+                            borderRadius: 4
                         },
                         {
-                            label: "Precipitation Forecast (mm)",
-                            data: rainData,
-                            borderColor: "#f59e0b",
-                            backgroundColor: "rgba(245, 158, 11, 0.1)",
-                            borderDash: [5, 5],
-                            tension: 0.3,
-                            yAxisID: "y1"
+                            label: "Vulnerability & Inundation Index (%)",
+                            data: vulnScores,
+                            backgroundColor: "rgba(53, 167, 255, 0.4)",
+                            borderColor: "#35a7ff",
+                            borderWidth: 1,
+                            borderRadius: 4
                         }
                     ]
                 },
@@ -1799,20 +2403,23 @@ class DisasterOSApp {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: "#8fa5bd", font: { size: 10 } } }
+                        legend: { labels: { color: "#8fa5bd", font: { size: 10 } } },
+                        tooltip: {
+                            callbacks: {
+                                afterBody: (ctx) => {
+                                    const idx = ctx[0].dataIndex;
+                                    const item = zonePredictions[idx];
+                                    return item ? `Calamity: ${item.calamity_type}\nThreat: ${item.severity}` : '';
+                                }
+                            }
+                        }
                     },
                     scales: {
                         x: { ticks: { color: "#8fa5bd", font: { size: 10 } }, grid: { color: "rgba(255,255,255,0.05)" } },
                         y: {
                             min: 0, max: 100,
-                            ticks: { color: "#35a7ff", font: { size: 10 }, callback: v => v + "%" },
+                            ticks: { color: "#8fa5bd", font: { size: 10 }, callback: v => v + "%" },
                             grid: { color: "rgba(255,255,255,0.05)" }
-                        },
-                        y1: {
-                            position: "right",
-                            min: 0, max: 80,
-                            ticks: { color: "#f59e0b", font: { size: 10 }, callback: v => v + "mm" },
-                            grid: { drawOnChartArea: false }
                         }
                     }
                 }
@@ -1822,18 +2429,22 @@ class DisasterOSApp {
         // 2. Resource & Shelter Utilization Bar Chart
         const ctxResource = document.getElementById("dashboardResourceChart");
         if (ctxResource) {
-            const shelters = window.store.data.shelters.slice(0, 4);
-            const labels = shelters.map(s => s.name.replace("Shelter", ""));
+            if (this.charts.resource) {
+                try { this.charts.resource.destroy(); } catch(e){}
+            }
+
+            const shelters = (window.store.data.shelters || []).slice(0, 5);
+            const labels = shelters.map(s => (s.name || "Shelter").replace("Relief Center", "").replace("Shelter", "").trim());
             const occupied = shelters.map(s => s.occupied || s.capacity_occupied || 0);
-            const capacity = shelters.map(s => (s.capacity || s.capacity_total || 500) - (s.occupied || 0));
+            const capacity = shelters.map(s => Math.max(0, (s.capacity || s.capacity_total || 500) - (s.occupied || 0)));
 
             this.charts.resource = new Chart(ctxResource, {
                 type: "bar",
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: "Occupied Beds", data: occupied, backgroundColor: "#ef4444" },
-                        { label: "Available Headroom", data: capacity, backgroundColor: "#10b981" }
+                        { label: "Occupied Beds", data: occupied, backgroundColor: "#ef4444", borderRadius: 4 },
+                        { label: "Available Headroom", data: capacity, backgroundColor: "#10b981", borderRadius: 4 }
                     ]
                 },
                 options: {
@@ -1841,7 +2452,7 @@ class DisasterOSApp {
                     maintainAspectRatio: false,
                     plugins: { legend: { labels: { color: "#8fa5bd", font: { size: 10 } } } },
                     scales: {
-                        x: { stacked: true, ticks: { color: "#8fa5bd", font: { size: 10 } }, grid: { color: "rgba(255,255,255,0.05)" } },
+                        x: { ticks: { color: "#8fa5bd", font: { size: 10 } }, grid: { color: "rgba(255,255,255,0.05)" } },
                         y: { stacked: true, ticks: { color: "#8fa5bd", font: { size: 10 } }, grid: { color: "rgba(255,255,255,0.05)" } }
                     }
                 }
@@ -1852,21 +2463,28 @@ class DisasterOSApp {
     initAnalyticsCharts() {
         if (typeof Chart === "undefined") return;
 
-        // 1. Zone Risk Comparison
+        // 1. Zone Risk Comparison (Populated dynamically for active city zones)
         const ctxZone = document.getElementById("analyticsZoneRiskChart");
         if (ctxZone) {
-            const zones = window.store.data.zones;
+            if (this.charts.zone) {
+                try { this.charts.zone.destroy(); } catch(e){}
+            }
+
+            const zones = window.store.data.zones || [];
             const labels = zones.map(z => z.name);
-            const scores = [0.82, 0.68, 0.44, 0.31];
-            const vulns = zones.map(z => z.vulnerability);
+            const vulns = zones.map(z => (z.vulnerability || z.vulnerability_index || 0.5));
+            const scores = zones.map(z => {
+                const live = (this.liveRiskData || []).find(d => d.zone.zone_id === z.zone_id);
+                return live ? live.evalResult.r_zone : +(vulns[0] * 0.9).toFixed(2);
+            });
 
             this.charts.zone = new Chart(ctxZone, {
                 type: "bar",
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: "Deterministic R_zone Score", data: scores, backgroundColor: "rgba(53, 167, 255, 0.8)" },
-                        { label: "Vulnerability Index", data: vulns, backgroundColor: "rgba(245, 158, 11, 0.8)" }
+                        { label: "Deterministic R_zone Score", data: scores, backgroundColor: "rgba(53, 167, 255, 0.8)", borderRadius: 4 },
+                        { label: "Vulnerability Index", data: vulns, backgroundColor: "rgba(245, 158, 11, 0.8)", borderRadius: 4 }
                     ]
                 },
                 options: {
@@ -1884,6 +2502,9 @@ class DisasterOSApp {
         // 2. ML Feature Importance Chart
         const ctxFeat = document.getElementById("analyticsFeatureImpChart");
         if (ctxFeat) {
+            if (this.charts.feature) {
+                try { this.charts.feature.destroy(); } catch(e){}
+            }
             this.charts.feature = new Chart(ctxFeat, {
                 type: "bar",
                 data: {
@@ -1891,7 +2512,8 @@ class DisasterOSApp {
                     datasets: [{
                         label: "Relative Gini Importance",
                         data: [0.354, 0.254, 0.171, 0.065, 0.047, 0.026, 0.025, 0.023],
-                        backgroundColor: "#10b981"
+                        backgroundColor: "#10b981",
+                        borderRadius: 4
                     }]
                 },
                 options: {
@@ -1907,16 +2529,38 @@ class DisasterOSApp {
             });
         }
 
-        // 3. Incident Breakdown Doughnut
+        // 3. Incident Breakdown Doughnut (Dynamically tallies categories from active city store)
         const ctxCat = document.getElementById("analyticsCategoryDoughnut");
         if (ctxCat) {
+            if (this.charts.category) {
+                try { this.charts.category.destroy(); } catch(e){}
+            }
+
+            const incidents = window.store.data.incidents || [];
+            const catMap = {
+                "Flood & Water": 0,
+                "Trauma & Medical": 0,
+                "Structural Damage": 0,
+                "Fire Emergency": 0,
+                "Relief & Rations": 0
+            };
+
+            incidents.forEach(inc => {
+                const t = (inc.type || '').toLowerCase();
+                if (t.includes('flood') || t.includes('water') || t.includes('inundation')) catMap["Flood & Water"]++;
+                else if (t.includes('medical') || t.includes('trauma') || t.includes('ambulance') || t.includes('casualty')) catMap["Trauma & Medical"]++;
+                else if (t.includes('collapse') || t.includes('structural') || t.includes('quake') || t.includes('seismic')) catMap["Structural Damage"]++;
+                else if (t.includes('fire')) catMap["Fire Emergency"]++;
+                else catMap["Relief & Rations"]++;
+            });
+
             this.charts.category = new Chart(ctxCat, {
                 type: "doughnut",
                 data: {
-                    labels: ["Flood & Inundation", "Trauma / Medical", "Structural Collapse", "Fire Emergency", "Infrastructure"],
+                    labels: Object.keys(catMap),
                     datasets: [{
-                        data: [42, 28, 14, 10, 6],
-                        backgroundColor: ["#35a7ff", "#ef4444", "#f59e0b", "#f97316", "#a78bfa"],
+                        data: Object.values(catMap),
+                        backgroundColor: ["#35a7ff", "#ef4444", "#f59e0b", "#f97316", "#10b981"],
                         borderWidth: 0
                     }]
                 },
@@ -1929,11 +2573,133 @@ class DisasterOSApp {
         }
     }
 
+    handleGlobalSearch(event) {
+        const q = (event?.target?.value || "").trim().toLowerCase();
+        const dropdown = document.getElementById("globalSearchResults");
+        if (!dropdown) return;
+
+        if (q.length < 2) {
+            dropdown.style.display = "none";
+            return;
+        }
+
+        const data = window.store?.data || {};
+        const results = [];
+
+        // Incidents
+        (data.incidents || []).forEach(inc => {
+            if ((inc.title && inc.title.toLowerCase().includes(q)) ||
+                (inc.type && inc.type.toLowerCase().includes(q)) ||
+                (inc.description && inc.description.toLowerCase().includes(q)) ||
+                (inc.incident_id && inc.incident_id.toLowerCase().includes(q))) {
+                results.push({
+                    type: "🚨 INCIDENT",
+                    title: `${inc.title || inc.incident_id} (${inc.severity || 'Urgent'})`,
+                    sub: `${inc.location || 'Monitored Sector'} • Status: ${inc.status}`,
+                    page: "incidents"
+                });
+            }
+        });
+
+        // Shelters
+        (data.shelters || []).forEach(s => {
+            if ((s.name && s.name.toLowerCase().includes(q)) ||
+                (s.address && s.address.toLowerCase().includes(q)) ||
+                (s.location && s.location.toLowerCase().includes(q))) {
+                const avail = (s.capacity || s.capacity_total || 500) - (s.occupied || 0);
+                results.push({
+                    type: "⌂ SHELTER",
+                    title: s.name,
+                    sub: `Available: ${avail} beds • ${s.location || s.address}`,
+                    page: "shelters"
+                });
+            }
+        });
+
+        // Hospitals
+        (data.hospitals || []).forEach(h => {
+            if ((h.name && h.name.toLowerCase().includes(q)) ||
+                (h.location && h.location.toLowerCase().includes(q)) ||
+                (h.specialty && h.specialty.toLowerCase().includes(q))) {
+                results.push({
+                    type: "✚ HOSPITAL",
+                    title: h.name,
+                    sub: `Available Beds: ${h.available || h.bed_capacity_available || 20} • ICU: ${h.icu || 5} • 📞 ${h.contact_number || '108'}`,
+                    page: "hospitals"
+                });
+            }
+        });
+
+        // Risk Zones
+        (data.zones || []).forEach(z => {
+            if ((z.name && z.name.toLowerCase().includes(q)) ||
+                (z.hazard_type && z.hazard_type.toLowerCase().includes(q)) ||
+                (z.calamity_type && z.calamity_type.toLowerCase().includes(q))) {
+                results.push({
+                    type: "⌖ RISK ZONE",
+                    title: `${z.name} (${z.calamity_type || z.hazard_type || 'Hazard Zone'})`,
+                    sub: `Vulnerability: ${z.vulnerability || z.vulnerability_index || 'High'} • Pop: ${z.population || 50000}`,
+                    page: "risk-map"
+                });
+            }
+        });
+
+        // Inventory
+        (data.inventory || []).forEach(inv => {
+            if ((inv.item_name && inv.item_name.toLowerCase().includes(q)) ||
+                (inv.category && inv.category.toLowerCase().includes(q))) {
+                results.push({
+                    type: "▤ INVENTORY",
+                    title: `${inv.item_name} (${inv.quantity} ${inv.unit || 'units'})`,
+                    sub: `Category: ${inv.category} • Location: ${inv.location}`,
+                    page: "inventory"
+                });
+            }
+        });
+
+        // SOPs
+        const protocols = [
+            { name: "Urban Flash Flood Triage SOP", desc: "Automated alert cascade and boat deployment" },
+            { name: "Monsoon Inundation Evacuation Protocol", desc: "High-volume pumps and refugee shelter intake" },
+            { name: "Mass Casualty Hospital Surge Protocol", desc: "Trauma ward triage and emergency oxygen routing" },
+            { name: "Seismic Quake Structural Triage SOP", desc: "Urban search and rescue collapse perimeter isolation" }
+        ];
+        protocols.forEach(p => {
+            if (p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) {
+                results.push({
+                    type: "✓ SOP PROTOCOL",
+                    title: p.name,
+                    sub: p.desc,
+                    page: "sop"
+                });
+            }
+        });
+
+        if (results.length === 0) {
+            dropdown.innerHTML = `<div style="padding:12px;color:#8fa5bd;font-size:11px;text-align:center;">No matching emergency resources found for "${q}".</div>`;
+            dropdown.style.display = "block";
+            return;
+        }
+
+        let html = '';
+        results.slice(0, 8).forEach(res => {
+            html += `
+            <div class="search-result-item" onclick="app.navigate('${res.page}'); document.getElementById('globalSearchResults').style.display='none'; document.getElementById('globalSearch').value='';" style="padding:8px 12px;border-bottom:1px solid #14304e;cursor:pointer;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <strong style="color:#fff;font-size:12px;">${res.title}</strong>
+                    <span class="badge badge-info" style="font-size:9px;">${res.type}</span>
+                </div>
+                <div class="muted small" style="margin-top:2px;">${res.sub}</div>
+            </div>`;
+        });
+
+        dropdown.innerHTML = html;
+        dropdown.style.display = "block";
+    }
+
     globalSearch() {
-        const q = document.getElementById("globalSearch").value.toLowerCase();
-        if (q.length < 2) return;
-        const inc = window.store.data.incidents.find(i => JSON.stringify(i).toLowerCase().includes(q));
-        if (inc) this.toast(`Found ${inc.incident_id} (${inc.type})`);
+        const input = document.getElementById("globalSearch");
+        this.handleGlobalSearch({ target: input });
     }
 
     toast(msg) {

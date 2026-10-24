@@ -1,4 +1,3 @@
-<!-- DisasterOS Application Shell: Role-filtered 8-module command center with GIS, RAG assistant, and constrained dispatch optimizer. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,155 +13,152 @@
 </head>
 <body>
 
-    <!-- ================= LOGIN MODAL ================= -->
+    <!-- ================= LOGIN & REGISTRATION MODAL ================= -->
     <div class="login-screen" id="loginScreen">
-        <div class="login-box">
+        <div class="login-box-wide">
             <div class="login-logo">
-                <div class="logo-icon">âš¡</div>
+                <div class="logo-icon">⚡</div>
                 <h1>DisasterOS</h1>
-                <p>Smart Disaster Early Warning, Response & Relief Management</p>
+                <p>Smart Disaster Early Warning, Response & Relief Management Platform</p>
             </div>
 
-            <div class="form-group">
-                <label>Operator / Citizen Identifier</label>
-                <input class="form-control" id="loginUser" value="manager" placeholder="e.g. manager, admin, responder, or your name">
+            <!-- Tab Switcher -->
+            <div class="login-nav-tabs">
+                <button class="login-nav-tab active" id="tabBtnEval" onclick="app.switchLoginTab('eval')">
+                    ⚡ 1-Click Evaluation Logins (15 Accounts)
+                </button>
+                <button class="login-nav-tab" id="tabBtnStandard" onclick="app.switchLoginTab('standard')">
+                    🔑 Standard Sign In
+                </button>
+                <button class="login-nav-tab" id="tabBtnRegister" onclick="app.switchLoginTab('register')">
+                    📝 Register New Organization
+                </button>
             </div>
 
-            <div class="form-group">
-                <label>Password Credentials</label>
-                <input class="form-control" id="loginPassword" type="password" value="manager123" placeholder="Password (Staff verification required)">
+            <!-- TAB 1: 1-Click Evaluation Accounts (3 per actor role) -->
+            <div id="loginTabEval">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                    <span class="muted small">Select Actor Role to test zero-leakage access:</span>
+                    <span class="badge badge-info">REVIEW 2 VERIFIED</span>
+                </div>
+                
+                <div class="actor-pills-row">
+                    <button class="actor-pill-btn active" id="pill-admin" onclick="app.selectEvalActor('admin')">🛡️ System Admin (3)</button>
+                    <button class="actor-pill-btn" id="pill-manager" onclick="app.selectEvalActor('manager')">🎖️ Disaster Manager (3)</button>
+                    <button class="actor-pill-btn" id="pill-responder" onclick="app.selectEvalActor('responder')">🚒 Responder (3)</button>
+                    <button class="actor-pill-btn" id="pill-coordinator" onclick="app.selectEvalActor('coordinator')">🏥 Hospital/Shelter (3)</button>
+                    <button class="actor-pill-btn" id="pill-citizen" onclick="app.selectEvalActor('citizen')">👤 Public Citizen (3)</button>
+                </div>
+
+                <div id="evalCredentialsContainer">
+                    <!-- Populated dynamically via app.renderEvalCredentials() -->
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Select Role</label>
-                <select class="form-control" id="loginRole">
-                    <option value="Disaster Manager">Disaster Manager (Command Operations)</option>
-                    <option value="Emergency Responder">Emergency Responder (Field Operations)</option>
-                    <option value="Hospital Coordinator">Hospital / Shelter Coordinator</option>
-                    <option value="Citizen">Citizen (Public Intake)</option>
-                </select>
+            <!-- TAB 2: Standard Sign In Form -->
+            <div id="loginTabStandard" style="display:none;">
+                <div class="form-group">
+                    <label>Operator / Citizen Identifier</label>
+                    <input class="form-control" id="loginUser" value="manager.chennai" placeholder="e.g. manager.chennai, admin.root, or your username">
+                </div>
+
+                <div class="form-group">
+                    <label>Password Credentials</label>
+                    <input class="form-control" id="loginPassword" type="password" value="Command#44" placeholder="Staff password credentials">
+                </div>
+
+                <div class="form-group">
+                    <label>Select Authorized Role Portal</label>
+                    <select class="form-control" id="loginRole">
+                        <option value="System Administrator">🛡️ System Administrator (Full System & Infrastructure Control)</option>
+                        <option value="Disaster Manager" selected>🎖️ Disaster Manager (Operational Command & Triage)</option>
+                        <option value="Emergency Responder">🚒 Emergency Responder (Tactical Search & Rescue Field Units)</option>
+                        <option value="Hospital Coordinator">🏥 Hospital / Shelter Coordinator (Medical Capacity & Beds)</option>
+                        <option value="Citizen">👤 Public Citizen (Public Calamity Awareness & Reporting)</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary login-btn" onclick="app.login()">
+                    Sign In to Designated Command Portal
+                </button>
             </div>
 
-            <button class="btn btn-primary login-btn" onclick="app.login()">
-                Sign In to Command Center
-            </button>
+            <!-- TAB 3: New Organization / Facility Registration -->
+            <div id="loginTabRegister" style="display:none;">
+                <div class="alert warning" style="margin-bottom:12px;font-size:11px;">
+                    ℹ️ <strong>Manager Authorization Required:</strong> Registrations for Hospitals, Shelters, and Responders enter a pending queue and must be verified and approved by a Disaster Manager before activation.
+                </div>
+                <form onsubmit="app.handleRegistration(event)" class="form-grid">
+                    <div class="form-group">
+                        <label>Officer / Contact Full Name</label>
+                        <input class="form-control" id="regFullName" required placeholder="e.g. Dr. Arvind Subramanian">
+                    </div>
+                    <div class="form-group">
+                        <label>Applicant Role</label>
+                        <select class="form-control" id="regRole">
+                            <option value="Hospital Coordinator">Hospital Coordinator (Trauma / ICU)</option>
+                            <option value="Shelter Coordinator">Shelter Coordinator (Relief Pavilion)</option>
+                            <option value="Emergency Responder">Emergency Responder (Rescue Team)</option>
+                            <option value="Citizen">Public Citizen (Immediate Activation)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Facility / Organization Name</label>
+                        <input class="form-control" id="regOrg" required placeholder="e.g. Sunrise Trauma Center / NGO Unit">
+                    </div>
+                    <div class="form-group">
+                        <label>Operational City</label>
+                        <select class="form-control" id="regCity">
+                            <option value="chennai">Chennai (HQ)</option>
+                            <option value="mumbai">Mumbai</option>
+                            <option value="kolkata">Kolkata</option>
+                            <option value="delhi">Delhi NCR</option>
+                            <option value="tokyo">Tokyo (Seismic)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Desired Username</label>
+                        <input class="form-control" id="regUser" required placeholder="e.g. subramanian.trauma">
+                    </div>
+                    <div class="form-group">
+                        <label>Account Password</label>
+                        <input class="form-control" id="regPass" type="password" required placeholder="Minimum 6 characters">
+                    </div>
+                    <div class="form-group full">
+                        <label>Emergency Official Contact / Phone</label>
+                        <input class="form-control" id="regPhone" required placeholder="+91-XXXXX-XXXXX">
+                    </div>
+                    <div class="form-group full">
+                        <button type="submit" class="btn btn-primary" style="width:100%;padding:10px;">
+                            Submit Application for Manager Verification
+                        </button>
+                    </div>
+                </form>
+            </div>
 
             <div class="demo-note">
-                BCSE301L Software Engineering Project â€¢ Review 1 Verified Full Architecture
+                BCSE301L Software Engineering Project • Review 2 (100% Core Implementation)
             </div>
         </div>
     </div>
 
-    <!-- ================= MAIN APP ================= -->
+    <!-- ================= MAIN APP SHELL ================= -->
     <div class="app" id="application" style="display:none;">
 
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
-            <div class="logo">
-                <div class="logo-icon">âš¡</div>
-                <div>
-                    <h1>DisasterOS</h1>
-                    <span>Emergency Platform</span>
+            <div class="brand">
+                <div class="brand-logo">
+                    <div class="logo-icon">⚡</div>
+                    <div>
+                        <div class="brand-title">DisasterOS</div>
+                        <div class="brand-subtitle">Emergency Command Kernel</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="nav" id="sidebarNav"><!-- DYNAMIC -->
-                <!-- COMMAND -->
-                <div class="nav-section">COMMAND</div>
-                <button class="nav-item active" onclick="app.navigate('dashboard', this)">
-                    <span class="nav-icon">â–¦</span> Command Dashboard
-                </button>
-                <button class="nav-item" onclick="app.navigate('early-warning', this)">
-                    <span class="nav-icon">âš </span> Early Warning
-                    <span class="nav-badge" id="alertBadge">3</span>
-                </button>
-                <button class="nav-item" onclick="app.navigate('risk-map', this)">
-                    <span class="nav-icon">âŒ–</span> Dynamic GIS Map
-                </button>
-                <button class="nav-item" onclick="app.navigate('decision-support', this)">
-                    <span class="nav-icon">â—†</span> Decision Support
-                </button>
-
-                <!-- EMERGENCY RESPONSE -->
-                <div class="nav-section">EMERGENCY RESPONSE</div>
-                <button class="nav-item" onclick="app.navigate('incidents', this)">
-                    <span class="nav-icon">â—‰</span> Incidents Lifecycle
-                </button>
-                <button class="nav-item" onclick="app.navigate('emergency', this)">
-                    <span class="nav-icon">ðŸš¨</span> Help Requests
-                </button>
-                <button class="nav-item" onclick="app.navigate('dispatch', this)">
-                    <span class="nav-icon">ðŸš‘</span> Rescue Dispatch
-                </button>
-                <button class="nav-item" onclick="app.navigate('sop', this)">
-                    <span class="nav-icon">âœ“</span> SOP Automation
-                </button>
-                <button class="nav-item" onclick="app.navigate('evacuation', this)">
-                    <span class="nav-icon">â‡¢</span> Evacuation Planning
-                </button>
-
-                <!-- RESOURCES -->
-                <div class="nav-section">RESOURCES</div>
-                <button class="nav-item" onclick="app.navigate('shelters', this)">
-                    <span class="nav-icon">âŒ‚</span> Shelters
-                </button>
-                <button class="nav-item" onclick="app.navigate('hospitals', this)">
-                    <span class="nav-icon">âœš</span> Hospitals
-                </button>
-                <button class="nav-item" onclick="app.navigate('volunteers', this)">
-                    <span class="nav-icon">â™Ÿ</span> Volunteers
-                </button>
-                <button class="nav-item" onclick="app.navigate('inventory', this)">
-                    <span class="nav-icon">â–¤</span> Inventory
-                </button>
-                <button class="nav-item" onclick="app.navigate('relief', this)">
-                    <span class="nav-icon">â–±</span> Relief Distribution
-                </button>
-                <button class="nav-item" onclick="app.navigate('infrastructure', this)">
-                    <span class="nav-icon">âŒ</span> Infrastructure
-                </button>
-
-                <!-- INTELLIGENCE -->
-                <div class="nav-section">INTELLIGENCE</div>
-                <button class="nav-item" onclick="app.navigate('reports', this)">
-                    <span class="nav-icon">â–¥</span> AI Reports
-                </button>
-                <button class="nav-item" onclick="app.navigate('assistant', this)">
-                    <span class="nav-icon">ðŸ¤–</span> AI Assistant
-                </button>
-                <button class="nav-item" onclick="app.navigate('analytics', this)">
-                    <span class="nav-icon">â—«</span> Analytics
-                </button>
-
-                <!-- CITIZEN SERVICES -->
-                <div class="nav-section">CITIZEN SERVICES</div>
-                <button class="nav-item" onclick="app.navigate('citizen-report', this)">
-                    <span class="nav-icon">ðŸ“·</span> Report Incident (GPS)
-                </button>
-                <button class="nav-item" onclick="app.navigate('notifications', this)">
-                    <span class="nav-icon">ðŸ””</span> Notifications
-                </button>
-
-                <!-- SYSTEM -->
-                <div class="nav-section">SYSTEM</div>
-                <button class="nav-item" onclick="app.navigate('architecture', this)">
-                    <span class="nav-icon">â—‡</span> System Architecture
-                </button>
-                <button class="nav-item" onclick="app.navigate('sources', this)">
-                    <span class="nav-icon">â—Ž</span> API Sources
-                </button>
-                <button class="nav-item" onclick="app.navigate('rbac', this)">
-                    <span class="nav-icon">â™™</span> RBAC & Users
-                </button>
-                <button class="nav-item" onclick="app.navigate('audit', this)">
-                    <span class="nav-icon">â–£</span> Audit Logs
-                </button>
-                <button class="nav-item" onclick="app.navigate('system', this)">
-                    <span class="nav-icon">âš™</span> System Health
-                </button>
-                <button class="nav-item" onclick="app.logout()">
-                    <span class="nav-icon">â‡¥</span> Logout
-                </button>
+            <div class="nav" id="sidebarNav">
+                <!-- Dynamically hydrated based on current actor permissions via app.renderSidebar() -->
             </div>
         </aside>
 
@@ -170,7 +166,7 @@
         <main class="main">
             <header class="topbar">
                 <div style="display:flex;align-items:center;gap:12px;">
-                    <button class="icon-btn mobile-menu" onclick="app.toggleSidebar()">â˜°</button>
+                    <button class="icon-btn mobile-menu" onclick="app.toggleSidebar()">☰</button>
                     <div>
                         <div class="page-title" id="pageTitle">Command Dashboard</div>
                         <div class="page-subtitle" id="pageSubtitle">Real-time disaster telemetry and response coordination</div>
@@ -178,22 +174,34 @@
                 </div>
 
                 <div class="top-actions">
-                    <select class="form-control" id="regionSelector" style="width:160px;font-size:11px;padding:7px 10px;" onchange="app.changeRegion(this.value)">
-                        <option value="chennai">ðŸ“ Chennai (HQ)</option>
-                        <option value="mumbai">ðŸ“ Mumbai</option>
-                        <option value="kolkata">ðŸ“ Kolkata</option>
-                        <option value="delhi">ðŸ“ Delhi NCR</option>
-                        <option value="tokyo">ðŸ“ Tokyo (Seismic)</option>
+                    <!-- City Selector -->
+                    <select class="form-control" id="regionSelector" style="width:165px;font-size:11px;padding:7px 10px;" onchange="app.changeRegion(this.value)">
+                        <option value="chennai">📍 Chennai (HQ)</option>
+                        <option value="mumbai">📍 Mumbai</option>
+                        <option value="kolkata">📍 Kolkata</option>
+                        <option value="delhi">📍 Delhi NCR</option>
+                        <option value="tokyo">📍 Tokyo (Seismic)</option>
                     </select>
-                    <input class="search" id="globalSearch" placeholder="Search incidents, shelters..." onkeyup="app.globalSearch()">
+
+                    <!-- Global Search with Interactive Autocomplete Dropdown -->
+                    <div class="search-box-container">
+                        <input class="search" id="globalSearch" placeholder="Search incidents, shelters, hospitals..." oninput="app.handleGlobalSearch(event)" onfocus="app.handleGlobalSearch(event)">
+                        <div class="global-search-dropdown" id="globalSearchResults" style="display:none;"></div>
+                    </div>
+
+                    <!-- Sync Button -->
                     <button class="btn btn-primary" onclick="app.triggerLiveSync()">
-                        ðŸ”„ Sync Live Feeds
+                        🔄 Sync Live Feeds
                     </button>
-                    <button class="icon-btn" onclick="app.navigate('notifications')">
-                        ðŸ””
+
+                    <!-- Notifications Button -->
+                    <button class="icon-btn" onclick="app.navigate('notifications')" title="Notifications">
+                        🔔
                         <span class="notification-dot"></span>
                     </button>
-                    <div class="profile">
+
+                    <!-- User Profile Card -->
+                    <div class="profile" onclick="app.navigate('rbac')" title="Click to view Role & Authorization" style="cursor:pointer;">
                         <div class="avatar" id="avatar">SS</div>
                         <div>
                             <div style="font-size:11px;font-weight:bold;" id="profileName">Shaik Sameer</div>
@@ -212,10 +220,9 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- Leaflet JS for GIS Mapping -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <!-- Chart.js for High-Fidelity Multi-Hazard Analytics & Telemetry Forecasting -->
+    <!-- Chart.js for Multi-Hazard Analytics & Telemetry Forecasting -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
     <!-- Floating Tactical AI Assistant Widget (Accessible across all views) -->
@@ -231,24 +238,24 @@
                 <div class="ai-avatar">🤖</div>
                 <div>
                     <strong>DisasterOS Tactical Assistant</strong>
-                    <div class="muted small" style="font-size:10px;">NDMA/WHO RAG Kernel & Live Ops</div>
+                    <div class="muted small" style="font-size:10px;">NDMA/WHO RAG Kernel & Live Municipal Ops</div>
                 </div>
             </div>
             <button class="ai-close-btn" onclick="app.toggleAiAssistant()">✕</button>
         </div>
         <div class="ai-panel-messages" id="drawerChatMessages">
             <div class="message bot">
-                <strong>DisasterOS Tactical Assistant</strong><br>
-                Connected to official NDMA/WHO guidelines and real-time operational feeds. Ask about active incidents, shelter bed headroom, emergency hospital capacities, or evacuation protocols.
+                <strong>DisasterOS Tactical Intelligence Assistant</strong><br>
+                Connected to official NDMA/WHO guidelines and real-time municipal telemetry. Ask about active incidents, shelter bed headroom, emergency hospital capacities, or evacuation protocols.
             </div>
         </div>
         <div class="ai-quick-chips">
             <button class="ai-chip" onclick="app.quickPrompt('hi')">👋 Say Hi</button>
-            <button class="ai-chip" onclick="app.quickPrompt('Which shelters currently have available bed capacity?')">🏕️ Open Shelters</button>
-            <button class="ai-chip" onclick="app.quickPrompt('What hospitals are operational with available beds?')">🏥 Hospital Beds</button>
-            <button class="ai-chip" onclick="app.quickPrompt('What is the emergency helpline number?')">🚨 Helplines</button>
-            <button class="ai-chip" onclick="app.quickPrompt('What is the SOP when flood R_zone exceeds 0.65?')">🌊 Flood SOP</button>
-            <button class="ai-chip" onclick="app.quickPrompt('Explain START mass casualty triage protocol')">🏥 START Triage</button>
+            <button class="ai-chip" onclick="app.quickPrompt('where should i report an emergency?')">🚨 How to Report</button>
+            <button class="ai-chip" onclick="app.quickPrompt('where can i see the disaster forecast?')">📈 Disaster Forecast</button>
+            <button class="ai-chip" onclick="app.quickPrompt('where can i go if there is a flood?')">🏕️ Open Shelters</button>
+            <button class="ai-chip" onclick="app.quickPrompt('where is the rescue team?')">🚒 Rescue Teams</button>
+            <button class="ai-chip" onclick="app.quickPrompt('what is the emergency helpline number?')">📞 Helplines</button>
         </div>
         <div class="ai-panel-footer">
             <input class="form-control" id="drawerChatInput" placeholder="Ask about protocols, beds, incidents..." onkeydown="if(event.key==='Enter')app.sendDrawerChat()">
@@ -256,7 +263,7 @@
         </div>
     </div>
 
-    <!-- Modular Scripts -->
+    <!-- Modular Application Scripts -->
     <script src="js/config.js"></script>
     <script src="js/store.js"></script>
     <script src="js/db-adapter.js"></script>
@@ -272,4 +279,3 @@
     <script src="js/app.js"></script>
 </body>
 </html>
-

@@ -12,7 +12,7 @@ class GISMapController {
         };
     }
 
-    init(containerId = "gisMapContainer", defaultLat = 13.0827, defaultLon = 80.2707) {
+    init(containerId = "gisMapContainer", defaultLat = null, defaultLon = null) {
         const container = document.getElementById(containerId);
         if (!container) return;
 
@@ -22,8 +22,12 @@ class GISMapController {
             this.map = null;
         }
 
+        // Center on active city if available
+        const activeLat = defaultLat || window.app?.currentRegion?.lat || 13.0827;
+        const activeLon = defaultLon || window.app?.currentRegion?.lon || 80.2707;
+
         // Initialize Leaflet Map with dark-tuned OSM tiles
-        this.map = L.map(containerId).setView([defaultLat, defaultLon], 12);
+        this.map = L.map(containerId).setView([activeLat, activeLon], 12);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -43,10 +47,10 @@ class GISMapController {
 
     renderAll() {
         if (!this.map) return;
+        this.renderRiskZones();
         this.renderShelters();
         this.renderHospitals();
         this.renderIncidents();
-        this.renderRiskZones();
     }
 
     renderRiskZones() {
@@ -55,20 +59,30 @@ class GISMapController {
 
         const zones = window.store?.data?.zones || [];
         zones.forEach(z => {
-            const color = z.vulnerability > 0.6 ? "#ff5263" : z.vulnerability > 0.4 ? "#ffb84d" : "#35d49a";
+            const vuln = z.vulnerability || 0.5;
+            const color = vuln > 0.65 ? "#ef4444" : vuln > 0.45 ? "#f59e0b" : "#10b981";
+            const radiusMeters = Math.max(1800, (z.radius_km || 3.5) * 800);
+
             const circle = L.circle([z.lat, z.lon], {
                 color: color,
+                weight: 3,
                 fillColor: color,
-                fillOpacity: 0.18,
-                radius: (z.radius_km || 10) * 250 // Scale for visual display
+                fillOpacity: 0.22,
+                radius: radiusMeters
             });
 
+            const sevLabel = vuln > 0.65 ? "Red Alert (High Inundation Risk)" : vuln > 0.45 ? "Orange Alert (Moderate Watch)" : "Green Alert (Safe Zone)";
+
             circle.bindPopup(`
-                <div style="color:#111;font-family:sans-serif;font-size:12px;">
-                    <strong style="font-size:13px;">${z.name}</strong><br>
+                <div style="color:#111;font-family:sans-serif;font-size:12px;min-width:180px;">
+                    <strong style="font-size:13px;color:#0a192f;">${z.name}</strong><br>
+                    <span style="display:inline-block;padding:2px 6px;border-radius:4px;background:${color};color:#fff;font-weight:bold;font-size:10px;margin:4px 0;">
+                        ${sevLabel}
+                    </span><br>
                     <strong>Zone ID:</strong> ${z.zone_id}<br>
-                    <strong>Base Vulnerability:</strong> ${(z.vulnerability * 100).toFixed(0)}%<br>
-                    <span style="color:#d32f2f;font-weight:bold;">Monitored Early Warning Zone</span>
+                    <strong>Vulnerability Index:</strong> ${(vuln * 100).toFixed(0)}%<br>
+                    <strong>Elevation:</strong> ${z.elevation_m || 5}m MSL<br>
+                    <strong>Monitored Coverage:</strong> ${(radiusMeters / 1000).toFixed(1)} km radius
                 </div>
             `);
             this.layers.riskZones.addLayer(circle);
@@ -81,25 +95,125 @@ class GISMapController {
 
         const incidents = window.store?.data?.incidents || [];
         incidents.forEach(inc => {
-            const markerColor = inc.severity === "critical" ? "#ff5263" : inc.severity === "high" ? "#ffb84d" : "#35a7ff";
+            const markerColor = inc.severity === "critical" ? "#ef4444" : inc.severity === "high" ? "#f59e0b" : "#35a7ff";
             
             const icon = L.divIcon({
                 className: "custom-map-pin",
-                html: `<div style="background:${markerColor};width:24px;height:24px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:bold;box-shadow:0 0 10px ${markerColor}">🚨</div>`,
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
+                html: `<div style="background:${markerColor};width:26px;height:26px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;color:#fff;font-size:13px;box-shadow:0 0 12px ${markerColor}">🚨</div>`,
+                iconSize: [26, 26],
+                iconAnchor: [13, 13]
             });
 
             const marker = L.marker([inc.lat, inc.lon], { icon: icon });
             marker.bindPopup(`
-                <div style="color:#111;font-family:sans-serif;font-size:12px;">
-                    <strong style="font-size:13px;color:#d32f2f;">${inc.incident_id} (${inc.type.toUpperCase()})</strong><br>
-                    <p style="margin:4px 0;">${inc.description}</p>
-                    <strong>Severity:</strong> <span style="color:${markerColor};font-weight:bold;">${inc.severity.toUpperCase()}</span><br>
-                    <strong>Status:</strong> ${inc.status.toUpperCase()}
+                <div style="color:#111;font-family:sans-serif;font-size:12px;min-width:180px;">
+                    <strong style="font-size:13px;color:#d32f2f;">${inc.incident_id} (${(inc.type || 'EMERGENCY').toUpperCase()})</strong><br>
+                    <p style="margin:4px 0;font-size:11px;">${inc.description || 'Active incident reported.'}</p>
+                    <strong>Location:</strong> ${inc.location}<br>
+                    <strong>Severity:</strong> <span style="color:${markerColor};font-weight:bold;">${(inc.severity || 'high').toUpperCase()}</span><br>
+                    <strong>Status:</strong> ${(inc.status || 'Active').toUpperCase()}<br>
+                    <strong>Assigned:</strong> ${inc.team || 'Pending Dispatch'}
                 </div>
             `);
             this.layers.incidents.addLayer(marker);
+        });
+    }
+
+    renderShelters() {
+        if (!this.layers.shelters) return;
+        this.layers.shelters.clearLayers();
+
+        const shelters = window.store?.data?.shelters || [];
+        shelters.forEach(s => {
+            const cap = s.capacity || s.capacity_total || 500;
+            const occ = s.occupied !== undefined ? s.occupied : (s.capacity_occupied || 0);
+            const occPct = Math.round((occ / cap) * 100);
+            const badgeColor = occPct >= 90 ? "#ef4444" : occPct >= 70 ? "#f59e0b" : "#10b981";
+
+            const icon = L.divIcon({
+                className: "custom-map-pin",
+                html: `<div style="background:#10b981;width:26px;height:26px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;color:#fff;font-size:13px;box-shadow:0 0 10px #10b981">🏕️</div>`,
+                iconSize: [26, 26],
+                iconAnchor: [13, 13]
+            });
+
+            const marker = L.marker([s.lat, s.lon], { icon: icon });
+            marker.bindPopup(`
+                <div style="color:#111;font-family:sans-serif;font-size:12px;min-width:190px;">
+                    <strong style="font-size:13px;color:#065f46;">${s.name}</strong><br>
+                    <span style="font-size:11px;color:#555;">📍 ${s.location}</span><br>
+                    <div style="margin:6px 0;background:#f0fdf4;padding:4px 6px;border-radius:4px;border:1px solid #bbf7d0;">
+                        <strong>Beds:</strong> ${occ} / ${cap} occupied (<span style="color:${badgeColor};font-weight:bold;">${cap - occ} open</span>)<br>
+                        <strong>Status:</strong> ${s.status || 'Open'}<br>
+                        <strong>Supplies:</strong> ${s.water_liters || s.resources?.water_l || 5000}L Water, ${s.food_kits || s.resources?.food_kits || 800} Food Kits
+                    </div>
+                </div>
+            `);
+            this.layers.shelters.addLayer(marker);
+        });
+    }
+
+    renderHospitals() {
+        if (!this.layers.hospitals) return;
+        this.layers.hospitals.clearLayers();
+
+        const hospitals = window.store?.data?.hospitals || [];
+        hospitals.forEach(h => {
+            const avail = h.available !== undefined ? h.available : (h.bed_capacity_available || 50);
+            const total = h.beds || h.bed_capacity_total || 400;
+            const icu = h.icu !== undefined ? h.icu : (h.icu_beds || 20);
+
+            const icon = L.divIcon({
+                className: "custom-map-pin",
+                html: `<div style="background:#35a7ff;width:26px;height:26px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;color:#fff;font-size:13px;box-shadow:0 0 10px #35a7ff">🏥</div>`,
+                iconSize: [26, 26],
+                iconAnchor: [13, 13]
+            });
+
+            const marker = L.marker([h.lat, h.lon], { icon: icon });
+            marker.bindPopup(`
+                <div style="color:#111;font-family:sans-serif;font-size:12px;min-width:190px;">
+                    <strong style="font-size:13px;color:#1e40af;">${h.name}</strong><br>
+                    <span style="font-size:11px;color:#555;">📍 ${h.location}</span><br>
+                    <div style="margin:6px 0;background:#eff6ff;padding:4px 6px;border-radius:4px;border:1px solid #bfdbfe;">
+                        <strong>Available Beds:</strong> <span style="color:#2563eb;font-weight:bold;">${avail}</span> / ${total}<br>
+                        <strong>ICU Units:</strong> <span style="color:#d97706;font-weight:bold;">${icu} Units</span><br>
+                        <strong>Trauma Capable:</strong> ${h.trauma_capable ? '✅ 24/7 Level 1' : 'General'}<br>
+                        <strong>Tel:</strong> <a href="tel:${h.contact_number}">${h.contact_number}</a>
+                    </div>
+                </div>
+            `);
+            this.layers.hospitals.addLayer(marker);
+        });
+    }
+
+    plotSeismicEvents(events = []) {
+        if (!this.layers.seismic) return;
+        this.layers.seismic.clearLayers();
+
+        events.forEach(evt => {
+            const mag = evt.mag;
+            const color = mag >= 6.0 ? "#ef4444" : mag >= 4.5 ? "#f59e0b" : "#35a7ff";
+            const radius = Math.max(12, mag * 5);
+
+            const marker = L.circleMarker([evt.lat, evt.lon], {
+                radius: radius,
+                color: color,
+                weight: 2,
+                fillColor: color,
+                fillOpacity: 0.35
+            });
+
+            marker.bindPopup(`
+                <div style="color:#111;font-family:sans-serif;font-size:12px;">
+                    <strong style="color:#d32f2f;">Seismic Event (USGS Feed)</strong><br>
+                    <strong>Magnitude:</strong> M${mag.toFixed(1)}<br>
+                    <strong>Place:</strong> ${evt.place}<br>
+                    <strong>Depth:</strong> ${evt.depth_km} km<br>
+                    <strong>Proximity:</strong> ${evt.distance_km} km from monitored city
+                </div>
+            `);
+            this.layers.seismic.addLayer(marker);
         });
     }
 
@@ -117,7 +231,7 @@ class GISMapController {
             this.pickerMarker = L.marker([lat, lng], {
                 icon: L.divIcon({
                     className: "custom-picker-pin",
-                    html: `<div style="background:#ffb84d;width:28px;height:28px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;font-size:14px;box-shadow:0 0 14px #ffb84d">📍</div>`,
+                    html: `<div style="background:#f59e0b;width:28px;height:28px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;font-size:15px;box-shadow:0 0 14px #f59e0b">📍</div>`,
                     iconSize: [28, 28],
                     iconAnchor: [14, 14]
                 })
@@ -128,84 +242,11 @@ class GISMapController {
             }
         });
     }
-
-    renderShelters() {
-        if (!this.layers.shelters) return;
-        this.layers.shelters.clearLayers();
-
-        const shelters = window.store?.data?.shelters || [];
-        shelters.forEach(s => {
-            const icon = L.divIcon({
-                className: "custom-map-pin",
-                html: `<div style="background:#35d49a;width:24px;height:24px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:bold;box-shadow:0 0 8px #35d49a">⌂</div>`,
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            });
-
-            const marker = L.marker([s.lat, s.lon], { icon: icon });
-            marker.bindPopup(`
-                <div style="color:#111;font-family:sans-serif;font-size:12px;">
-                    <strong style="font-size:13px;color:#1b5e20;">${s.name}</strong><br>
-                    <strong>Occupancy:</strong> ${s.capacity_occupied} / ${s.capacity_total} (${((s.capacity_occupied/s.capacity_total)*100).toFixed(0)}%)<br>
-                    <strong>Status:</strong> <span style="font-weight:bold;">${s.status.toUpperCase()}</span><br>
-                    <strong>Resources:</strong> Water: ${s.resources?.water_l}L, Food: ${s.resources?.food_kits} kits
-                </div>
-            `);
-            this.layers.shelters.addLayer(marker);
-        });
-    }
-
-    renderHospitals() {
-        if (!this.layers.hospitals) return;
-        this.layers.hospitals.clearLayers();
-
-        const hospitals = window.store?.data?.hospitals || [];
-        hospitals.forEach(h => {
-            const icon = L.divIcon({
-                className: "custom-map-pin",
-                html: `<div style="background:#35a7ff;width:24px;height:24px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:bold;box-shadow:0 0 8px #35a7ff">✚</div>`,
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            });
-
-            const marker = L.marker([h.lat, h.lon], { icon: icon });
-            marker.bindPopup(`
-                <div style="color:#111;font-family:sans-serif;font-size:12px;">
-                    <strong style="font-size:13px;color:#0d47a1;">${h.name}</strong><br>
-                    <strong>Beds Available:</strong> ${h.bed_capacity_available} / ${h.bed_capacity_total}<br>
-                    <strong>ICU Beds:</strong> ${h.icu_beds}<br>
-                    <strong>Trauma Capable:</strong> ${h.trauma_capable ? 'Yes' : 'No'}<br>
-                    <strong>Phone:</strong> ${h.contact_number}
-                </div>
-            `);
-            this.layers.hospitals.addLayer(marker);
-        });
-    }
-
-    plotSeismicEvents(events) {
-        if (!this.layers.seismic) return;
-        this.layers.seismic.clearLayers();
-
-        events.forEach(ev => {
-            const circle = L.circleMarker([ev.lat, ev.lon], {
-                radius: Math.max(5, ev.mag * 3.5),
-                color: "#ff9800",
-                fillColor: "#ff9800",
-                fillOpacity: 0.5,
-                weight: 2
-            });
-
-            circle.bindPopup(`
-                <div style="color:#111;font-family:sans-serif;font-size:12px;">
-                    <strong style="color:#e65100;">USGS Seismic Telemetry</strong><br>
-                    <strong>Magnitude:</strong> M ${ev.mag}<br>
-                    <strong>Location:</strong> ${ev.place}<br>
-                    <strong>Time:</strong> ${ev.time}
-                </div>
-            `);
-            this.layers.seismic.addLayer(circle);
-        });
-    }
 }
 
-window.gisMap = new GISMapController();
+// Global GIS map controller instance
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = { GISMapController };
+} else {
+    window.gisMap = new GISMapController();
+}

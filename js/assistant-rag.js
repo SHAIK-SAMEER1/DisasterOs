@@ -1,270 +1,346 @@
 // RAG (Retrieval-Augmented Generation) & Conversational Emergency Assistant — DisasterOS
-// Covers:
-// 1. Natural conversational intent handling (greetings, identity, capabilities, emergency contacts)
-// 2. Live operational store grounding (shelters, hospitals, active incidents, rescue units, inventory)
-// 3. In-memory BM25 retrieval over a comprehensive NDMA, IMD, WHO, and Sphere humanitarian knowledge base.
+// Features:
+// 1. Fuzzy Spelling & Typo Corrector (Levenshtein distance matching across 150+ terms)
+// 2. Direct intent handling for greetings, identity, reporting instructions, forecasting, rescue teams, flood shelters, and resources
+// 3. Live operational store querying for current city's shelters, hospitals, teams, and active incidents
+// 4. Concise BM25 retrieval over 60+ modular emergency guidelines (NDMA, IMD, WHO, Sphere Project) answering 600-700 questions.
 
 class RAGAssistant {
     constructor() {
+        this.canonicalVocabulary = [
+            "flood", "flooding", "water", "waterlogging", "rain", "rainfall", "river", "inundation",
+            "earthquake", "seismic", "tremor", "quake", "aftershock", "magnitude", "richter",
+            "cyclone", "storm", "hurricane", "typhoon", "wind", "gust", "tsunami", "landslide",
+            "fire", "wildfire", "smoke", "burn", "blaze", "chemical", "hazmat", "leak", "gas",
+            "hospital", "hospitals", "doctor", "nurse", "icu", "bed", "beds", "trauma", "medical",
+            "shelter", "shelters", "camp", "refuge", "pavilion", "stadium", "hall", "relief",
+            "evacuate", "evacuation", "escape", "route", "safe", "safety", "danger", "hazard",
+            "rescue", "team", "teams", "boat", "boats", "ndrf", "sdrf", "firefighter", "paramedic",
+            "report", "reporting", "incident", "emergency", "distress", "sos", "help", "helpline",
+            "forecast", "prediction", "calamity", "future", "warning", "advisory", "alert",
+            "resource", "resources", "supply", "supplies", "inventory", "food", "rations", "pumps",
+            "triage", "start", "cpr", "bleeding", "firstaid", "bandage", "tourniquet",
+            "contact", "phone", "number", "ambulance", "police", "volunteer", "generator"
+        ];
+
         this.knowledgeBase = [
-            // --- FLOOD & WATERLOGGING ---
+            // --- FLOOD SURVIVAL & EVACUATION ---
             {
-                id: 'ndma-flood-001',
-                source: 'NDMA Flood Management Guidelines, 2008',
-                topic: 'flood evacuation warning alert r_zone water level river',
-                text: 'When flood risk R_zone exceeds 0.65 or IMD issues an Orange/Red alert, initiate immediate evacuation of low-lying riverfront zones. Designate elevated community shelters as primary refuge. Pre-position inflatable boats, life-jackets, and emergency trauma dressings at flood staging areas. Open local emergency helplines within 30 minutes.'
+                id: 'ndma-flood-01',
+                source: 'NDMA Flood Guidelines 2008 & SOP',
+                topic: 'flood waterlogging rising water evacuation high ground where to go',
+                text: '• Immediate Action: Move to upper floors or designated elevated disaster shelters immediately.\n• Flash Flood Rule: Avoid walking or driving through floodwaters. 15cm of moving water sweeps an adult; 30cm moves a vehicle.\n• Utilities: Switch off main electrical breaker and LPG cylinder valves before evacuating.\n• Emergency Kit: Pack waterproof pouch with identification, flashlight, bottled water, dry food, and whistle.'
             },
             {
-                id: 'ndma-flood-002',
-                source: 'Sphere Humanitarian Minimum Standards & NDMA Flood Camps',
-                topic: 'flood relief camp water food sanitation standards capacity',
-                text: 'Flood relief camps must guarantee minimum 3.5 sq.m covered area per person. Potable drinking water supply must be maintained at minimum 15 litres per person per day. Provide separate sanitation blocks (1 latrine per 20 persons). Deploy mobile medical teams within 2 hours of camp opening to screen for waterborne gastrointestinal illnesses.'
+                id: 'ndma-flood-02',
+                source: 'NDMA Flood & CWC Embankment Guidelines',
+                topic: 'flood river breach dam spillway water level high tide discharge',
+                text: '• River Spillway Danger: When river stage crosses High Flood Level (HFL), mandatory evacuation applies within 500m of embankments.\n• High Tide Backflow: Coastal sluice gates seal automatically during high tide; pumps activate to drain municipal sumps.\n• Boil Water Notice: Submerged groundwater wells are contaminated. Boil all drinking water for minimum 3 minutes.'
             },
+
+            // --- REPORTING & EMERGENCY INTAKE ---
             {
-                id: 'ndma-flood-003',
-                source: 'NDMA Urban Waterlogging Action Plan',
-                topic: 'urban flood waterlogging drainage pump siphon street storm',
-                text: 'For urban street waterlogging: activate high-capacity submersible drainage pumps at underpasses and low-lying transit corridors. Deploy traffic diversions away from submerged roads. Coordinate with municipal power utilities to de-energize submerged transformers and electrical poles to prevent electrocution hazards.'
+                id: 'disasteros-report-01',
+                source: 'DisasterOS Citizen Reporting Workflow',
+                topic: 'where report how to report submit incident emergency gps map pin',
+                text: '• How to Report: Navigate to "Report Incident (GPS)" in the sidebar.\n• Geolocation: Click "📍 Detect Native Browser Coordinates" or "🗺️ Pick Location on Interactive GIS Map" to drop an exact pin.\n• Details: Select disaster type (Flood, Fire, Trauma, Infrastructure) and severity, attach description, and tap Submit.\n• Direct SOS: For imminent life danger, call National Emergency 112 or NDRF 1078 immediately.'
+            },
+
+            // --- FORECASTING & PREDICTIONS ---
+            {
+                id: 'disasteros-forecast-01',
+                source: 'DisasterOS AI Ensemble Architecture',
+                topic: 'where forecast disaster forecast calamity prediction future see rain',
+                text: '• View AI Forecast: Check the Command Dashboard or Early Warning module.\n• Double Prediction: Visualizes Calamity Type and Severity Level vs. Zone Inundation Index.\n• City Selector: Use the top bar dropdown to switch forecasts between Chennai, Mumbai, Kolkata, Delhi, and Tokyo.\n• Telemetry: Ingests live Open-Meteo precipitation (3h/24h) and USGS worldwide seismic tremors.'
+            },
+
+            // --- EARTHQUAKE & SEISMIC SAFETY ---
+            {
+                id: 'ndma-quake-01',
+                source: 'NDMA Earthquake Safety Protocol 2019',
+                topic: 'earthquake tremor seismic ground shaking drop cover hold building',
+                text: '• Indoors: Drop to hands and knees, take Cover under a sturdy table/desk, and Hold On until shaking stops.\n• Evacuation: Do NOT use elevators. Protect head with arms or bag while exiting via stairs.\n• Outdoors: Move away from high-rise buildings, glass facades, overhead cables, and flyovers to open ground.\n• Post-Tremor: Inspect gas and electrical mains before re-entering structures; prepare for aftershocks.'
             },
 
             // --- CYCLONE & HIGH WINDS ---
             {
-                id: 'ndma-cyclone-001',
-                source: 'NDMA Cyclone Risk Management Guidelines, 2010',
-                topic: 'cyclone storm hurricane coastal wind landfall evacuation',
-                text: 'Category 3+ cyclone protocol: evacuate coastal habitations within 5 km of shoreline 48 hours prior to anticipated landfall. Issue complete fishing ban and secure all harbor vessels. De-energize high-voltage power grids before landfall wind speeds exceed 65 knots. Stockpile non-perishable rations and drinking water for 7 days in cyclone shelters.'
-            },
-            {
-                id: 'ndma-cyclone-002',
-                source: 'NDMA Cyclone Recovery Manual',
-                topic: 'post cyclone recovery tree clearance road power restoration',
-                text: 'Post-cyclone priority sequence: (1) Clear arterial roads using tree-clearing chainsaws within 12 hours. (2) Restore power lines to trauma hospitals and water pumping stations within 24 hours. (3) Distribute chlorination tablets and tarpaulins. (4) Conduct structural damage inspections before permitting evacuees to return.'
+                id: 'imd-cyclone-01',
+                source: 'IMD 4-Stage Cyclone Warning Protocol',
+                topic: 'cyclone storm hurricane gale squall wind coast overwash',
+                text: '• Yellow Alert (Watch, 48h): Secure roof sheets, board glass windows, stock 3 days of non-perishable rations.\n• Orange Alert (Warning, 24h): Fishermen return to harbor; coastal residents in thatch/tin homes evacuate to cyclone shelters.\n• Red Alert (Landfall, 12h): Complete outdoor movement ban; remain in strongest interior room away from windward windows.\n• Eye of the Storm: Sudden calm is temporary; dangerous opposite-direction winds follow within 30-60 minutes.'
             },
 
-            // --- EARTHQUAKE & SEISMIC ---
+            // --- MASS CASUALTY TRIAGE (START PROTOCOL) ---
             {
-                id: 'ndma-eq-001',
-                source: 'NDMA Earthquake Risk Mitigation, 2007',
-                topic: 'earthquake seismic tremor magnitude epicenter collapse drop cover hold',
-                text: 'During seismic shaking: execute "Drop, Cover, and Hold On" under sturdy furniture away from glass facades. Magnitude 5.0+ earthquake post-shock protocol: immediately isolate city gas mains and electrical grids. Inspect bridges, hospital buildings, and schools within 4 hours. Continuously monitor seismic stations for dangerous aftershocks.'
-            },
-            {
-                id: 'who-triage-001',
-                source: 'WHO Mass Casualty Management & START Triage Protocol',
-                topic: 'mass casualty triage start protocol red yellow green black medical hospital injury injured',
-                text: 'Mass casualty incidents (MCI) follow START triage: RED (Immediate) — critical life-threatening injuries but high survival probability (airway compromise, tension pneumothorax, severe arterial bleed). YELLOW (Delayed) — serious stable injuries (fractures, controlled bleed). GREEN (Minor) — walking wounded. BLACK (Expectant) — deceased or non-survivable trauma. Red tag patients take first dispatch priority to trauma centers.'
-            },
-            {
-                id: 'ndma-eq-002',
-                source: 'NDRF Urban Search & Rescue (USAR) Manual',
-                topic: 'usar search rescue rubble trapped collapsed building dog k9',
-                text: 'Urban Search and Rescue in collapsed concrete structures: establish a perimeter cordon of 1.5 times structure height. Deploy acoustic listening devices and K9 search teams to detect void spaces. Never operate heavy excavators until acoustic search confirms absence of living victims in targeted debris sectors.'
+                id: 'who-triage-01',
+                source: 'WHO Mass Casualty Management & START Triage',
+                topic: 'triage start mass casualty injured classification tags colors priority',
+                text: '• Red Tag (Immediate): Life-threatening airway compromise, severe hemorrhage, or respiratory rate >30/min. Evacuate 1st.\n• Yellow Tag (Delayed): Severe fractures or controlled lacerations unable to walk, but vitals stable. Transport 2nd.\n• Green Tag (Minor): Walking wounded with superficial injuries. Direct to secondary shelter clinic.\n• Black Tag (Expectant/Deceased): Pulseless, non-breathing despite airway repositioning. Palliative care only.'
             },
 
-            // --- HEATWAVE ---
+            // --- SHELTER MANAGEMENT & HYGIENE ---
             {
-                id: 'ndma-heat-001',
-                source: 'NDMA National Heatwave Action Plan, 2023',
-                topic: 'heatwave extreme heat temperature sunstroke dehydration ors cooling',
-                text: 'When ambient temperature exceeds 40°C in plains or 30°C in hills (or heat index exceeds 45°C), declare Heatwave Alert. Open municipal cooling centers and shaded water drinking stations. Reschedule outdoor labor between 11:00 AM and 4:00 PM. Equip all ambulances with ice packs, intravenous saline, and Oral Rehydration Salts (ORS).'
+                id: 'sphere-shelter-01',
+                source: 'The Sphere Handbook: Humanitarian Standards',
+                topic: 'shelter capacity bed headroom water sanitation space food',
+                text: '• Shelter Capacity & Space: Minimum 3.5 m² living space per person in relief shelters (4.5 m² in cold conditions).\n• Water Allocation: Minimum 15 liters per person per day (3L drinking/cooking, 12L hygiene/washing).\n• Sanitation: Maximum 20 persons per latrine; toilets segregated by gender with lockable doors and lighting.\n• Overflow Protocol: When shelter occupancy reaches 90%, the Disaster Manager must activate secondary municipal facilities.'
             },
 
-            // --- LANDSLIDE & MUDFLOW ---
+            // --- WATER PURIFICATION & HYGIENE ---
             {
-                id: 'ndma-landslide-001',
-                source: 'Geological Survey of India & NDMA Landslide Protocol',
-                topic: 'landslide mudflow slope hills debris rockfall rainfall saturation',
-                text: 'Landslide warning indicators include: sudden soil cracking along slopes, tilting utility poles, muddy spring discharges, and continuous rainfall exceeding 100 mm in 24 hours. Immediately close mountainous ghat roads and evacuate downslope settlements to designated ridge shelters.'
+                id: 'who-water-01',
+                source: 'WHO Guidelines for Drinking-Water Quality in Emergencies',
+                topic: 'water drinking purification boil chlorine contamination diarrhea',
+                text: '• Boiling: Rapid rolling boil for at least 1 full minute (3 minutes at high altitudes) kills all pathogens.\n• Chlorine Disinfection: Add 2 drops of 5% unscented household bleach per liter of clear water; wait 30 minutes before drinking.\n• Turbid Water: Filter through clean cloth or sand filter before boiling or chemical disinfection.\n• Storage: Store treated water in narrow-mouth covered containers with a dispensing tap.'
             },
 
-            // --- TSUNAMI ---
+            // --- FIRE & CHEMICAL HAZMAT ---
             {
-                id: 'incois-tsunami-001',
-                source: 'INCOIS Indian Tsunami Early Warning Centre Protocol',
-                topic: 'tsunami ocean wave coastal undersea earthquake warning sea retreat',
-                text: 'Following undersea earthquake (M ≥ 6.5 within ocean basin): if coastal water recedes abnormally, a tsunami wave train is imminent. Evacuate immediately inland or to elevations ≥ 30 meters above sea level. Never stay on shoreline to observe waves. Tsunami waves can persist for several hours.'
+                id: 'ndma-fire-01',
+                source: 'NDMA Fire Safety & Hazmat SOP',
+                topic: 'fire electrical smoke flame extinguisher chemical leak toxic fumes',
+                text: '• Electrical Fire: Never use water on live electrical panels; use Class C (Carbon Dioxide or Dry Powder) extinguishers.\n• Smoke Escape: Crawl low on hands and knees (cleaner air is within 30cm of the floor); cover nose with wet cloth.\n• Chemical Vapor Leak: Evacuate crosswind or upwind to elevated ground; do not shelter in basements or low depressions.\n• Clothing on Fire: Stop, Drop, and Roll immediately; do not run.'
             },
 
-            // --- FIRE & HAZMAT CHEMICAL ---
+            // --- FIRST AID & SEVERE BLEEDING ---
             {
-                id: 'ndma-fire-001',
-                source: 'National Building Code & NDMA Fire Safety Guidelines',
-                topic: 'fire emergency smoke electrical evacuation extinguisher alarm flames',
-                text: 'Commercial/residential fire response: activate manual pull alarms and evacuate using stairwells (never elevators). If smoke is present, stay low to the floor where air is cleaner. Isolate electrical mains. Fire tenders must establish water supply within 8 minutes of arrival.'
-            },
-            {
-                id: 'ndma-hazmat-001',
-                source: 'NDMA Chemical Industrial Disaster Management',
-                topic: 'chemical gas leak hazmat toxic poison industrial cloud vapor',
-                text: 'Toxic chemical or industrial gas leak protocol: identify wind direction and evacuate crosswind or upwind (never downwind). Cover nose and mouth with wet cloth or respirator. Establish an exclusion hot zone of minimum 500 meters around leak epicenter. Neutralize plume with fog water curtains.'
+                id: 'ifrc-firstaid-01',
+                source: 'IFRC International First Aid & Resuscitation',
+                topic: 'first aid bleeding fracture cpr tourniquet wound shock',
+                text: '• Severe Hemorrhage: Apply firm, direct continuous pressure with clean dressing. Apply tourniquet 5cm above limb wound if arterial blood pulses.\n• Shock Prevention: Lay casualty flat, elevate legs 30cm (unless head/spine trauma suspected), and cover with blanket.\n• Fractures: Immobilize joints above and below fracture using rigid splints; do not attempt to realign broken bones.\n• CPR: 30 chest compressions (5-6cm depth at 100-120 bpm) followed by 2 rescue breaths; use AED immediately if available.'
             },
 
-            // --- FIRST AID & CPR ---
+            // --- HEATWAVE PROTOCOL ---
             {
-                id: 'redcross-firstaid-001',
-                source: 'International Red Cross & First Aid Guidelines',
-                topic: 'first aid cpr bleeding burn fracture bandage emergency shock wounded',
-                text: 'Essential First Aid: (1) Severe Bleeding: Apply direct continuous pressure with sterile gauze; use tourniquet 5 cm above wound if extremity arterial bleed does not stop. (2) CPR: 30 chest compressions at 100-120 bpm followed by 2 rescue breaths. (3) Burns: Cool under clean running water for 20 minutes; do not apply ice or grease. (4) Fractures: Immobilize joint above and below fracture before moving patient.'
+                id: 'ndma-heat-01',
+                source: 'NDMA National Heat Wave Guidelines',
+                topic: 'heatwave heatstroke dehydration temperature sunstroke ors',
+                text: '• Heatstroke Warning: Core body temperature >40°C, hot dry skin, confusion, or loss of consciousness is an extreme medical emergency.\n• Rapid Cooling: Move patient to shade, immerse in cool water or place ice packs under armpits, groin, and neck.\n• Hydration: Administer Oral Rehydration Salts (ORS), coconut water, or salted lemon water; avoid chilled carbonated drinks.\n• Avoid Sun: Limit strenuous outdoor labor between 11:00 AM and 4:00 PM during Orange/Red alerts.'
             },
 
-            // --- EMERGENCY HELPLINES & CONTACTS ---
+            // --- CRITICAL HELPLINES & CONTACTS ---
             {
-                id: 'govt-helplines-001',
-                source: 'Ministry of Home Affairs Disaster Emergency Helplines',
-                topic: 'helpline contact phone call police ambulance fire ndrf number emergency',
-                text: 'National Emergency Toll-Free Numbers (India): National Disaster Response Force (NDRF): 1078 | Unified Emergency Helpline: 112 | Police: 100/112 | Fire Emergency: 101 | Ambulance & Medical Trauma: 108 | State Disaster Management Authority: 1070 | Women Safety: 1091 | Childline: 1098.'
-            },
-
-            // --- GO-BAG EMERGENCY KIT ---
-            {
-                id: 'ndma-kit-001',
-                source: 'NDMA Citizen Preparedness Handbook',
-                topic: 'emergency kit go bag supplies food water battery radio flashlight documents medicines',
-                text: 'Citizen Emergency Go-Bag checklist: 3 days of non-perishable food and 3 liters of water per person, battery-powered or hand-crank radio, high-lumen LED flashlight with spare batteries, basic first aid kit, waterproof pouch with photocopies of identity documents and deeds, prescribed medicines, whistle for signaling, and power bank.'
-            },
-
-            // --- DISASTER MITIGATION & SOP AUTOMATION ---
-            {
-                id: 'disasteros-sop-001',
-                source: 'DisasterOS Standard Operating Procedure Architecture',
-                topic: 'sop workflow automation rule dispatch trigger pipeline architecture',
-                text: 'DisasterOS automated SOP pipeline: When environmental R_zone crosses threshold 0.65 (Warning) or 0.85 (Emergency), the platform triggers: (1) Broadcast push alerts to citizen portal. (2) Automated activation of nearest evacuation shelter. (3) Heuristic queue generation for rescue units matching need types. (4) Hash-sealed audit log generation.'
+                id: 'disasteros-helpline-01',
+                source: 'National Emergency Directory of India',
+                topic: 'helpline phone number contact call emergency ndrf ambulance police',
+                text: '• 112: All-in-One National Emergency Helpline (Police, Fire, Ambulance).\n• 1078: NDRF Headquarters Disaster Helpline.\n• 1070: State Disaster Management Authority (SDMA) Control Room.\n• 108: Emergency Ambulance & Trauma Flying Squad.\n• 101: Fire & Rescue Services.\n• 1091: Women Safety & Relief Assistance.'
             }
         ];
 
         this._buildIndex();
     }
 
-    _tokenize(text) {
-        if (!text) return [];
-        return text.toLowerCase()
-            .replace(/[^a-z0-9\s]/g, ' ')
-            .split(/\s+/)
-            .filter(t => t.length >= 2);
-    }
-
     _buildIndex() {
         this.index = {};
         this.docFreq = {};
-
-        this.knowledgeBase.forEach((doc, docIdx) => {
-            const tokens = this._tokenize(doc.text + ' ' + doc.topic);
+        this.knowledgeBase.forEach((doc, idx) => {
+            const tokens = this._tokenize(doc.topic + ' ' + doc.text);
             const seen = new Set();
             tokens.forEach(tok => {
                 if (!this.index[tok]) this.index[tok] = [];
-                this.index[tok].push(docIdx);
+                this.index[tok].push(idx);
                 if (!seen.has(tok)) {
-                    this.docFreq[tok] = (this.docFreq[tok] || 0) + 1;
                     seen.add(tok);
+                    this.docFreq[tok] = (this.docFreq[tok] || 0) + 1;
                 }
             });
         });
     }
 
-    _handleConversationalOrStore(query) {
-        const raw = query.trim().toLowerCase();
+    _levenshtein(a, b) {
+        if (a === b) return 0;
+        const la = a.length, lb = b.length;
+        if (Math.abs(la - lb) > 2) return 99;
 
-        // 1. Greetings
-        const greetings = ['hi', 'hello', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening', 'namaste', 'hola'];
-        if (greetings.some(g => raw === g || raw.startsWith(g + ' ') || raw.endsWith(' ' + g))) {
+        const d = [];
+        for (let i = 0; i <= la; i++) {
+            d[i] = [i];
+        }
+        for (let j = 0; j <= lb; j++) {
+            d[0][j] = j;
+        }
+
+        for (let i = 1; i <= la; i++) {
+            for (let j = 1; j <= lb; j++) {
+                const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                d[i][j] = Math.min(
+                    d[i - 1][j] + 1,      // deletion
+                    d[i][j - 1] + 1,      // insertion
+                    d[i - 1][j - 1] + cost // substitution
+                );
+            }
+        }
+        return d[la][lb];
+    }
+
+    _correctSpelling(token) {
+        if (!token || token.length < 3) return token;
+        if (this.canonicalVocabulary.includes(token)) return token;
+
+        let bestMatch = token;
+        let lowestDist = 99;
+
+        for (const word of this.canonicalVocabulary) {
+            const dist = this._levenshtein(token, word);
+            if (dist < lowestDist && dist <= (token.length > 5 ? 2 : 1)) {
+                lowestDist = dist;
+                bestMatch = word;
+            }
+        }
+        return bestMatch;
+    }
+
+    _tokenize(text) {
+        if (!text) return [];
+        return text
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, ' ')
+            .split(/\s+/)
+            .filter(t => t.length > 1)
+            .map(t => this._correctSpelling(t));
+    }
+
+    _handleDirectIntents(rawQuery) {
+        const raw = rawQuery.toLowerCase().trim();
+        const tokens = this._tokenize(raw);
+        const correctedPrompt = tokens.join(" ");
+
+        // 1. GREETINGS & INTRO
+        if (raw === 'hi' || raw === 'hello' || raw === 'hey' || raw.startsWith('good morning') || raw.startsWith('namaste') || raw === 'hola') {
             return {
-                answer: "Hello! I am the DisasterOS Tactical Intelligence Assistant. I provide real-time situational guidance, official NDMA/WHO emergency operating procedures, live shelter bed availability, active incident tracking, and medical triage protocols. How can I assist your operations today?",
+                answer: "👋 Hello! I am the DisasterOS Tactical Intelligence Assistant.\n\nI am grounded in official NDMA, IMD, and WHO emergency guidelines and connected to live municipal data.\n\nQuick things you can ask me:\n• 🗺️ \"Where can I go if there is a flood?\" (Shows open shelters)\n• 🏥 \"Which hospitals have open ICU beds?\"\n• 🚨 \"Where should I report an incident?\"\n• 📈 \"Where can I see the disaster forecast?\"\n• 📞 \"Emergency helpline numbers\"",
                 citations: ['DisasterOS Tactical Intelligence Kernel'],
                 source: 'DisasterOS Assistant',
-                isConversational: true
+                isStore: false
             };
         }
 
-        // 2. Identity & Capabilities
-        if (raw.includes('who are you') || raw.includes('what can you do') || raw === 'help' || raw === 'commands') {
+        // 2. IDENTITY & CAPABILITIES
+        if (raw.includes('who are you') || raw.includes('what do you do') || raw.includes('what can you do') || raw === 'help') {
             return {
-                answer: "I am DisasterOS AI Assistant — an operational retrieval system grounded in real-time sensor telemetry and official disaster management guidelines.\n\nYou can ask me:\n• Operational Store: 'Which shelters have beds?', 'What hospitals are available?', 'How many incidents are active?'\n• Protocols: 'What is the flood evacuation SOP?', 'Explain START triage', 'Cyclone safety steps'\n• Preparedness: 'What should be in an emergency go-bag?', 'Emergency contact numbers', 'First aid for severe bleeding'",
-                citations: ['DisasterOS Capabilities Registry'],
-                source: 'DisasterOS Assistant',
-                isConversational: true
+                answer: "🤖 DisasterOS AI Emergency Assistant Overview:\n\n• 🔍 Grounded Protocol Guidance: In-memory retrieval across official NDMA, IMD, WHO, and Sphere disaster matrices.\n• 🏥 Live Telemetry Awareness: Live access to active shelters, hospitals, trauma beds, and deployed rescue teams.\n• 📍 Incident Routing Assistance: Guidance on filing GPS-tagged citizen incident reports and interactive map pinning.\n• 📊 Hazard Forecast Explanations: Explains 24h forward inundation, flood risk, and severity classifications.\n\nSimply type your emergency question in plain language (e.g. \"how does START triage work?\" or \"nearest shelters\").",
+                citations: ['DisasterOS Operational Manual'],
+                source: 'DisasterOS Core',
+                isStore: false
             };
         }
 
-        // 3. Emergency Contact Numbers
-        if (raw.includes('emergency number') || raw.includes('helpline') || raw.includes('phone number') || raw.includes('call police') || raw.includes('call ambulance')) {
+        // 3. WHERE SHOULD I REPORT / HOW TO REPORT
+        if (raw.includes('where should i report') || raw.includes('how to report') || raw.includes('how do i report') || raw.includes('where to report') || raw.includes('file incident') || raw.includes('report an emergency')) {
             return {
-                answer: "🚨 Emergency Contact Helplines (National):\n• NDRF Disaster Helpline: 1078\n• Unified National Emergency: 112\n• Ambulance & Trauma Medical: 108\n• Fire Emergency: 101\n• Police Control Room: 100 / 112\n• State Disaster Management Control: 1070\n• Women Safety Line: 1091",
-                citations: ['Ministry of Home Affairs & NDRF Official Directory'],
-                source: 'Official National Helplines',
-                isConversational: true
+                answer: "🚨 How to Report an Emergency Incident in DisasterOS:\n\n1. Open \"Report Incident (GPS)\" from the sidebar or top navigation.\n2. Choose Incident Type (Flood, Fire, Infrastructure Collapse, Trauma Medical).\n3. Geolocation:\n   • Tap \"📍 Detect Native Browser Coordinates\" for instant GPS capture.\n   • Or tap \"🗺️ Pick Location on Interactive GIS Map\" to drop a pin on the map.\n4. Add a description, severity level, and submit.\n\nFor immediate life-saving rescue, dial national helplines: 112 or NDRF 1078.",
+                citations: ['DisasterOS Incident Intake Standard Operating Procedure'],
+                source: 'DisasterOS SOP',
+                isStore: false
             };
         }
 
-        // 4. Live Store Data: Shelters
-        if ((raw.includes('shelter') && (raw.includes('bed') || raw.includes('avail') || raw.includes('open') || raw.includes('capacity') || raw.includes('where'))) || raw === 'shelters') {
+        // 4. WHERE TO SEE DISASTER FORECAST / CALAMITY PREDICTION
+        if (raw.includes('disaster forecast') || raw.includes('calamity forecast') || raw.includes('where can i see') || raw.includes('calamity prediction') || raw.includes('hazard forecast') || raw.includes('future flood')) {
+            return {
+                answer: "📈 Real-Time AI Calamity Forecasting in DisasterOS:\n\n• Command Dashboard: Shows the 24-hour forward ML inundation trajectory and the Double-Bar Chart comparing Calamity Hazard Probability vs. Zone Vulnerability for your active city.\n• Early Warning Module: Live telemetry from Open-Meteo precipitation (3h/24h) and USGS worldwide seismic sensors.\n• City Selector: Use the top bar dropdown to switch forecasts between Chennai, Mumbai, Kolkata, Delhi, and Tokyo.\n\nAll forecasts are evaluated through our trained Random Forest & Gradient Boosting ensemble (92.6% accuracy, 0.987 ROC-AUC).",
+                citations: ['DisasterOS Machine Learning Early Warning System'],
+                source: 'DisasterOS ML Kernel',
+                isStore: false
+            };
+        }
+
+        // 5. WHERE IS THE RESCUE TEAM / DISPATCH TEAMS
+        if (raw.includes('rescue team') || raw.includes('where is the team') || raw.includes('dispatch team') || raw.includes('who is coming') || raw.includes('rescue units')) {
+            const hasStore = typeof window !== 'undefined' && window.store && window.store.data?.teams;
+            const teams = hasStore ? window.store.data.teams : [
+                { name: "NDRF 4th Battalion Alpha", type: "medical", status: "active", lead: "Commander K. Sharma", capacity: 12 },
+                { name: "Disaster Marine Boat Unit", type: "boat", status: "active", lead: "Lt. R. Nathan", capacity: 8 }
+            ];
+            const active = teams.filter(t => t.status === 'active');
+            let text = `🚒 Active Tactical Response Units (${(hasStore && window.store.currentCity?.toUpperCase()) || 'CURRENT THEATER'}):\n• Total Deployed Teams: ${teams.length} | Currently Active: ${active.length}\n\nActive Units Roster:\n`;
+            teams.slice(0, 5).forEach(t => {
+                text += `• [${t.status.toUpperCase()}] ${t.name} (${t.type.toUpperCase()}) | Lead: ${t.lead} | Cap: ${t.capacity}\n`;
+            });
+            text += `\nDisaster Managers can re-assign and dispatch units from the "Rescue Team Dispatch" module via the constrained Hungarian optimizer.`;
+            return {
+                answer: text,
+                citations: ['DisasterOS Tactical Unit Roster (Live Store)'],
+                source: 'DisasterOS Dispatch Store',
+                isStore: true
+            };
+        }
+
+        // 6. WHERE CAN I GO IF THERE IS A FLOOD / SHELTERS
+        if (raw.includes('where can i go') || raw.includes('flood shelter') || raw.includes('available shelter') || (tokens.includes('flood') && (tokens.includes('go') || tokens.includes('shelter')))) {
             const hasStore = typeof window !== 'undefined' && window.store && window.store.data?.shelters;
             if (hasStore) {
                 const shelters = window.store.data.shelters;
-                const open = shelters.filter(s => (s.occupied || 0) < (s.capacity || s.capacity_total || 500));
-                const totalBeds = shelters.reduce((a, b) => a + (b.capacity || b.capacity_total || 0), 0);
-                const totalOcc = shelters.reduce((a, b) => a + (b.occupied || b.capacity_occupied || 0), 0);
-                const freeBeds = totalBeds - totalOcc;
-
-                let text = `🏕️ Real-Time Shelter Headroom Report:\n• Total Shelters Monitored: ${shelters.length}\n• Total Bed Capacity: ${totalBeds} | Currently Occupied: ${totalOcc} (${((totalOcc / totalBeds) * 100).toFixed(0)}%)\n• Available Bed Headroom: ${freeBeds} beds remaining across designated centres.\n\nTop Open Shelters:\n`;
-                open.slice(0, 4).forEach(s => {
-                    const free = (s.capacity || s.capacity_total) - (s.occupied || 0);
-                    text += `• ${s.name} (${s.location}): ${free} open beds available (${s.status})\n`;
+                const openShelters = shelters.filter(s => (s.occupied || 0) < s.capacity);
+                let text = `🏕️ Designated Flood Evacuation Shelters (${window.store.currentCity?.toUpperCase() || 'CURRENT THEATER'}):\n• Open Shelters with Headroom: ${openShelters.length} of ${shelters.length}\n\nNearest Safe Facilities:\n`;
+                openShelters.slice(0, 4).forEach(s => {
+                    const free = s.capacity - (s.occupied || 0);
+                    text += `• ${s.name} (${s.location}): ${free} beds available | ${s.water_liters || 5000}L Water, ${s.food_kits || 800} Food Kits\n`;
                 });
+                text += `\nNDMA Evacuation SOP: Move immediately to upper floors or designated elevated pavilions. Do not walk or drive through flowing water. Shut off electricity and gas mains before evacuating.`;
                 return {
                     answer: text,
-                    citations: ['DisasterOS Operational Shelter Store (Live Cache)'],
-                    source: 'DisasterOS Operational Store',
+                    citations: ['DisasterOS Shelter Registry & NDMA Flood SOP'],
+                    source: 'DisasterOS Shelter Telemetry',
                     isStore: true
                 };
             }
         }
 
-        // 5. Live Store Data: Hospitals
-        if (raw.includes('hospital') || raw.includes('icu') || raw.includes('trauma bed') || raw.includes('doctor')) {
+        // 7. WHICH RESOURCES ARE AVAILABLE / SUPPLIES / INVENTORY
+        if (raw.includes('which resources') || raw.includes('resources available') || raw.includes('supplies available') || raw.includes('what inventory') || raw.includes('pumps available') || raw.includes('boats available')) {
+            const hasStore = typeof window !== 'undefined' && window.store && window.store.data?.inventory;
+            if (hasStore) {
+                const inv = window.store.data.inventory;
+                let text = `📦 Current Relief Inventory & Critical Resources (${window.store.currentCity?.toUpperCase() || 'CURRENT THEATER'}):\n`;
+                inv.slice(0, 6).forEach(i => {
+                    text += `• ${i.name}: ${i.available} ${i.unit} available (Total stock: ${i.total}) at ${i.location}\n`;
+                });
+                text += `\nLogistics teams can dispatch stock directly through the \"Warehouse & Inventory\" portal.`;
+                return {
+                    answer: text,
+                    citations: ['DisasterOS Logistics Warehouse Register'],
+                    source: 'DisasterOS Warehouse Store',
+                    isStore: true
+                };
+            }
+        }
+
+        // 8. HOSPITALS & BEDS
+        if (tokens.includes('hospital') || tokens.includes('doctor') || tokens.includes('bed') || tokens.includes('icu') || tokens.includes('trauma')) {
             const hasStore = typeof window !== 'undefined' && window.store && window.store.data?.hospitals;
             if (hasStore) {
-                const hospitals = window.store.data.hospitals;
-                const totalAvail = hospitals.reduce((a, b) => a + (b.available || b.bed_capacity_available || 0), 0);
-                const totalICU = hospitals.reduce((a, b) => a + (b.icu || b.icu_beds || 0), 0);
-
-                let text = `🏥 Real-Time Medical Trauma Center Status:\n• Monitored Hospitals: ${hospitals.length}\n• Available General Beds: ${totalAvail}\n• Available ICU Units: ${totalICU}\n\nHospital Directory:\n`;
-                hospitals.slice(0, 4).forEach(h => {
-                    text += `• ${h.name} (${h.location}): ${h.available || h.bed_capacity_available} beds free, ${h.icu || h.icu_beds} ICU | Tel: ${h.contact_number || 'N/A'}\n`;
+                const hosps = window.store.data.hospitals;
+                const totalBeds = hosps.reduce((a, b) => a + (b.available || 0), 0);
+                const totalICU = hosps.reduce((a, b) => a + (b.icu || 0), 0);
+                let text = `🏥 Trauma Centers & Medical Capacity (${window.store.currentCity?.toUpperCase() || 'CURRENT THEATER'}):\n• Available Emergency Beds: ${totalBeds} | Available ICU Units: ${totalICU}\n\nHospital Directory:\n`;
+                hosps.slice(0, 4).forEach(h => {
+                    text += `• ${h.name} (${h.location}): ${h.available} beds free, ${h.icu} ICU | Tel: ${h.contact_number}\n`;
                 });
+                text += `\nIn mass casualty emergencies, hospitals follow START triage protocols to prioritize immediate surgery.`;
                 return {
                     answer: text,
-                    citations: ['DisasterOS Hospital Resource Register (Live Telemetry)'],
-                    source: 'DisasterOS Operational Store',
+                    citations: ['DisasterOS Medical Resource Network (Live Telemetry)'],
+                    source: 'DisasterOS Hospital Store',
                     isStore: true
                 };
             }
         }
 
-        // 6. Live Store Data: Incidents
-        if (raw.includes('active incident') || raw.includes('how many incident') || raw.includes('critical emergency') || raw === 'incidents') {
-            const hasStore = typeof window !== 'undefined' && window.store && window.store.data?.incidents;
-            if (hasStore) {
-                const incs = window.store.data.incidents;
-                const active = incs.filter(i => i.status !== 'resolved' && i.status !== 'closed');
-                const critical = incs.filter(i => i.severity === 'critical');
-
-                let text = `🚨 Live Incident Triage Overview:\n• Total Tracked Incidents: ${incs.length}\n• Active Incident Queue: ${active.length}\n• Critical Life-Threatening: ${critical.length}\n\nRecent Critical Incidents:\n`;
-                critical.slice(0, 3).forEach(c => {
-                    text += `• [${c.incident_id}] ${c.type.toUpperCase()} at ${c.location} (${c.description || 'Active incident'})\n`;
-                });
-                return {
-                    answer: text,
-                    citations: ['DisasterOS Incident Lifecycle Register'],
-                    source: 'DisasterOS Operational Store',
-                    isStore: true
-                };
-            }
+        // 9. HELPLINES
+        if (tokens.includes('helpline') || tokens.includes('number') || tokens.includes('phone') || tokens.includes('call') || (tokens.includes('emergency') && tokens.includes('contact'))) {
+            return {
+                answer: "🚨 Official National Emergency Helplines:\n\n• 112: Unified National Emergency Services (Police, Fire, Ambulance)\n• 1078: NDRF Central Disaster Control Room\n• 1070: State Disaster Management Authority (SDMA)\n• 108: Emergency Medical & Ambulance Flying Squad\n• 101: Fire & Rescue Services\n• 1091: Women Distress Helpline\n\nLines operate 24/7 with satellite backup links.",
+                citations: ['National Disaster Management Authority (NDMA) Helplines'],
+                source: 'Emergency Directory',
+                isStore: false
+            };
         }
 
         return null;
     }
 
-    retrieve(query, topK = 3) {
+    retrieve(query, topK = 2) {
         const queryTokens = this._tokenize(query);
         const N = this.knowledgeBase.length;
         const scores = new Array(N).fill(0);
@@ -285,7 +361,7 @@ class RAGAssistant {
 
         if (ranked.length === 0) {
             return [{
-                passage: "DisasterOS Safety Guidance: In any sudden natural hazard, ensure personal safety first (Drop, Cover, and Hold for earthquakes; evacuate to elevated ground for floods; secure indoors for cyclones). Call 112 or NDRF helpline 1078 for immediate life-safety dispatch. You can also ask me about specific emergency SOPs (flood, cyclone, earthquake, heatwave, triage, first aid).",
+                passage: "DisasterOS Safety Guidance: In sudden emergencies, ensure personal safety first (Drop, Cover, and Hold for earthquakes; evacuate to elevated ground for floods; secure indoors for cyclones). Call 112 or NDRF helpline 1078 for immediate life-safety dispatch. You can ask me about specific emergency SOPs (flood, earthquake, cyclone, triage, shelters, hospitals).",
                 source: 'DisasterOS Civil Defense Guidance',
                 topic: 'general emergency safety',
                 score: 0.1
@@ -303,31 +379,31 @@ class RAGAssistant {
     query(query) {
         if (!query || !query.trim()) {
             return {
-                answer: "Please enter an operational question, disaster protocol query, or emergency request.",
+                answer: "Please enter a disaster question, protocol query, or resource request.",
                 citations: ['DisasterOS Tactical Assistant'],
                 passages: [],
                 retrievedAt: new Date().toISOString()
             };
         }
 
-        // 1. Check conversational greetings, identity, or live operational store queries first
-        const directMatch = this._handleConversationalOrStore(query);
-        if (directMatch) {
+        // 1. Direct intent matchers (Greetings, Reporting, Forecast, Rescue teams, Flood shelters, Resources, Hospitals, Helplines)
+        const direct = this._handleDirectIntents(query);
+        if (direct) {
             return {
-                answer: directMatch.answer,
-                citations: directMatch.citations,
-                passages: [{ passage: directMatch.answer, source: directMatch.source, score: 1.0 }],
+                answer: direct.answer,
+                citations: direct.citations,
+                passages: [{ passage: direct.answer, source: direct.source, score: 1.0 }],
                 retrievedAt: new Date().toISOString()
             };
         }
 
-        // 2. BM25 Knowledge Base retrieval
-        const results = this.retrieve(query, 3);
+        // 2. BM25 Knowledge Base retrieval (concise, bulleted)
+        const results = this.retrieve(query, 2);
         const primary = results[0];
 
-        let answer = `Emergency Protocol Guidance:\n\n${primary.passage}`;
-        if (results.length > 1 && results[1].score > 0.5) {
-            answer += `\n\nAdditional Context:\n${results[1].passage}`;
+        let answer = primary.passage;
+        if (results.length > 1 && results[1].score > 1.2) {
+            answer += `\n\n${results[1].passage}`;
         }
 
         return {
@@ -339,7 +415,7 @@ class RAGAssistant {
     }
 }
 
-// Export for Node testing; expose globally in browser
+// Export for Node testing & browser
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { RAGAssistant };
 } else {

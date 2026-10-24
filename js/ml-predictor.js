@@ -1,6 +1,9 @@
-// DisasterOS Machine Learning Hazard Predictor & 24h Forecasting Engine
+// DisasterOS Machine Learning Hazard Predictor & Tactical Authority Advisory Engine
 // Trained on 5,000 multi-hazard historical records (IMD & USGS distributions)
 // Ensemble: Random Forest Severity Classifier & Gradient Boosting Inundation Regressor
+// Provides:
+// 1. Calamity Type & Severity Double Prediction across Monitored Zones
+// 2. Actionable Authority Tactical Advisory with Geo-Proximity Resource Allocator
 
 class MLHazardPredictor {
     constructor() {
@@ -26,16 +29,15 @@ class MLHazardPredictor {
         };
 
         this.severityTiers = [
-            { id: 0, label: "Baseline", class: "badge-success", maxProb: 0.30 },
-            { id: 1, label: "Advisory / Watch", class: "badge-info", maxProb: 0.52 },
-            { id: 2, label: "Warning (High)", class: "badge-warning", maxProb: 0.74 },
+            { id: 0, label: "Baseline (Advisory)", class: "badge-success", maxProb: 0.35 },
+            { id: 1, label: "Watch (Moderate)", class: "badge-info", maxProb: 0.55 },
+            { id: 2, label: "Warning (High)", class: "badge-warning", maxProb: 0.75 },
             { id: 3, label: "Emergency (Severe)", class: "badge-danger", maxProb: 1.00 }
         ];
     }
 
     /**
-     * Predict multi-hazard severity and 24h forecast curve.
-     * @param {Object} input - Telemetry features
+     * Predict single hazard severity and 24h forecast curve.
      */
     predict(input = {}) {
         const r3 = input.rain_3h_mm ?? 15.0;
@@ -48,13 +50,11 @@ class MLHazardPredictor {
         const vuln = input.vuln_index ?? 0.65;
         const headroom = input.shelter_headroom ?? 0.40;
 
-        // Normalization & Feature Transformations
         const rain3_norm = Math.min(1.0, r3 / 50.0);
         const rain24_norm = Math.min(1.0, r24 / 150.0);
         const elev_factor = Math.max(0.0, 1.0 - (elev / 70.0));
         const seismic_energy = (mag / 7.0) * Math.exp(-dist / 150.0);
 
-        // Ensemble Regressor prediction (Inundation probability)
         let prob = (
             0.36 * rain3_norm +
             0.26 * rain24_norm +
@@ -67,7 +67,6 @@ class MLHazardPredictor {
         prob = Math.max(0.02, Math.min(0.99, prob));
         prob = parseFloat(prob.toFixed(4));
 
-        // Severity Tier Classification
         let tier = this.severityTiers[0];
         for (const t of this.severityTiers) {
             if (prob <= t.maxProb) {
@@ -75,9 +74,8 @@ class MLHazardPredictor {
                 break;
             }
         }
-        if (prob > 0.74) tier = this.severityTiers[3];
+        if (prob > 0.75) tier = this.severityTiers[3];
 
-        // 24-Hour Forward Forecast Curve (intervals at +3h, +6h, +12h, +18h, +24h)
         const forecast24h = [
             { hour: "+0h (Current)", prob: prob, rain_mm: r3 },
             { hour: "+3h", prob: parseFloat(Math.min(0.99, prob * (1.0 + (r3 > 25 ? 0.12 : -0.05))).toFixed(3)), rain_mm: parseFloat((r3 * 0.9).toFixed(1)) },
@@ -101,6 +99,142 @@ class MLHazardPredictor {
                 { factor: "Urban Vulnerability", weight: 0.0648, value: vuln.toFixed(2) }
             ],
             timestamp: new Date().toISOString()
+        };
+    }
+
+    /**
+     * Evaluates all monitored zones in a city to produce the double-prediction matrix:
+     * 1. Calamity Hazard Probability (Bar 1)
+     * 2. Vulnerability & Inundation Index (Bar 2)
+     * 3. Calamity Classification Type
+     */
+    predictCityZones(cityKey, zones = [], liveWeather = null, liveSeismic = null) {
+        if (!zones || zones.length === 0) return [];
+
+        const rain3 = liveWeather?.precipitation_3h ?? (cityKey === 'tokyo' ? 12.0 : cityKey === 'mumbai' ? 44.0 : 32.0);
+        const rain24 = liveWeather?.precipitation_24h ?? (rain3 * 2.8);
+        const seismicMag = liveSeismic?.nearby_events?.[0]?.mag ?? (cityKey === 'tokyo' ? 5.2 : 0.0);
+        const seismicDist = liveSeismic?.nearby_events?.[0]?.distance_km ?? 120.0;
+
+        return zones.map(z => {
+            const vuln = z.vulnerability || 0.5;
+            const elev = z.elevation_m || 10.0;
+
+            // Inundation Risk Probability
+            let prob = (0.35 * Math.min(1.0, rain3 / 50.0)) +
+                       (0.25 * Math.min(1.0, rain24 / 150.0)) +
+                       (0.25 * vuln) +
+                       (0.15 * Math.max(0, 1.0 - (elev / 30.0)));
+
+            if (seismicMag > 4.5 && seismicDist < 200) {
+                prob += (seismicMag / 8.0) * Math.exp(-seismicDist / 150.0) * 0.30;
+            }
+
+            prob = Math.max(0.08, Math.min(0.98, prob));
+            prob = parseFloat(prob.toFixed(3));
+
+            // Vulnerability / Inundation Index (Bar 2)
+            const inundationIdx = parseFloat(Math.min(1.0, vuln * 0.85 + (prob * 0.35)).toFixed(3));
+
+            // Determine Calamity Type
+            let calamityType = "Flash Flood & Inundation";
+            if (seismicMag > 4.5) {
+                calamityType = "Seismic / Soil Liquefaction";
+            } else if (z.name.toLowerCase().includes("coast") || z.name.toLowerCase().includes("port") || z.name.toLowerCase().includes("bay")) {
+                calamityType = "Coastal Storm Surge & Overwash";
+            } else if (elev < 3.0) {
+                calamityType = "Lowland Basin Waterlogging";
+            } else if (z.name.toLowerCase().includes("industrial") || z.name.toLowerCase().includes("hill")) {
+                calamityType = "Industrial / Runoff Hazard";
+            }
+
+            // Severity Tier
+            let tier = this.severityTiers[0];
+            if (prob > 0.75) tier = this.severityTiers[3];
+            else if (prob > 0.55) tier = this.severityTiers[2];
+            else if (prob > 0.35) tier = this.severityTiers[1];
+
+            return {
+                zone_id: z.zone_id,
+                name: z.name,
+                calamity_type: calamityType,
+                hazard_prob: prob,
+                hazard_percent: (prob * 100).toFixed(1),
+                inundation_idx: inundationIdx,
+                inundation_percent: (inundationIdx * 100).toFixed(1),
+                severity_tier: tier.id,
+                severity_label: tier.label,
+                badge_class: tier.class,
+                elevation_m: elev,
+                lat: z.lat,
+                lon: z.lon
+            };
+        });
+    }
+
+    /**
+     * Generates Tactical Authority Advisory & Geo-Proximity Resource Allocations
+     * for the highest risk / calamity-impacted zone.
+     */
+    getTacticalAdvisory(highestZone, cityKey, storeData = {}) {
+        if (!highestZone) {
+            return {
+                advisories: ["Maintain continuous meteorological sensor telemetry monitoring."],
+                nearestHospital: null,
+                nearestShelter: null,
+                nearestTeam: null,
+                nearestInfrastructure: null
+            };
+        }
+
+        const zLat = highestZone.lat;
+        const zLon = highestZone.lon;
+
+        // Haversine helper
+        const distKm = (lat1, lon1, lat2, lon2) => {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        };
+
+        // 1. Closest Hospital
+        const hospitals = (storeData.hospitals || []).map(h => {
+            const d = distKm(zLat, zLon, h.lat, h.lon);
+            return { ...h, distance_km: parseFloat(d.toFixed(1)), eta_minutes: Math.max(4, Math.round(d * 3.2)) };
+        }).sort((a, b) => a.distance_km - b.distance_km);
+        const nearestHospital = hospitals[0] || null;
+
+        // 2. Closest Shelter
+        const shelters = (storeData.shelters || []).map(s => {
+            const d = distKm(zLat, zLon, s.lat, s.lon);
+            return { ...s, distance_km: parseFloat(d.toFixed(1)), eta_minutes: Math.max(5, Math.round(d * 3.5)) };
+        }).sort((a, b) => a.distance_km - b.distance_km);
+        const nearestShelter = shelters[0] || null;
+
+        // 3. Closest Response Team
+        const teams = (storeData.teams || []).map(t => {
+            const d = distKm(zLat, zLon, t.lat, t.lon);
+            return { ...t, distance_km: parseFloat(d.toFixed(1)), eta_minutes: Math.max(3, Math.round(d * 2.8)) };
+        }).sort((a, b) => a.distance_km - b.distance_km);
+        const nearestTeam = teams[0] || null;
+
+        // Concrete actionable tips for authorities
+        const calType = highestZone.calamity_type || "Flash Flood";
+        const advisories = [
+            `Pre-stage ${calType.includes("Flood") || calType.includes("Water") ? "inflatable boats & high-volume dewatering pumps" : "heavy shoring units & hydraulic spreaders"} at ${highestZone.name}.`,
+            `Alert ${nearestHospital ? nearestHospital.name : 'District Trauma Center'} (${nearestHospital ? nearestHospital.available : 50} beds free) for mass-casualty incoming triage.`,
+            `Direct citizen overflow to ${nearestShelter ? nearestShelter.name : 'Nearest Civic Shelter'} (${nearestShelter ? (nearestShelter.capacity - nearestShelter.occupied) : 200} spaces remaining).`,
+            `Dispatch ${nearestTeam ? nearestTeam.name : 'Tactical First Unit'} under ${nearestTeam ? (nearestTeam.lead || 'Field Commander') : 'Field Lead'} to secure primary evacuation arteries.`
+        ];
+
+        return {
+            zone: highestZone,
+            advisories,
+            nearestHospital,
+            nearestShelter,
+            nearestTeam
         };
     }
 }
