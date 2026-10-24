@@ -1,0 +1,83 @@
+{
+  "features": [
+    "rain_3h_mm",
+    "rain_24h_mm",
+    "soil_saturation",
+    "elevation_masl",
+    "drainage_density",
+    "seismic_mag",
+    "epicenter_dist_km",
+    "population_density",
+    "vuln_index",
+    "shelter_headroom"
+  ],
+  "feature_importances": {
+    "rain_3h_mm": 0.3545,
+    "rain_24h_mm": 0.254,
+    "soil_saturation": 0.1715,
+    "vuln_index": 0.0648,
+    "elevation_masl": 0.0468,
+    "epicenter_dist_km": 0.0259,
+    "shelter_headroom": 0.0247,
+    "drainage_density": 0.0243,
+    "population_density": 0.0232,
+    "seismic_mag": 0.0103
+  },
+  "means": {
+    "rain_3h_mm": 21.832966,
+    "rain_24h_mm": 81.032214,
+    "soil_saturation": 0.322921,
+    "elevation_masl": 43.434239999999996,
+    "drainage_density": 2.491722,
+    "seismic_mag": 1.21476,
+    "epicenter_dist_km": 253.91245999999995,
+    "population_density": 12665.7418,
+    "vuln_index": 0.5506032000000001,
+    "shelter_headroom": 0.44986460000000006
+  },
+  "stds": {
+    "rain_3h_mm": 28.204527071781296,
+    "rain_24h_mm": 80.60162808428998,
+    "soil_saturation": 0.18009020172957774,
+    "elevation_masl": 23.89267878707618,
+    "drainage_density": 1.1602653035905193,
+    "seismic_mag": 1.77716801186607,
+    "epicenter_dist_km": 141.47449004943755,
+    "population_density": 6565.418263502544,
+    "vuln_index": 0.2008298059296976,
+    "shelter_headroom": 0.2316265905867459
+  },
+  "regression_intercept": 0.295242275,
+  "severity_thresholds": [
+    0.3,
+    0.52,
+    0.74
+  ],
+  "metrics": {
+    "model_architecture": "Ensemble (RandomForestClassifier + GradientBoostingRegressor)",
+    "training_samples": 4000,
+    "test_samples": 1000,
+    "accuracy": 0.926,
+    "weighted_f1": 0.9249,
+    "roc_auc": 0.9866,
+    "rmse": 0.0417,
+    "feature_importances": {
+      "rain_3h_mm": 0.3545,
+      "rain_24h_mm": 0.254,
+      "soil_saturation": 0.1715,
+      "vuln_index": 0.0648,
+      "elevation_masl": 0.0468,
+      "epicenter_dist_km": 0.0259,
+      "shelter_headroom": 0.0247,
+      "drainage_density": 0.0243,
+      "population_density": 0.0232,
+      "seismic_mag": 0.0103
+    },
+    "class_distribution": {
+      "0_Baseline": 3420,
+      "1_Advisory": 850,
+      "2_Warning": 311,
+      "3_Emergency": 419
+    }
+  }
+}

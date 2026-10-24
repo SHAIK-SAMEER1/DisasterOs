@@ -1,0 +1,27 @@
+{
+  "model_architecture": "Ensemble (RandomForestClassifier + GradientBoostingRegressor)",
+  "training_samples": 4000,
+  "test_samples": 1000,
+  "accuracy": 0.926,
+  "weighted_f1": 0.9249,
+  "roc_auc": 0.9866,
+  "rmse": 0.0417,
+  "feature_importances": {
+    "rain_3h_mm": 0.3545,
+    "rain_24h_mm": 0.254,
+    "soil_saturation": 0.1715,
+    "vuln_index": 0.0648,
+    "elevation_masl": 0.0468,
+    "epicenter_dist_km": 0.0259,
+    "shelter_headroom": 0.0247,
+    "drainage_density": 0.0243,
+    "population_density": 0.0232,
+    "seismic_mag": 0.0103
+  },
+  "class_distribution": {
+    "0_Baseline": 3420,
+    "1_Advisory": 850,
+    "2_Warning": 311,
+    "3_Emergency": 419
+  }
+}
