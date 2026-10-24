@@ -248,6 +248,9 @@ add_fig_placeholder("Fig. 2. UML Use Case diagram mapping 4 primary roles across
 add_fig_placeholder("Fig. 3. UML Sequence diagram depicting the end-to-end flow from hazard telemetry sync to optimized dispatch.",
                     "uml/DisasterOS_Sequence.mdj (Root Diagram: Sequence_Main)")
 
+add_fig_placeholder("Fig. 4. Data Flow Diagram (DFD Level 0 Context Diagram & Level 1 Operational Decomposition).",
+                    "uml/DisasterOS_Component.mdj (DFD Data Flow Views & Process Models)")
+
 # 4. MODULE BREAKDOWN & MATHEMATICAL ALGORITHMS
 add_heading_1("4. Module Breakdown and Mathematical Formulations")
 add_body(
@@ -426,6 +429,14 @@ for ref in refs:
     r.font.name = "Times New Roman"
     r.font.size = Pt(8.5)
 
-doc.save(out_path)
-print(f"Successfully generated Review 2 Springer paper at: {out_path}")
+out_path_v2 = os.path.join(base_dir, "24BDS1154_Project1_Paper1_v2.docx")
+doc.save(out_path_v2)
+print(f"Successfully generated Review 2 Springer paper at: {out_path_v2}")
+
+try:
+    doc.save(out_path)
+    print(f"Successfully updated original file at: {out_path}")
+except PermissionError:
+    print(f"[NOTE] '{out_path}' is currently locked by Microsoft Word. Generated fresh copy at '{out_path_v2}'. Close Word and rename if needed.")
+
 print(f"Total Paragraphs: {len(doc.paragraphs)}, Total Tables: {len(doc.tables)}")

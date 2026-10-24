@@ -103,6 +103,32 @@ class GISMapController {
         });
     }
 
+    enableLocationPicker(callback) {
+        if (!this.map) return;
+        this.pickerCallback = callback;
+
+        if (this.pickerMarker) {
+            this.map.removeLayer(this.pickerMarker);
+            this.pickerMarker = null;
+        }
+
+        this.map.once('click', (e) => {
+            const { lat, lng } = e.latlng;
+            this.pickerMarker = L.marker([lat, lng], {
+                icon: L.divIcon({
+                    className: "custom-picker-pin",
+                    html: `<div style="background:#ffb84d;width:28px;height:28px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;font-size:14px;box-shadow:0 0 14px #ffb84d">📍</div>`,
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 14]
+                })
+            }).addTo(this.map);
+
+            if (this.pickerCallback) {
+                this.pickerCallback(lat, lng);
+            }
+        });
+    }
+
     renderShelters() {
         if (!this.layers.shelters) return;
         this.layers.shelters.clearLayers();

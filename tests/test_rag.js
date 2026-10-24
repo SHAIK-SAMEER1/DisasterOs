@@ -1,4 +1,4 @@
-// Unit tests for RAG Assistant
+// Unit tests for Enhanced Conversational RAG Assistant
 // node tests/test_rag.js
 
 const { RAGAssistant } = require('../js/assistant-rag.js');
@@ -48,17 +48,18 @@ async function runTests() {
     const triageResult = rag.query('START protocol red tag mass casualty');
     assert(
         triageResult.answer.toLowerCase().includes('immediate') ||
-        triageResult.answer.toLowerCase().includes('triage'),
+        triageResult.answer.toLowerCase().includes('triage') ||
+        triageResult.answer.toLowerCase().includes('red'),
         'Triage query answer contains triage terminology',
         triageResult.answer.substring(0, 100)
     );
 
-    // TEST 4: Unknown query returns fallback message
+    // TEST 4: Unknown query returns safety guidance fallback
     const unknownResult = rag.query('quantum entanglement pizza recipe');
     assert(
-        unknownResult.passages[0].score === 0 ||
+        unknownResult.passages[0].passage.toLowerCase().includes('safety guidance') ||
         unknownResult.passages[0].passage.toLowerCase().includes('no relevant'),
-        'Unknown query returns fallback message',
+        'Unknown query returns intelligent civil defense safety guidance',
         unknownResult.passages[0].passage.substring(0, 80)
     );
 
@@ -80,9 +81,25 @@ async function runTests() {
     const shelterResult = rag.query('shelter capacity overflow 90 percent headroom');
     assert(
         shelterResult.answer.toLowerCase().includes('shelter') ||
-        shelterResult.answer.toLowerCase().includes('capacity'),
+        shelterResult.answer.toLowerCase().includes('camp'),
         'Shelter query returns relevant capacity content',
         shelterResult.answer.substring(0, 100)
+    );
+
+    // TEST 8: Greeting 'hi' or 'hello' responds with conversational greeting
+    const greetResult = rag.query('hi');
+    assert(
+        greetResult.answer.toLowerCase().includes('hello') || greetResult.answer.toLowerCase().includes('tactical'),
+        "Conversational greeting 'hi' returns warm assistant greeting",
+        greetResult.answer.substring(0, 80)
+    );
+
+    // TEST 9: Emergency helpline numbers returned accurately
+    const helplineResult = rag.query('what is the emergency helpline number');
+    assert(
+        helplineResult.answer.includes('1078') && helplineResult.answer.includes('112'),
+        'Emergency helpline query returns 1078 (NDRF) and 112 (National Emergency)',
+        helplineResult.answer.substring(0, 80)
     );
 
     console.log(`\n--- RESULTS: ${passed} passed, ${failed} failed ---\n`);

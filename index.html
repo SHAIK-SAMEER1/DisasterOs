@@ -218,6 +218,44 @@
     <!-- Chart.js for High-Fidelity Multi-Hazard Analytics & Telemetry Forecasting -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
+    <!-- Floating Tactical AI Assistant Widget (Accessible across all views) -->
+    <div class="floating-ai-trigger" id="floatingAiTrigger" onclick="app.toggleAiAssistant()">
+        <span class="pulse-ring"></span>
+        <span class="ai-icon">🤖</span>
+        <span class="ai-label">AI Assistant</span>
+    </div>
+
+    <div class="floating-ai-panel" id="floatingAiPanel" style="display:none;">
+        <div class="ai-panel-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div class="ai-avatar">🤖</div>
+                <div>
+                    <strong>DisasterOS Tactical Assistant</strong>
+                    <div class="muted small" style="font-size:10px;">NDMA/WHO RAG Kernel & Live Ops</div>
+                </div>
+            </div>
+            <button class="ai-close-btn" onclick="app.toggleAiAssistant()">✕</button>
+        </div>
+        <div class="ai-panel-messages" id="drawerChatMessages">
+            <div class="message bot">
+                <strong>DisasterOS Tactical Assistant</strong><br>
+                Connected to official NDMA/WHO guidelines and real-time operational feeds. Ask about active incidents, shelter bed headroom, emergency hospital capacities, or evacuation protocols.
+            </div>
+        </div>
+        <div class="ai-quick-chips">
+            <button class="ai-chip" onclick="app.quickPrompt('hi')">👋 Say Hi</button>
+            <button class="ai-chip" onclick="app.quickPrompt('Which shelters currently have available bed capacity?')">🏕️ Open Shelters</button>
+            <button class="ai-chip" onclick="app.quickPrompt('What hospitals are operational with available beds?')">🏥 Hospital Beds</button>
+            <button class="ai-chip" onclick="app.quickPrompt('What is the emergency helpline number?')">🚨 Helplines</button>
+            <button class="ai-chip" onclick="app.quickPrompt('What is the SOP when flood R_zone exceeds 0.65?')">🌊 Flood SOP</button>
+            <button class="ai-chip" onclick="app.quickPrompt('Explain START mass casualty triage protocol')">🏥 START Triage</button>
+        </div>
+        <div class="ai-panel-footer">
+            <input class="form-control" id="drawerChatInput" placeholder="Ask about protocols, beds, incidents..." onkeydown="if(event.key==='Enter')app.sendDrawerChat()">
+            <button class="btn btn-primary" onclick="app.sendDrawerChat()">Send</button>
+        </div>
+    </div>
+
     <!-- Modular Scripts -->
     <script src="js/config.js"></script>
     <script src="js/store.js"></script>
@@ -227,6 +265,7 @@
     <script src="js/risk-engine.js"></script>
     <script src="js/ml-predictor.js"></script>
     <script src="js/optimizer.js"></script>
+    <script src="js/institutional-alert.js"></script>
     <script src="js/assistant-rag.js"></script>
     <script src="js/audit-hash.js"></script>
     <script src="js/map.js"></script>

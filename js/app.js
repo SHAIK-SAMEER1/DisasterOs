@@ -39,8 +39,20 @@ class DisasterOSApp {
         document.getElementById("application").style.display = "flex";
 
         this.buildSidebar(this.currentUser.role);
-        this.navigate("dashboard");
-        this.toast(`Welcome to DisasterOS, ${this.currentUser.name}`);
+        const defaultPage = this._getDefaultPageForRole(this.currentUser.role);
+        this.navigate(defaultPage);
+        this.toast(`Authenticated as ${this.currentUser.name} (${this.currentUser.role})`);
+    }
+
+    _getDefaultPageForRole(role) {
+        switch (role) {
+            case "Citizen": return "citizen-report";
+            case "Emergency Responder": return "incidents";
+            case "Hospital Coordinator": return "shelters";
+            case "System Administrator":
+            case "Disaster Manager":
+            default: return "dashboard";
+        }
     }
 
     logout() {
@@ -52,51 +64,46 @@ class DisasterOSApp {
         document.getElementById("sidebar").classList.toggle("open");
     }
 
-    /* ── PHASE 2A: ROLE-FILTERED SIDEBAR ─────────────────────────────────── */
-    /**
-     * Role access matrix for the 8 core modules.
-     * Maps page keys → array of roles that may see that nav item.
-     */
+    /* ── STRICT ROLE ACCESS MATRIX & ZERO INFORMATION LEAKAGE ───────────────── */
     _navMatrix() {
-        const ALL = ['Disaster Manager', 'System Administrator', 'Emergency Responder', 'Hospital Coordinator', 'NGO Coordinator', 'Warehouse Manager', 'Volunteer', 'Citizen'];
-        const STAFF = ['Disaster Manager', 'System Administrator', 'Emergency Responder', 'Hospital Coordinator', 'NGO Coordinator', 'Warehouse Manager', 'Volunteer'];
-        const OPS   = ['Disaster Manager', 'System Administrator', 'Emergency Responder'];
-        const MGMT  = ['Disaster Manager', 'System Administrator'];
-        const COORD = ['Disaster Manager', 'System Administrator', 'Hospital Coordinator', 'NGO Coordinator', 'Warehouse Manager'];
+        const ADMIN_ONLY   = ['System Administrator'];
+        const MANAGER_ONLY = ['Disaster Manager', 'System Administrator'];
+        const RESPONDER    = ['Emergency Responder', 'Disaster Manager', 'System Administrator'];
+        const HOSPITAL     = ['Hospital Coordinator', 'Disaster Manager', 'System Administrator'];
+        const CITIZEN      = ['Citizen', 'Disaster Manager', 'System Administrator'];
 
         return [
             // COMMAND
-            { section: 'COMMAND' },
-            { page: 'dashboard',        icon: '⊞', label: 'Command Dashboard',      roles: ALL },
-            { page: 'early-warning',    icon: '⚠', label: 'Early Warning',           roles: ALL,    badge: 'alertBadge' },
-            { page: 'risk-map',         icon: '⌖', label: 'Dynamic GIS Map',         roles: ALL },
-            { page: 'decision-support', icon: '◆', label: 'Decision Support',         roles: STAFF },
+            { section: 'COMMAND OPERATIONS' },
+            { page: 'dashboard',        icon: '⊞', label: 'Command Dashboard',      roles: MANAGER_ONLY },
+            { page: 'early-warning',    icon: '⚠', label: 'Early Warning',           roles: MANAGER_ONLY,   badge: 'alertBadge' },
+            { page: 'risk-map',         icon: '⌖', label: 'Dynamic GIS Map',         roles: ['Disaster Manager', 'System Administrator', 'Emergency Responder', 'Hospital Coordinator', 'Citizen'] },
+            { page: 'decision-support', icon: '◆', label: 'Decision Support',         roles: MANAGER_ONLY },
+            
             // EMERGENCY RESPONSE
             { section: 'EMERGENCY RESPONSE' },
-            { page: 'incidents',        icon: '◉', label: 'Incidents Lifecycle',      roles: STAFF },
-            { page: 'emergency',        icon: '🚨', label: 'Help Requests',           roles: ALL },
-            { page: 'dispatch',         icon: '🚑', label: 'Rescue Dispatch',         roles: OPS },
-            { page: 'sop',              icon: '✓', label: 'SOP Automation',           roles: MGMT },
+            { page: 'incidents',        icon: '◉', label: 'Incidents Lifecycle',      roles: RESPONDER },
+            { page: 'emergency',        icon: '🚨', label: 'Help Distress Calls',     roles: CITIZEN },
+            { page: 'dispatch',         icon: '🚑', label: 'Rescue Dispatch',         roles: RESPONDER },
+            { page: 'sop',              icon: '✓', label: 'SOP Automation',           roles: MANAGER_ONLY },
+            
             // RESOURCES
-            { section: 'RESOURCES' },
-            { page: 'shelters',         icon: '⌂', label: 'Shelters',                roles: COORD },
-            { page: 'hospitals',        icon: '✚', label: 'Hospitals',               roles: ['Disaster Manager', 'System Administrator', 'Hospital Coordinator'] },
-            { page: 'inventory',        icon: '▤', label: 'Inventory',               roles: ['Disaster Manager', 'System Administrator', 'Warehouse Manager'] },
-            // INTELLIGENCE
-            { section: 'INTELLIGENCE' },
-            { page: 'assistant',        icon: '🤖', label: 'AI RAG Assistant',        roles: ALL },
-            { page: 'analytics',        icon: '◫', label: 'Analytics',               roles: STAFF },
+            { section: 'CRITICAL RESOURCES' },
+            { page: 'shelters',         icon: '⌂', label: 'Shelters Management',     roles: HOSPITAL },
+            { page: 'hospitals',        icon: '✚', label: 'Hospital Coordination',   roles: HOSPITAL },
+            { page: 'inventory',        icon: '▤', label: 'Warehouse & Inventory',   roles: MANAGER_ONLY },
+            { page: 'analytics',        icon: '◫', label: 'Analytics & Trends',      roles: MANAGER_ONLY },
+            
             // CITIZEN SERVICES
-            { section: 'CITIZEN SERVICES' },
-            { page: 'citizen-report',   icon: '📷', label: 'Report Incident (GPS)',   roles: ['Citizen', 'Disaster Manager', 'System Administrator'] },
-            // GOVERNANCE
-            { section: 'GOVERNANCE' },
-            { page: 'audit',            icon: '▣', label: 'Audit Logs',             roles: MGMT },
-            { page: 'rbac',             icon: '♙', label: 'RBAC & Roles',           roles: MGMT },
-            // SYSTEM
-            { section: 'SYSTEM' },
-            { page: 'sources',          icon: '◎', label: 'API Sources',             roles: MGMT },
-            { page: 'system',           icon: '⚙', label: 'System Health',           roles: MGMT },
+            { section: 'CITIZEN INTAKE' },
+            { page: 'citizen-report',   icon: '📷', label: 'Report Incident (GPS)',   roles: CITIZEN },
+            
+            // SYSTEM GOVERNANCE (Strictly System Administrator Only!)
+            { section: 'SYSTEM GOVERNANCE' },
+            { page: 'rbac',             icon: '♙', label: 'RBAC User Matrix',        roles: ADMIN_ONLY },
+            { page: 'audit',            icon: '▣', label: 'Cryptographic Audit',     roles: ADMIN_ONLY },
+            { page: 'sources',          icon: '◎', label: 'Scientific API Sources',  roles: ADMIN_ONLY },
+            { page: 'system',           icon: '⚙', label: 'Platform System Health',  roles: ADMIN_ONLY }
         ];
     }
 
@@ -109,10 +116,9 @@ class DisasterOSApp {
 
         for (const item of matrix) {
             if (item.section) {
-                // Only render section header if at least one following item is visible
                 const hasVisible = matrix
                     .slice(matrix.indexOf(item) + 1)
-                    .some(n => n.page && (n.roles.includes(role) || n.roles.includes('System Administrator') && role === 'System Administrator'));
+                    .some(n => n.page && n.roles.includes(role));
                 if (hasVisible) {
                     lastSection = item.section;
                     html += `<div class="nav-section">${item.section}</div>`;
@@ -120,14 +126,14 @@ class DisasterOSApp {
                 continue;
             }
             if (!item.roles.includes(role)) continue;
-            const isActive = item.page === 'dashboard' ? 'active' : '';
+            const defaultPage = this._getDefaultPageForRole(role);
+            const isActive = item.page === defaultPage ? 'active' : '';
             const badgeHtml = item.badge ? `<span class="nav-badge" id="${item.badge}">3</span>` : '';
             html += `<button class="nav-item ${isActive}" data-page="${item.page}" onclick="app.navigate('${item.page}', this)">
                 <span class="nav-icon">${item.icon}</span> ${item.label}${badgeHtml}
             </button>`;
         }
 
-        // Always include logout
         html += `<div class="nav-section">SESSION</div>
         <button class="nav-item" onclick="app.logout()"><span class="nav-icon">⇥</span> Logout (${role})</button>`;
 
@@ -135,9 +141,44 @@ class DisasterOSApp {
     }
 
     navigate(page, element) {
+        const matrix = this._navMatrix();
+        const role = this.currentUser ? this.currentUser.role : 'Citizen';
+        const entry = matrix.find(item => item.page === page);
+
+        // Security Guard: Hard block unauthorized views
+        if (entry && !entry.roles.includes(role)) {
+            const content = document.getElementById("content");
+            document.getElementById("pageTitle").innerText = "403 Access Denied";
+            document.getElementById("pageSubtitle").innerText = "Role-Based Access Enforcement";
+            const defaultPage = this._getDefaultPageForRole(role);
+            content.innerHTML = `
+                <div class="card" style="border-left:4px solid #ef4444;background:#1a0c0c;padding:30px;margin-top:20px;">
+                    <div style="font-size:36px;margin-bottom:10px;">⛔ Access Restricted (403)</div>
+                    <h3>Insufficient Operational Privileges</h3>
+                    <p class="muted" style="line-height:1.7;margin-top:8px;">
+                        Your verified account role <strong style="color:#f59e0b;">'${role}'</strong> is not authorized to access the module <code style="color:#ef4444;">'${page}'</code>.
+                        This security event has been logged to the immutable SHA-256 audit ledger.
+                    </p>
+                    <br>
+                    <button class="btn btn-primary" onclick="app.navigate('${defaultPage}')">
+                        Return to Authorized Portal
+                    </button>
+                </div>
+            `;
+            if (window.store) {
+                window.store.log(this.currentUser.name, `SECURITY_VIOLATION: Attempted unauthorized navigation to '${page}'`, "SECURITY_AUDIT");
+            }
+            return;
+        }
+
         this.currentPage = page;
         document.querySelectorAll(".nav-item").forEach(x => x.classList.remove("active"));
-        if (element) element.classList.add("active");
+        if (element) {
+            element.classList.add("active");
+        } else {
+            const btn = document.querySelector(`.nav-item[data-page="${page}"]`);
+            if (btn) btn.classList.add("active");
+        }
 
         const titles = {
             dashboard: ["Command Dashboard", "Real-time disaster management overview and operational status"],
@@ -197,30 +238,37 @@ class DisasterOSApp {
     changeRegion(regionKey) {
         const regions = {
             chennai: { name: "Chennai", lat: 13.0827, lon: 80.2707 },
-            mumbai: { name: "Mumbai", lat: 19.0760, lon: 72.8777 },
+            mumbai: { name: "Mumbai", lat: 18.9220, lon: 72.8347 },
             kolkata: { name: "Kolkata", lat: 22.5726, lon: 88.3639 },
             delhi: { name: "Delhi NCR", lat: 28.6139, lon: 77.2090 },
-            tokyo: { name: "Tokyo", lat: 35.6762, lon: 139.6503 }
+            tokyo: { name: "Tokyo (Seismic)", lat: 35.6762, lon: 139.6503 }
         };
 
         const target = regions[regionKey] || regions.chennai;
         this.currentRegion = target;
 
+        // Multi-City Asset Hydration
+        if (window.institutionalEngine && window.institutionalEngine.cityAssetTemplates[regionKey]) {
+            const tmpl = window.institutionalEngine.cityAssetTemplates[regionKey];
+            window.store.data.zones = tmpl.zones;
+            window.store.data.hospitals = tmpl.hospitals;
+            if (tmpl.shelters) window.store.data.shelters = tmpl.shelters;
+        } else if (regionKey === "chennai") {
+            window.store.load(); // Restore full Chennai dataset
+        }
+
         // Pan GIS map if open
         if (window.gisMap && window.gisMap.map) {
             window.gisMap.map.setView([target.lat, target.lon], 12);
+            window.gisMap.renderAll();
         }
 
-        // Update default zone coordinates to selected city
-        window.store.data.zones[0].lat = target.lat + 0.02;
-        window.store.data.zones[0].lon = target.lon - 0.02;
-        window.store.data.zones[0].name = `${target.name} North Zone`;
-
-        this.toast(`Panned to ${target.name}. Fetching live Open-Meteo & USGS telemetry...`);
+        this.toast(`Panned to ${target.name}. Ingesting live Open-Meteo & USGS telemetry...`);
         this.syncLiveTelemetry();
     }
 
     async syncLiveTelemetry() {
+        const target = this.currentRegion || { lat: 13.0827, lon: 80.2707 };
         const zones = window.store.data.zones;
         const shelterMap = {};
         window.store.data.shelters.forEach(s => {
@@ -229,9 +277,11 @@ class DisasterOSApp {
         });
 
         try {
-            const seismicData = await window.gateway.getSeismicActivity(13.08, 80.27, 500);
+            // Live USGS Seismic feed queried for the active region
+            const seismicData = await window.gateway.getSeismicActivity(target.lat, target.lon, 600);
             this.recentSeismicEvents = seismicData.nearby_events;
 
+            // Live Open-Meteo Weather queried for each zone in the active city
             const riskEvaluations = [];
             for (const zone of zones) {
                 const weather = await window.gateway.getRainfall(zone.lat, zone.lon);
@@ -241,6 +291,15 @@ class DisasterOSApp {
             }
 
             this.liveRiskData = riskEvaluations;
+
+            // Re-render map layers if GIS map is mounted
+            if (window.gisMap && window.gisMap.map) {
+                window.gisMap.renderAll();
+                if (this.recentSeismicEvents) {
+                    window.gisMap.plotSeismicEvents(this.recentSeismicEvents);
+                }
+            }
+
             if (this.currentPage === "early-warning" || this.currentPage === "dashboard") {
                 this.navigate(this.currentPage);
             }
@@ -410,7 +469,57 @@ class DisasterOSApp {
                     </div>
                 </div>
             </div>
+
+            <!-- INSTITUTIONAL MEDICAL SURGE & INJURED CASUALTY ROUTING -->
+            <div class="card" style="margin-top:16px;">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">🏥 Nearby Trauma Centers & Institutional Surge Readiness</div>
+                        <div class="muted small">Automated Haversine proximity screening & clinical readiness for ${this.currentRegion ? this.currentRegion.name : 'Monitored Region'}</div>
+                    </div>
+                    <span class="badge badge-success">ACTIVE MONITORING</span>
+                </div>
+                <div class="grid grid-3" style="margin-top:12px;">
+                    ${(window.institutionalEngine ? window.institutionalEngine.findNearbyHospitals(this.currentRegion ? this.currentRegion.lat : 13.08, this.currentRegion ? this.currentRegion.lon : 80.27, window.store.data.hospitals, 35).slice(0, 3) : []).map(h => `
+                        <div class="card" style="background:#0a192a;border:1px solid #1a334d;">
+                            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                                <strong style="color:#fff;">${h.name}</strong>
+                                <span class="badge ${h.available > 30 ? 'badge-success' : 'badge-warning'}">${h.available} Beds</span>
+                            </div>
+                            <div class="muted small" style="margin:4px 0;">📍 ${h.location} • <strong>${h.distance_km} km</strong> (ETA ~${h.transit_minutes} mins)</div>
+                            <div class="muted small">ICU Headroom: <strong style="color:#35a7ff;">${h.icu} Units</strong></div>
+                            <div class="muted small" style="margin:6px 0;">📞 <a href="tel:${h.contact_number}" style="color:#64c5ff;text-decoration:none;">${h.contact_number}</a></div>
+                            <div style="background:#05121e;padding:8px;border-radius:6px;font-size:10px;color:#a3c1de;margin-top:8px;">
+                                💡 <strong>Readiness Tip:</strong><br>
+                                ${h.clinical_advisory?.recommendations?.[0] || 'Maintain continuous ambulance triage bay readiness.'}
+                            </div>
+                            <br>
+                            <button class="btn btn-primary" style="width:100%;font-size:11px;" onclick="app.dispatchCasualtyToHospital('${h.hospital_id}', '${h.name}')">
+                                🚑 Route Injured Casualties Here
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
         `;
+    }
+
+    dispatchCasualtyToHospital(hospitalId, hospitalName) {
+        const countStr = prompt(`Enter number of injured citizens / casualties to route to ${hospitalName}:`, "2");
+        if (!countStr) return;
+        const count = parseInt(countStr, 10);
+        if (isNaN(count) || count <= 0) {
+            this.toast("Invalid casualty count.");
+            return;
+        }
+
+        const res = window.institutionalEngine.routeInjuredToHospital("INC-FIELD", hospitalId, count);
+        if (res.success) {
+            this.toast(`✓ Successfully routed ${count} casualties to ${hospitalName}. Beds remaining: ${res.remaining_beds}`);
+            this.navigate(this.currentPage);
+        } else {
+            alert(`Routing Failed: ${res.message}`);
+        }
     }
 
     /* 2. EARLY WARNING */
@@ -1092,11 +1201,124 @@ class DisasterOSApp {
     }
 
     quickPrompt(text) {
+        const drawerPanel = document.getElementById("floatingAiPanel");
+        const drawerInp = document.getElementById("drawerChatInput");
+        if (drawerPanel && drawerPanel.style.display !== "none" && drawerInp) {
+            drawerInp.value = text;
+            this.sendDrawerChat();
+            return;
+        }
         const inp = document.getElementById("chatInput");
         if (inp) {
             inp.value = text;
             this.sendChat();
+            return;
         }
+        this.toggleAiAssistant(true);
+        if (drawerInp) {
+            drawerInp.value = text;
+            this.sendDrawerChat();
+        }
+    }
+
+    toggleAiAssistant(forceOpen = null) {
+        const panel = document.getElementById("floatingAiPanel");
+        if (!panel) return;
+        const isHidden = panel.style.display === "none" || !panel.style.display;
+        if (forceOpen === true) {
+            panel.style.display = "flex";
+        } else if (forceOpen === false) {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = isHidden ? "flex" : "none";
+        }
+        if (panel.style.display === "flex") {
+            setTimeout(() => {
+                const inp = document.getElementById("drawerChatInput");
+                if (inp) inp.focus();
+            }, 100);
+        }
+    }
+
+    sendDrawerChat() {
+        const inp = document.getElementById("drawerChatInput");
+        if (!inp) return;
+        const txt = inp.value.trim();
+        if (!txt) return;
+        const box = document.getElementById("drawerChatMessages");
+        if (!box) return;
+
+        box.innerHTML += `<div class="message user">${txt}</div>`;
+        inp.value = "";
+        box.scrollTop = box.scrollHeight;
+
+        setTimeout(() => {
+            let answerText = "";
+            let citationsHTML = "";
+
+            const q = txt.toLowerCase();
+            let storeAnswer = null;
+
+            if (q.includes("available shelter") || (q.includes("shelter") && (q.includes("bed") || q.includes("open") || q.includes("capacity")))) {
+                const s = (window.store && window.store.data && window.store.data.shelters) ? window.store.data.shelters.filter(x => (x.occupied || 0) < (x.capacity || x.capacity_total || 100)) : [];
+                storeAnswer = s.length
+                    ? `Live Telemetry Check: ${s.length} shelters currently have open capacity: ${s.map(x => `${x.name} (${(x.capacity || x.capacity_total) - (x.occupied || 0)} beds open)`).join(", ")}.`
+                    : "Live Telemetry Check: All designated shelters are currently at capacity. Protocol requires opening emergency surge facilities.";
+            } else if (q.includes("hospital") && (q.includes("bed") || q.includes("icu") || q.includes("available") || q.includes("operational"))) {
+                const hosps = (window.store && window.store.data && window.store.data.hospitals) ? window.store.data.hospitals : [];
+                const avail = hosps.reduce((a, b) => a + (b.available || 0), 0);
+                storeAnswer = `Live Hospital Roster: ${avail} emergency beds are currently available across ${hosps.length} trauma facilities in ${this.currentRegion ? this.currentRegion.name : 'the operational sector'}.`;
+            }
+
+            if (window.ragAssistant) {
+                const ragRes = window.ragAssistant.query(txt);
+                answerText = ragRes.answer;
+                if (storeAnswer) {
+                    answerText = `${storeAnswer}\n\n${answerText}`;
+                }
+                if (ragRes.citations && ragRes.citations.length > 0) {
+                    citationsHTML = `<div style="margin-top:8px;font-size:10px;color:#8fa5bd;border-top:1px solid #1a3452;padding-top:6px;">
+                        <strong>Verified Citations:</strong><br>
+                        ${[...new Set(ragRes.citations)].map(c => `• <span style="color:#64c5ff;">${c}</span>`).join("<br>")}
+                    </div>`;
+                }
+            } else {
+                answerText = storeAnswer || "Grounded protocol response: Maintain communication with incident commander and adhere to NDMA disaster response matrices.";
+            }
+
+            box.innerHTML += `
+                <div class="message bot">
+                    <div style="white-space:pre-line;">${answerText}</div>
+                    ${citationsHTML}
+                </div>
+            `;
+            box.scrollTop = box.scrollHeight;
+        }, 200);
+    }
+
+    pickLocationOnMap() {
+        this.navigate("risk-map");
+        this.toast("🗺️ Interactive Map Mode: Click anywhere on the map to pin incident coordinates.");
+        setTimeout(() => {
+            if (window.gisMap) {
+                window.gisMap.enableLocationPicker((lat, lng) => {
+                    const pickedLat = parseFloat(lat.toFixed(4));
+                    const pickedLon = parseFloat(lng.toFixed(4));
+                    this.toast(`📍 Selected coordinates: ${pickedLat}, ${pickedLon}`);
+                    setTimeout(() => {
+                        this.navigate("citizen-report");
+                        setTimeout(() => {
+                            const latInput = document.getElementById("formLat");
+                            const lonInput = document.getElementById("formLon");
+                            if (latInput) latInput.value = pickedLat;
+                            if (lonInput) lonInput.value = pickedLon;
+                            const locInput = document.getElementById("formLocation");
+                            if (locInput) locInput.value = `Interactive Map Pin (${pickedLat}, ${pickedLon})`;
+                        }, 120);
+                    }, 800);
+                });
+            }
+        }, 350);
     }
 
     sendChat() {
@@ -1248,7 +1470,10 @@ class DisasterOSApp {
                         <div class="form-group full"><label>Description</label><textarea class="form-control" id="formDescription" placeholder="Provide details..."></textarea></div>
                         <div class="form-group"><label>Latitude</label><input class="form-control" id="formLat" type="number" step="0.0001" value="13.1150"></div>
                         <div class="form-group"><label>Longitude</label><input class="form-control" id="formLon" type="number" step="0.0001" value="80.2240"></div>
-                        <div class="form-group full"><button type="button" class="btn btn-secondary" onclick="app.detectGPS()">📍 Detect Native Browser Coordinates</button></div>
+                        <div class="form-group full" style="display:flex;gap:8px;">
+                            <button type="button" class="btn btn-secondary" style="flex:1;" onclick="app.detectGPS()">📍 Detect Native Browser Coordinates</button>
+                            <button type="button" class="btn btn-primary" style="flex:1;" onclick="app.pickLocationOnMap()">🗺️ Pick Location on Interactive GIS Map</button>
+                        </div>
                         <div class="form-group full"><button type="submit" class="btn btn-danger" style="padding:12px;">Submit Emergency Report</button></div>
                     </form>
                 </div>
