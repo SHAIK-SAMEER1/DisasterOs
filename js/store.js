@@ -645,19 +645,91 @@ class DataStore {
         if (this.data.audit_logs.length > 100) this.data.audit_logs.pop();
         
         if (typeof window !== "undefined" && window.auditChain) {
-            window.auditChain.append({ actor: actor, action: action, resource: module });
+            window.auditChain.append({ actor: actor, action: module || action, resource: module || "LOG", details: action });
         }
         this.save();
     }
 
     addIncident(inc) {
-        inc.incident_id = "INC-" + this.currentCity.toUpperCase().slice(0, 3) + "-" + (100 + this.data.incidents.length + 1);
-        inc.created_at = new Date().toISOString();
+        inc.incident_id = inc.incident_id || ("INC-" + this.currentCity.toUpperCase().slice(0, 3) + "-" + (100 + this.data.incidents.length + 1));
+        inc.created_at = inc.created_at || new Date().toISOString();
         inc.status = inc.status || "reported";
+        inc.reporter_id = inc.reporter_id || "Citizen";
+        inc.reporter_role = inc.reporter_role || "Citizen";
         this.data.incidents.unshift(inc);
-        this.log(inc.reporter_id || "Citizen", `Reported ${inc.type} incident at ${inc.location}`, "INCIDENTS");
+
+        // Stage 1 Pipeline Side Effect: Emit broadcast alert to store.data.alerts
+        if (!this.data.alerts) this.data.alerts = [];
+        const alertEntry = {
+            id: "ALT-" + this.currentCity.toUpperCase().slice(0, 3) + "-" + String(this.data.alerts.length + 1).padStart(2, "0"),
+            severity: (inc.severity === "critical" || inc.severity === "high") ? "Critical" : "Warning",
+            title: `Emergency Report: ${(inc.type || "Incident").toUpperCase()} at ${inc.location || "Monitored Sector"}`,
+            area: inc.location || this.currentCity.toUpperCase(),
+            source: `${inc.reporter_id} (${inc.reporter_role})`,
+            time: "Just now",
+            incident_id: inc.incident_id
+        };
+        this.data.alerts.unshift(alertEntry);
+        if (this.data.alerts.length > 25) this.data.alerts.pop();
+
+        this.log(`${inc.reporter_id} (${inc.reporter_role})`, `Reported ${inc.type} incident at ${inc.location} [${inc.incident_id}]`, "REPORT_INCIDENT");
         this.save();
         return inc;
+    }
+
+    updateIncident(id, updates = {}) {
+        const inc = this.data.incidents.find(i => i.incident_id === id);
+        if (inc) {
+            const oldStatus = inc.status;
+            Object.assign(inc, updates);
+            inc.updated_at = new Date().toISOString();
+
+            if (updates.team) {
+                inc.team = updates.team;
+                const teamObj = (this.data.teams || []).find(t => t.name === updates.team || t.team_id === updates.team);
+                if (teamObj) {
+                    teamObj.status = "deployed";
+                }
+            }
+            if (updates.status === "resolved" || updates.status === "closed") {
+                if (inc.team) {
+                    const teamObj = (this.data.teams || []).find(t => t.name === inc.team || t.team_id === inc.team);
+                    if (teamObj) {
+                        teamObj.status = "active";
+                    }
+                }
+            }
+
+            const actor = updates.updated_by || (typeof window !== "undefined" && window.app?.currentUser?.name) || "Incident Handler";
+            this.log(actor, `Updated incident ${id}: Status '${oldStatus}' ➔ '${inc.status}', Severity '${inc.severity}'`, "UPDATE_INCIDENT");
+
+            // Real-time alert emission for status change
+            if (updates.status && updates.status !== oldStatus) {
+                if (!this.data.alerts) this.data.alerts = [];
+                this.data.alerts.unshift({
+                    id: "ALT-" + this.currentCity.toUpperCase().slice(0, 3) + "-" + String(this.data.alerts.length + 1).padStart(2, "0"),
+                    severity: (inc.status === "resolved" || inc.status === "closed") ? "Success" : "Warning",
+                    title: `Incident ${id} [${(inc.status || "").toUpperCase()}]: ${inc.location || ""}`,
+                    area: inc.location || this.currentCity.toUpperCase(),
+                    source: actor,
+                    time: "Just now",
+                    incident_id: id
+                });
+                if (this.data.alerts.length > 25) this.data.alerts.pop();
+            }
+
+            this.save();
+            return inc;
+        }
+        return null;
+    }
+
+    updateIncidentStatus(id, newStatus, teamName = null, actor = null) {
+        return this.updateIncident(id, {
+            status: newStatus,
+            ...(teamName ? { team: teamName } : {}),
+            ...(actor ? { updated_by: actor } : {})
+        });
     }
 
     addEmergencyRequest(req) {

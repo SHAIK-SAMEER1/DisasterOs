@@ -226,8 +226,27 @@ class GISMapController {
             this.pickerMarker = null;
         }
 
-        this.map.once('click', (e) => {
-            const { lat, lng } = e.latlng;
+        let handled = false;
+        const onLocationPicked = (lat, lng) => {
+            if (handled) return;
+            handled = true;
+
+            // Remove listeners
+            this.map.off('click', mapClickHandler);
+            if (this.layers) {
+                Object.values(this.layers).forEach(group => {
+                    if (group && group.eachLayer) {
+                        group.eachLayer(layer => {
+                            layer.off('click', layerClickHandler);
+                        });
+                    }
+                });
+            }
+
+            if (this.pickerMarker) {
+                this.map.removeLayer(this.pickerMarker);
+            }
+
             this.pickerMarker = L.marker([lat, lng], {
                 icon: L.divIcon({
                     className: "custom-picker-pin",
@@ -240,7 +259,36 @@ class GISMapController {
             if (this.pickerCallback) {
                 this.pickerCallback(lat, lng);
             }
-        });
+        };
+
+        const mapClickHandler = (e) => {
+            if (e && e.latlng) {
+                onLocationPicked(e.latlng.lat, e.latlng.lng);
+            }
+        };
+
+        const layerClickHandler = (e) => {
+            if (e && e.latlng) {
+                if (this.map) this.map.closePopup();
+                if (e.originalEvent) {
+                    e.originalEvent.stopPropagation();
+                }
+                onLocationPicked(e.latlng.lat, e.latlng.lng);
+            }
+        };
+
+        this.map.once('click', mapClickHandler);
+
+        // Allow clicking ANY location inside operational zones, shelters, or markers
+        if (this.layers) {
+            Object.values(this.layers).forEach(group => {
+                if (group && group.eachLayer) {
+                    group.eachLayer(layer => {
+                        layer.once('click', layerClickHandler);
+                    });
+                }
+            });
+        }
     }
 }
 

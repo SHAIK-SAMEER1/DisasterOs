@@ -272,7 +272,7 @@ class DisasterOSApp {
             
             // EMERGENCY RESPONSE
             { section: 'EMERGENCY RESPONSE' },
-            { page: 'incidents',        icon: '◉', label: 'Incidents Lifecycle',      roles: RESPONDER },
+            { page: 'incidents',        icon: '◉', label: 'Incidents Lifecycle',      roles: ALL_ROLES },
             { page: 'emergency',        icon: '🚨', label: 'Help Distress Calls',     roles: ALL_ROLES },
             { page: 'dispatch',         icon: '🚑', label: 'Rescue Dispatch',         roles: RESPONDER },
             { page: 'sop',              icon: '✓', label: 'SOP Automation',           roles: MANAGER_ONLY },
@@ -331,6 +331,9 @@ class DisasterOSApp {
     }
 
     navigate(page, element) {
+        const strayModal = document.getElementById("appModalOverlay");
+        if (strayModal) strayModal.remove();
+
         const matrix = this._navMatrix();
         const role = this.currentUser ? this.currentUser.role : 'Citizen';
         const entry = matrix.find(item => item.page === page);
@@ -1099,31 +1102,88 @@ class DisasterOSApp {
 
     /* 5. INCIDENTS */
     viewIncidents() {
-        const incidents = window.store.data.incidents;
+        const allIncidents = window.store?.data?.incidents || [];
+        const filter = this._incidentFilter || "all";
+        const canMutate = ['Disaster Manager', 'System Administrator'].includes(this.currentUser?.role);
+        const teams = (window.store?.data?.teams || []).filter(t => t.status === 'active' || t.status === 'available');
+
+        let filtered = allIncidents;
+        if (filter === "reported") {
+            filtered = allIncidents.filter(i => (i.status || '').toLowerCase() === "reported");
+        } else if (filter === "assigned") {
+            filtered = allIncidents.filter(i => {
+                const s = (i.status || '').toLowerCase();
+                return s === "assigned" || s === "in_progress" || s === "dispatched";
+            });
+        } else if (filter === "resolved") {
+            filtered = allIncidents.filter(i => {
+                const s = (i.status || '').toLowerCase();
+                return s === "resolved" || s === "closed";
+            });
+        }
+
         return `
             <div class="card">
                 <div class="card-header">
                     <div>
                         <div class="card-title">Incident Lifecycle Management</div>
-                        <div class="muted small">Reported → Verified → Dispatched → Resolved → Closed</div>
+                        <div class="muted small">Reported → Verified → Assigned → Resolved → Closed</div>
                     </div>
-                    <button class="btn btn-danger" onclick="app.newIncidentPrompt()">+ New Incident</button>
+                    ${canMutate ? `<button class="btn btn-danger" onclick="app.newIncidentPrompt()">+ New Incident</button>` : ''}
                 </div>
+
+                <!-- Status Filter Tabs -->
+                <div style="display:flex;gap:8px;margin-bottom:14px;border-bottom:1px solid #1a3652;padding-bottom:10px;">
+                    <button class="btn ${filter === 'all' ? 'btn-primary' : 'btn-secondary'} btn-sm" onclick="app.setIncidentFilter('all')">All (${allIncidents.length})</button>
+                    <button class="btn ${filter === 'reported' ? 'btn-primary' : 'btn-secondary'} btn-sm" onclick="app.setIncidentFilter('reported')">Reported (${allIncidents.filter(i => (i.status||'').toLowerCase() === 'reported').length})</button>
+                    <button class="btn ${filter === 'assigned' ? 'btn-primary' : 'btn-secondary'} btn-sm" onclick="app.setIncidentFilter('assigned')">Assigned (${allIncidents.filter(i => ['assigned','in_progress','dispatched'].includes((i.status||'').toLowerCase())).length})</button>
+                    <button class="btn ${filter === 'resolved' ? 'btn-primary' : 'btn-secondary'} btn-sm" onclick="app.setIncidentFilter('resolved')">Resolved (${allIncidents.filter(i => ['resolved','closed'].includes((i.status||'').toLowerCase())).length})</button>
+                </div>
+
                 <div class="table-wrap">
                     <table>
-                        <thead><tr><th>ID</th><th>Type</th><th>Location</th><th>Severity</th><th>Lifecycle Status</th><th>Team</th><th>Action</th></tr></thead>
+                        <thead><tr><th>ID</th><th>Type</th><th>Location</th><th>Severity</th><th>Lifecycle Status</th><th>Assigned Team</th><th>Operational Actions</th></tr></thead>
                         <tbody>
-                            ${incidents.map((i, idx) => `
-                                <tr>
-                                    <td><strong>${i.incident_id}</strong></td>
-                                    <td>${i.type.toUpperCase()}</td>
-                                    <td>${i.location || 'North River Road'}</td>
-                                    <td><span class="badge ${i.severity === 'critical' || i.severity === 'Critical' ? 'badge-danger' : 'badge-warning'}">${i.severity.toUpperCase()}</span></td>
-                                    <td><span class="badge badge-info">${i.status.toUpperCase()}</span></td>
-                                    <td>${i.team || 'Pending'}</td>
-                                    <td><button class="btn btn-secondary" onclick="app.advanceIncident('${i.incident_id}')">Advance State ➔</button></td>
-                                </tr>
-                            `).join("")}
+                            ${filtered.map(i => {
+                                const st = (i.status || 'reported').toLowerCase();
+                                const sev = (i.severity || 'high').toLowerCase();
+                                const badgeClass = sev === 'critical' ? 'badge-danger' : (sev === 'high' ? 'badge-warning' : 'badge-info');
+                                const statusBadge = st === 'closed' ? 'badge-success' : (st === 'resolved' ? 'badge-primary' : (st === 'verified' ? 'badge-warning' : (st === 'assigned' || st === 'in_progress' ? 'badge-info' : 'badge-danger')));
+
+                                let actionHtml = '';
+                                if (!canMutate) {
+                                    actionHtml = `<span class="muted small">View Only</span>`;
+                                } else if (st === 'reported') {
+                                    actionHtml = `<button class="btn btn-warning btn-sm" onclick="app.verifyIncident('${i.incident_id}')">Verify</button>`;
+                                } else if (st === 'verified') {
+                                    actionHtml = `
+                                        <div style="display:flex;gap:4px;align-items:center;">
+                                            <select id="assign_team_${i.incident_id}" class="form-control" style="font-size:10px;padding:3px 6px;width:auto;">
+                                                ${teams.length > 0 ? teams.map(t => `<option value="${t.name}">${t.name}</option>`).join('') : '<option value="Rescue Team Alpha">Rescue Team Alpha</option>'}
+                                            </select>
+                                            <button class="btn btn-primary btn-sm" onclick="app.assignIncidentTeam('${i.incident_id}')">Assign Team</button>
+                                        </div>
+                                    `;
+                                } else if (st === 'assigned' || st === 'in_progress' || st === 'dispatched') {
+                                    actionHtml = `<button class="btn btn-success btn-sm" onclick="app.resolveIncident('${i.incident_id}')">Resolve</button>`;
+                                } else if (st === 'resolved') {
+                                    actionHtml = `<button class="btn btn-secondary btn-sm" onclick="app.closeIncident('${i.incident_id}')">Close</button>`;
+                                } else if (st === 'closed') {
+                                    actionHtml = `<span class="badge badge-success">Closed & Sealed</span>`;
+                                }
+
+                                return `
+                                    <tr>
+                                        <td><strong>${i.incident_id}</strong></td>
+                                        <td>${(i.type || 'EMERGENCY').toUpperCase()}</td>
+                                        <td>${i.location || 'Monitored Sector'}</td>
+                                        <td><span class="badge ${badgeClass}">${sev.toUpperCase()}</span></td>
+                                        <td><span class="badge ${statusBadge}">${st.toUpperCase()}</span></td>
+                                        <td>${i.team || '<span class="muted">None</span>'}</td>
+                                        <td>${actionHtml}</td>
+                                    </tr>
+                                `;
+                            }).join("")}
                         </tbody>
                     </table>
                 </div>
@@ -1131,14 +1191,70 @@ class DisasterOSApp {
         `;
     }
 
+    setIncidentFilter(f) {
+        this._incidentFilter = f;
+        this.navigate("incidents");
+    }
+
+    verifyIncident(id) {
+        if (!['Disaster Manager', 'System Administrator'].includes(this.currentUser?.role)) {
+            this.toast("Access Denied: Only Disaster Managers can update incidents");
+            return;
+        }
+        const actor = this.currentUser ? `${this.currentUser.name} (${this.currentUser.role})` : "Verified Operator";
+        window.store.updateIncidentStatus(id, "verified", null, actor);
+        this.navigate(this.currentPage);
+        this.toast(`✓ Incident ${id} verified by ${this.currentUser?.name || 'Operator'}`);
+    }
+
+    assignIncidentTeam(id) {
+        if (!['Disaster Manager', 'System Administrator'].includes(this.currentUser?.role)) {
+            this.toast("Access Denied: Only Disaster Managers can update incidents");
+            return;
+        }
+        const sel = document.getElementById(`assign_team_${id}`);
+        const teamName = sel ? sel.value : "Rescue Team Alpha";
+        const actor = this.currentUser ? `${this.currentUser.name} (${this.currentUser.role})` : "Dispatcher";
+        window.store.updateIncidentStatus(id, "assigned", teamName, actor);
+        this.navigate(this.currentPage);
+        this.toast(`✓ Incident ${id} assigned to ${teamName}`);
+    }
+
+    resolveIncident(id) {
+        if (!['Disaster Manager', 'System Administrator'].includes(this.currentUser?.role)) {
+            this.toast("Access Denied: Only Disaster Managers can update incidents");
+            return;
+        }
+        const actor = this.currentUser ? `${this.currentUser.name} (${this.currentUser.role})` : "Field Unit";
+        window.store.updateIncidentStatus(id, "resolved", null, actor);
+        this.navigate(this.currentPage);
+        this.toast(`✓ Incident ${id} resolved; assigned team released to active pool`);
+    }
+
+    closeIncident(id) {
+        if (!['Disaster Manager', 'System Administrator'].includes(this.currentUser?.role)) {
+            this.toast("Access Denied: Only Disaster Managers can update incidents");
+            return;
+        }
+        const actor = this.currentUser ? `${this.currentUser.name} (${this.currentUser.role})` : "Command Staff";
+        window.store.updateIncidentStatus(id, "closed", null, actor);
+        this.navigate(this.currentPage);
+        this.toast(`✓ Incident ${id} closed and cryptographically sealed`);
+    }
+
     advanceIncident(id) {
-        const order = ["reported", "verified", "dispatched", "resolved", "closed"];
+        if (!['Disaster Manager', 'System Administrator'].includes(this.currentUser?.role)) {
+            this.toast("Access Denied: Only Disaster Managers can update incidents");
+            return;
+        }
+        const order = ["reported", "verified", "assigned", "resolved", "closed"];
         const inc = window.store.data.incidents.find(i => i.incident_id === id);
         if (!inc) return;
         const nextIdx = (order.indexOf(inc.status.toLowerCase()) + 1) % order.length;
-        window.store.updateIncidentStatus(id, order[nextIdx]);
-        this.navigate("incidents");
-        this.toast(`Incident ${id} transitioned to ${order[nextIdx].toUpperCase()}`);
+        const actor = this.currentUser ? `${this.currentUser.name} (${this.currentUser.role})` : "Operator";
+        window.store.updateIncidentStatus(id, order[nextIdx], null, actor);
+        this.navigate(this.currentPage);
+        this.toast(`✓ Incident ${id} transitioned to ${order[nextIdx].toUpperCase()}`);
     }
 
     newIncidentPrompt() {
@@ -1390,38 +1506,111 @@ class DisasterOSApp {
                         <div class="stat-label">People currently sheltered</div>
                         <br>
                         <div class="progress"><div class="progress-bar" style="width:${(s.occupied/s.capacity)*100}%"></div></div>
-                        <div class="small muted" style="margin-top:8px;">Water: ${s.resources?.water_l}L • Food: ${s.resources?.food_kits} kits</div>
+                        <div class="small muted" style="margin-top:8px;">Water: ${s.water_liters ?? s.resources?.water_l ?? 4500}L • Food: ${s.food_kits ?? s.resources?.food_kits ?? 800} kits</div>
                         <br>
-                        <button class="btn btn-secondary" onclick="app.registerShelter('${s.name}')">+ Register Person</button>
+                        <button class="btn btn-secondary" onclick="app.registerShelter('${s.shelter_id}')">+ Register Person</button>
                     </div>
                 `).join("")}
             </div>
         `;
     }
 
-    registerShelter(name) {
-        window.store.updateShelterOccupancy(name, 1);
-        this.navigate("shelters");
-        this.toast(`Person registered at ${name}`);
+    registerShelter(id) {
+        const shelter = window.store.data.shelters.find(s => s.shelter_id === id || s.name === id);
+        if (shelter) {
+            const currentOcc = shelter.occupied !== undefined ? shelter.occupied : (shelter.capacity_occupied || 0);
+            window.store.updateShelterOccupancy(shelter.shelter_id, currentOcc + 1);
+            this.navigate("shelters");
+            this.toast(`Person registered at ${shelter.name} (${shelter.occupied}/${shelter.capacity})`);
+        }
     }
 
     /* 11. HOSPITALS */
     viewHospitals() {
+        const isCoordinatorOrHigher = ['Hospital Coordinator', 'Disaster Manager', 'System Administrator'].includes(this.currentUser?.role);
         return `
+            <div class="hero">
+                <h2>Hospital Coordination & Trauma Critical Care</h2>
+                <p>Real-time available bed headroom, intensive care triage capacity, and mass-casualty surgical readiness for <strong>${this.currentRegion?.name || 'Active Theater'}</strong>.</p>
+            </div>
             <div class="grid grid-3">
-                ${window.store.data.hospitals.map(h => `
+                ${window.store.data.hospitals.map(h => {
+                    const avail = h.available !== undefined ? h.available : (h.bed_capacity_available || 0);
+                    const icu = h.icu !== undefined ? h.icu : (h.icu_beds || 0);
+                    const beds = h.beds || h.bed_capacity_total || 400;
+                    const statusText = (avail > 50) ? 'Nominal' : (avail > 20 ? 'Surge Protocol' : 'Critical Capacity');
+                    const badgeClass = (avail > 50) ? 'badge-success' : (avail > 20 ? 'badge-warning' : 'badge-danger');
+                    const traumaLabel = h.trauma_capable ? 'Level 1 Trauma Center' : 'General Care Center';
+                    return `
                     <div class="card">
-                        <div class="card-header"><div class="card-title">${h.name}</div><span class="badge ${h.status === 'Operational' ? 'badge-success' : 'badge-warning'}">${h.status}</span></div>
-                        <div class="grid grid-3" style="margin:12px 0;">
-                            <div><div class="kpi">${h.beds}</div><div class="muted small">Total Beds</div></div>
-                            <div><div class="kpi" style="color:#35d49a;">${h.available}</div><div class="muted small">Available</div></div>
-                            <div><div class="kpi">${h.icu}</div><div class="muted small">ICU</div></div>
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">${h.name}</div>
+                                <div class="muted small">📍 ${h.location || 'Central Sector'} • 📞 ${h.contact_number || '+91-108'}</div>
+                            </div>
+                            <span class="badge ${badgeClass}">${statusText}</span>
                         </div>
-                        <button class="btn btn-primary" onclick="app.toast('Hospital notified of incoming trauma cases');">Notify Hospital</button>
+                        <div style="margin:8px 0;">
+                            <span class="badge badge-info">${traumaLabel}</span>
+                        </div>
+                        <div class="grid grid-3" style="margin:12px 0;">
+                            <div><div class="kpi">${beds}</div><div class="muted small">Total Beds</div></div>
+                            <div><div class="kpi" style="color:#35d49a;">${avail}</div><div class="muted small">Available</div></div>
+                            <div><div class="kpi">${icu}</div><div class="muted small">ICU</div></div>
+                        </div>
+                        <div style="display:flex;gap:6px;">
+                            ${isCoordinatorOrHigher ? `
+                                <button class="btn btn-warning" style="flex:1;" onclick="app.updateBedsPrompt('${h.hospital_id}')">Update Beds</button>
+                            ` : ''}
+                            <button class="btn btn-primary" style="flex:1;" onclick="app.toast('Hospital notified of incoming trauma cases');">Notify Hospital</button>
+                        </div>
                     </div>
-                `).join("")}
+                `}).join("")}
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🩺 START Triage Summary & Mass-Casualty Tagging Protocols</div>
+                    <span class="badge badge-primary">NDMA STANDARD</span>
+                </div>
+                <div class="grid grid-4" style="margin-top:10px;gap:10px;">
+                    <div style="padding:10px;background:#2d0b0b;border:1px solid #ef4444;border-radius:6px;">
+                        <strong style="color:#ef4444;">🔴 Immediate (RED)</strong>
+                        <div class="muted small" style="margin-top:4px;">Severe life-threatening airway, breathing, or circulatory failure requiring urgent surgical intervention within 60 minutes.</div>
+                    </div>
+                    <div style="padding:10px;background:#2d1b0b;border:1px solid #f59e0b;border-radius:6px;">
+                        <strong style="color:#f59e0b;">🟡 Delayed (YELLOW)</strong>
+                        <div class="muted small" style="margin-top:4px;">Serious injuries with stable vitals (compound fractures, deep lacerations). Treatment can be deferred up to 4 hours.</div>
+                    </div>
+                    <div style="padding:10px;background:#06231a;border:1px solid #10b981;border-radius:6px;">
+                        <strong style="color:#10b981;">🟢 Minor (GREEN)</strong>
+                        <div class="muted small" style="margin-top:4px;">Walking wounded with minor soft-tissue abrasions. Routed to secondary first aid or outpatient holding.</div>
+                    </div>
+                    <div style="padding:10px;background:#1a1a1a;border:1px solid #555;border-radius:6px;">
+                        <strong style="color:#aaa;">⚫ Expectant (BLACK)</strong>
+                        <div class="muted small" style="margin-top:4px;">Deceased or injuries incompatible with life under disaster triage conditions. Palliative comfort measures.</div>
+                    </div>
+                </div>
             </div>
         `;
+    }
+
+    updateBedsPrompt(id) {
+        const hosp = window.store.data.hospitals.find(h => h.hospital_id === id);
+        if (!hosp) return;
+        const availStr = prompt(`Enter available general beds for ${hosp.name}:`, hosp.available !== undefined ? hosp.available : 50);
+        if (availStr === null) return;
+        const icuStr = prompt(`Enter available ICU beds for ${hosp.name}:`, hosp.icu !== undefined ? hosp.icu : 15);
+        if (icuStr === null) return;
+        const newAvail = parseInt(availStr, 10);
+        const newICU = parseInt(icuStr, 10);
+        if (isNaN(newAvail) || isNaN(newICU)) {
+            alert("Invalid bed counts entered.");
+            return;
+        }
+        window.store.updateHospitalBeds(id, newAvail, newICU);
+        this.navigate("hospitals");
+        this.toast(`Updated ${hosp.name}: ${newAvail} general beds, ${newICU} ICU beds`);
     }
 
     /* 12. VOLUNTEERS */
@@ -1436,7 +1625,7 @@ class DisasterOSApp {
                         <tbody>
                             ${vols.map((v, i) => `
                                 <tr>
-                                    <td>${v.id}</td><td><strong>${v.name}</strong></td><td><span class="tag">${v.skill}</span></td><td>${v.zone}</td>
+                                    <td>${v.volunteer_id || v.id}</td><td><strong>${v.name}</strong></td><td><span class="tag">${Array.isArray(v.skills) ? v.skills.join(', ') : (v.skill || 'General')}</span></td><td>${v.zone_id || v.zone || 'Central Sector'}</td>
                                     <td><span class="badge ${v.status === 'Available' ? 'badge-success' : 'badge-info'}">${v.status}</span></td>
                                     <td><button class="btn btn-secondary" onclick="app.toggleVolunteer(${i})">${v.status === 'Available' ? 'Deploy' : 'Release'}</button></td>
                                 </tr>
@@ -1451,8 +1640,17 @@ class DisasterOSApp {
     addVolunteerPrompt() {
         const name = prompt("Volunteer Name:");
         if (!name) return;
-        const skill = prompt("Skill (First Aid, Rescue, Logistics):");
-        window.store.data.volunteers.push({ id: "VOL-" + (window.store.data.volunteers.length + 1), name: name, skill: skill || "General", zone: "Central", status: "Available" });
+        const skill = prompt("Skill (First Aid, Water Rescue, Ham Radio, Driver):");
+        window.store.data.volunteers.push({
+            volunteer_id: "VOL-" + (window.store.currentCity?.toUpperCase()?.slice(0, 3) || "CHN") + "-" + (10 + window.store.data.volunteers.length + 1),
+            id: "VOL-" + (window.store.data.volunteers.length + 1),
+            name: name,
+            skills: [skill || "General Support"],
+            skill: skill || "General Support",
+            zone_id: "ZONE-CENTRAL",
+            zone: "Central",
+            status: "Available"
+        });
         window.store.save();
         this.navigate("volunteers");
         this.toast("Volunteer registered");
@@ -1468,6 +1666,7 @@ class DisasterOSApp {
 
     /* 13. INVENTORY */
     viewInventory() {
+        const inv = window.store.data.inventory || [];
         return `
             <div class="card">
                 <div class="card-header"><div class="card-title">Warehouse Inventory & Stock Thresholds</div><button class="btn btn-primary" onclick="app.addStockPrompt()">+ Add Stock</button></div>
@@ -1475,13 +1674,24 @@ class DisasterOSApp {
                     <table>
                         <thead><tr><th>Item</th><th>Category</th><th>Quantity</th><th>Threshold</th><th>Warehouse</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody>
-                            ${window.store.data.inventory.map((item, i) => `
+                            ${inv.map((item, i) => {
+                                const name = item.name || item.item || 'Relief Equipment';
+                                const qty = item.available !== undefined ? item.available : (item.quantity !== undefined ? item.quantity : 0);
+                                const unit = item.unit || 'units';
+                                const threshold = item.threshold !== undefined ? item.threshold : Math.round((item.total || 100) * 0.25);
+                                const loc = item.location || item.warehouse || 'Central Warehouse';
+                                const isHealthy = qty > threshold;
+                                return `
                                 <tr>
-                                    <td><strong>${item.item}</strong></td><td>${item.category}</td><td>${item.quantity} ${item.unit}</td><td>${item.threshold}</td><td>${item.warehouse}</td>
-                                    <td><span class="badge ${item.quantity > item.threshold ? 'badge-success' : 'badge-danger'}">${item.quantity > item.threshold ? 'Healthy' : 'Low Stock'}</span></td>
-                                    <td><button class="btn btn-warning" onclick="app.issueInventory(${i})">Issue 100</button></td>
+                                    <td><strong>${name}</strong></td>
+                                    <td>${item.category || 'Equipment'}</td>
+                                    <td>${qty} ${unit}</td>
+                                    <td>${threshold}</td>
+                                    <td>${loc}</td>
+                                    <td><span class="badge ${isHealthy ? 'badge-success' : 'badge-danger'}">${isHealthy ? 'Healthy' : 'Low Stock'}</span></td>
+                                    <td><button class="btn btn-warning" onclick="app.issueInventory(${i})">Issue Stock</button></td>
                                 </tr>
-                            `).join("")}
+                            `}).join("")}
                         </tbody>
                     </table>
                 </div>
@@ -1492,20 +1702,38 @@ class DisasterOSApp {
     addStockPrompt() {
         const item = prompt("Item name:");
         if (!item) return;
-        const qty = parseInt(prompt("Quantity:") || "100");
-        window.store.data.inventory.push({ item: item, category: "Relief", quantity: qty, unit: "units", threshold: 50, warehouse: "WH-Central" });
+        const qty = parseInt(prompt("Quantity:") || "100", 10);
+        const threshold = Math.round(qty * 0.25);
+        window.store.data.inventory.push({
+            item_id: "INV-" + (window.store.currentCity?.toUpperCase()?.slice(0, 3) || "CHN") + "-" + (10 + window.store.data.inventory.length + 1),
+            name: item,
+            item: item,
+            category: "Equipment",
+            total: qty,
+            available: qty,
+            quantity: qty,
+            unit: "units",
+            threshold: threshold,
+            location: "Central Warehouse",
+            warehouse: "Central Warehouse"
+        });
         window.store.save();
         this.navigate("inventory");
-        this.toast("Stock added");
+        this.toast(`Stock added: ${item} (${qty} units)`);
     }
 
     issueInventory(i) {
         const item = window.store.data.inventory[i];
-        if (item.quantity >= 100) {
-            item.quantity -= 100;
+        if (!item) return;
+        const currentQty = item.available !== undefined ? item.available : (item.quantity !== undefined ? item.quantity : 0);
+        const issueQty = Math.min(100, currentQty);
+        if (issueQty > 0) {
+            if (item.available !== undefined) item.available -= issueQty;
+            if (item.quantity !== undefined) item.quantity -= issueQty;
+            window.store.log("Logistics Manager", `Issued ${issueQty} ${item.unit || 'units'} of ${item.name || item.item}`, "INVENTORY");
             window.store.save();
             this.navigate("inventory");
-            this.toast(`Issued 100 ${item.unit} of ${item.item}`);
+            this.toast(`Issued ${issueQty} ${item.unit || 'units'} of ${item.name || item.item}`);
         } else {
             this.toast("Insufficient inventory stock");
         }
@@ -1519,10 +1747,10 @@ class DisasterOSApp {
                 <div class="card-header"><div class="card-title">Relief Distribution Tracking</div><button class="btn btn-primary" onclick="app.toast('New relief dispatch workflow initiated');">+ New Delivery</button></div>
                 <div class="table-wrap">
                     <table>
-                        <thead><tr><th>Delivery ID</th><th>Destination</th><th>Items</th><th>Beneficiaries</th><th>Status</th></tr></thead>
+                        <thead><tr><th>Delivery ID</th><th>Destination</th><th>Items</th><th>Beneficiaries / ETA</th><th>Status</th></tr></thead>
                         <tbody>
                             ${delivs.map(d => `
-                                <tr><td><strong>${d.id}</strong></td><td>${d.destination}</td><td>${d.items}</td><td>${d.beneficiaries}</td><td><span class="badge ${d.status === 'Delivered' ? 'badge-success' : 'badge-info'}">${d.status}</span></td></tr>
+                                <tr><td><strong>${d.delivery_id || d.id}</strong></td><td>${d.destination}</td><td>${d.items}</td><td>${d.beneficiaries || d.eta || d.team || 'In Transit'}</td><td><span class="badge ${d.status === 'Delivered' ? 'badge-success' : 'badge-info'}">${d.status}</span></td></tr>
                             `).join("")}
                         </tbody>
                     </table>
@@ -1538,14 +1766,14 @@ class DisasterOSApp {
                 <div class="card-title">Critical Infrastructure Health & Telemetry</div>
                 <div class="table-wrap">
                     <table>
-                        <thead><tr><th>Asset</th><th>Type</th><th>Zone</th><th>Condition</th><th>Uptime</th><th>Action</th></tr></thead>
+                        <thead><tr><th>Asset</th><th>Type</th><th>Zone</th><th>Condition</th><th>Critical Level</th><th>Action</th></tr></thead>
                         <tbody>
                             ${window.store.data.infrastructure.map(inf => `
                                 <tr>
-                                    <td><strong>${inf.asset}</strong></td><td>${inf.type}</td><td>${inf.zone}</td>
-                                    <td><span class="badge ${inf.condition === 'Critical' ? 'badge-danger' : inf.condition === 'Warning' ? 'badge-warning' : 'badge-success'}">${inf.condition}</span></td>
-                                    <td>${inf.uptime}</td>
-                                    <td><button class="btn btn-secondary" onclick="app.toast('${inf.asset} telemetry inspection scheduled');">Inspect</button></td>
+                                    <td><strong>${inf.name || inf.asset}</strong></td><td>${inf.type}</td><td>${inf.zone_id || inf.location || inf.zone || 'Monitored Sector'}</td>
+                                    <td><span class="badge ${inf.status?.toLowerCase().includes('critical') || inf.critical_level === 'critical' ? 'badge-danger' : 'badge-success'}">${inf.status || inf.condition || 'Operational'}</span></td>
+                                    <td>${inf.critical_level ? inf.critical_level.toUpperCase() : (inf.uptime || 'HIGH')}</td>
+                                    <td><button class="btn btn-secondary" onclick="app.toast('${inf.name || inf.asset} telemetry inspection scheduled');">Inspect</button></td>
                                 </tr>
                             `).join("")}
                         </tbody>
@@ -1929,30 +2157,75 @@ class DisasterOSApp {
 
     /* 19. CITIZEN REPORT */
     viewCitizenReport() {
+        const zones = window.store?.data?.zones || [];
+        const defaultZone = zones[0] || { lat: 13.1150, lon: 80.2240 };
+
         return `
             <div class="grid grid-2">
                 <div class="card">
-                    <div class="card-header"><div class="card-title">Report Emergency Incident</div><span class="badge badge-danger">CITIZEN INTAKE</span></div>
+                    <div class="card-header">
+                        <div class="card-title">Report Emergency Incident</div>
+                        <span class="badge badge-danger">CITIZEN INTAKE</span>
+                    </div>
                     <form onsubmit="app.submitCitizenReport(event)" class="form-grid">
-                        <div class="form-group"><label>Incident Type</label><select class="form-control" id="formDisasterType"><option value="flood">Flood</option><option value="fire">Fire</option><option value="infrastructure">Infrastructure Damage</option><option value="medical">Medical Emergency</option></select></div>
-                        <div class="form-group"><label>Severity</label><select class="form-control" id="formSeverity"><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option></select></div>
-                        <div class="form-group full"><label>Location</label><input class="form-control" id="formLocation" value="River Road Block A" required></div>
-                        <div class="form-group full"><label>Description</label><textarea class="form-control" id="formDescription" placeholder="Provide details..."></textarea></div>
-                        <div class="form-group"><label>Latitude</label><input class="form-control" id="formLat" type="number" step="0.0001" value="13.1150"></div>
-                        <div class="form-group"><label>Longitude</label><input class="form-control" id="formLon" type="number" step="0.0001" value="80.2240"></div>
+                        <div class="form-group">
+                            <label>Incident Type</label>
+                            <select class="form-control" id="formDisasterType">
+                                <option value="flood">Flood</option>
+                                <option value="fire">Fire</option>
+                                <option value="infrastructure">Infrastructure Damage</option>
+                                <option value="medical">Medical Emergency</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Severity</label>
+                            <select class="form-control" id="formSeverity">
+                                <option value="critical">Critical</option>
+                                <option value="high" selected>High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                        <div class="form-group full">
+                            <label>Location / Landmark</label>
+                            <input class="form-control" id="formLocation" value="River Road Block A" required placeholder="e.g. River Road Block A">
+                        </div>
+                        <div class="form-group full">
+                            <label>Description & Evidence Details</label>
+                            <textarea class="form-control" id="formDescription" placeholder="Provide ground situation details, casualties, water depth, or urgency..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Latitude</label>
+                            <input class="form-control" id="formLat" type="number" step="0.0001" value="${defaultZone.lat ? defaultZone.lat.toFixed(4) : '13.1150'}">
+                        </div>
+                        <div class="form-group">
+                            <label>Longitude</label>
+                            <input class="form-control" id="formLon" type="number" step="0.0001" value="${defaultZone.lon ? defaultZone.lon.toFixed(4) : '80.2240'}">
+                        </div>
                         <div class="form-group full" style="display:flex;gap:8px;">
                             <button type="button" class="btn btn-secondary" style="flex:1;" onclick="app.detectGPS()">📍 Detect Native Browser Coordinates</button>
                             <button type="button" class="btn btn-primary" style="flex:1;" onclick="app.pickLocationOnMap()">🗺️ Pick Location on Interactive GIS Map</button>
                         </div>
-                        <div class="form-group full"><button type="submit" class="btn btn-danger" style="padding:12px;">Submit Emergency Report</button></div>
+                        <div class="form-group full">
+                            <button type="submit" class="btn btn-danger" style="padding:12px;width:100%;font-weight:700;">Submit Emergency Report</button>
+                        </div>
                     </form>
                 </div>
                 <div class="card">
                     <div class="card-title">Incident Processing Workflow</div>
-                    <div class="timeline">
-                        <div class="timeline-item"><h4>1. Submission & Geocoding</h4><p>Native GPS coordinates captured directly from device.</p></div>
-                        <div class="timeline-item"><h4>2. Zone Risk Computation</h4><p>Automatic R_zone formula evaluation triggered.</p></div>
-                        <div class="timeline-item"><h4>3. Response Dispatch</h4><p>Nearest available team assigned via heuristic queue.</p></div>
+                    <div class="timeline" style="margin-top:14px;">
+                        <div class="timeline-item">
+                            <h4>1. Submission & Geocoding</h4>
+                            <p>Native GPS coordinates captured directly from device and mapped to operational zone.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>2. Zone Risk Computation & Audit</h4>
+                            <p>Automatic R_zone formula evaluation triggered and appended to immutable SHA-256 cryptographic audit chain.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>3. Response Dispatch</h4>
+                            <p>Nearest available response team assigned via heuristic queue and incident manager triage.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1983,15 +2256,42 @@ class DisasterOSApp {
         const lat = parseFloat(document.getElementById("formLat").value);
         const lon = parseFloat(document.getElementById("formLon").value);
 
-        window.store.addIncident({
+        // Auto-detect closest zone
+        let assignedZoneId = "ZONE-NORTH";
+        const zones = window.store?.data?.zones || [];
+        if (zones.length > 0 && !isNaN(lat) && !isNaN(lon)) {
+            let minDist = Infinity;
+            for (const z of zones) {
+                const dist = Math.hypot(z.lat - lat, z.lon - lon);
+                if (dist < minDist) {
+                    minDist = dist;
+                    assignedZoneId = z.zone_id;
+                }
+            }
+        }
+
+        const reporterName = this.currentUser?.name || "Citizen";
+        const reporterRole = this.currentUser?.role || "Citizen";
+
+        const newInc = window.store.addIncident({
             type: type,
             severity: sev,
             location: loc,
             description: desc,
             lat: lat,
             lon: lon,
-            zone_id: "ZONE-NORTH"
+            zone_id: assignedZoneId,
+            reporter_id: reporterName,
+            reporter_role: reporterRole
         });
+
+        if (window.dataAdapter?.isCloudConnected && typeof window.dataAdapter.createIncident === 'function') {
+            window.dataAdapter.createIncident(newInc);
+        }
+
+        if (window.gisMap && window.gisMap.map) {
+            window.gisMap.renderAll();
+        }
 
         this.toast("Incident reported and added to map!");
         setTimeout(() => this.navigate("incidents"), 600);
@@ -2107,7 +2407,7 @@ class DisasterOSApp {
                             <tbody>
                                 ${pending.map(p => `
                                     <tr>
-                                        <td><code>${p.registration_id}</code></td>
+                                        <td><code>${p.id || p.registration_id}</code></td>
                                         <td><strong>${p.full_name}</strong></td>
                                         <td><span class="badge badge-info">${p.role}</span></td>
                                         <td>${p.org_name}</td>
@@ -2118,10 +2418,10 @@ class DisasterOSApp {
                                         ${isManagerOrAdmin ? `
                                             <td>
                                                 <div style="display:flex;gap:6px;">
-                                                    <button class="btn btn-primary btn-sm" onclick="app.approveApplicant('${p.registration_id}')" style="font-size:10px;padding:4px 8px;">
+                                                    <button class="btn btn-primary btn-sm" onclick="app.approveApplicant('${p.id || p.registration_id}')" style="font-size:10px;padding:4px 8px;">
                                                         ✓ Approve
                                                     </button>
-                                                    <button class="btn btn-danger btn-sm" onclick="app.rejectApplicant('${p.registration_id}')" style="font-size:10px;padding:4px 8px;">
+                                                    <button class="btn btn-danger btn-sm" onclick="app.rejectApplicant('${p.id || p.registration_id}')" style="font-size:10px;padding:4px 8px;">
                                                         ✗ Reject
                                                     </button>
                                                 </div>
@@ -2665,7 +2965,7 @@ class DisasterOSApp {
                 const t = (inc.type || '').toLowerCase();
                 if (t.includes('flood') || t.includes('water') || t.includes('inundation')) catMap["Flood & Water"]++;
                 else if (t.includes('medical') || t.includes('trauma') || t.includes('ambulance') || t.includes('casualty')) catMap["Trauma & Medical"]++;
-                else if (t.includes('collapse') || t.includes('structural') || t.includes('quake') || t.includes('seismic')) catMap["Structural Damage"]++;
+                else if (t.includes('collapse') || t.includes('structural') || t.includes('quake') || t.includes('seismic') || t.includes('infrastructure')) catMap["Structural Damage"]++;
                 else if (t.includes('fire')) catMap["Fire Emergency"]++;
                 else catMap["Relief & Rations"]++;
             });
