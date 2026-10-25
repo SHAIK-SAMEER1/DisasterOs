@@ -574,6 +574,9 @@ class DataStore {
                         if (!parsed.pending_registrations) {
                             parsed.pending_registrations = JSON.parse(JSON.stringify(initialPendingRegistrations));
                         }
+                        if (parsed.currentCity) {
+                            this.currentCity = parsed.currentCity;
+                        }
                         return parsed;
                     }
                 } catch (e) {
@@ -582,7 +585,9 @@ class DataStore {
             }
         }
         // Initialize default with Chennai dataset
+        this.currentCity = "chennai";
         const init = JSON.parse(JSON.stringify(CITY_DATA.chennai));
+        init.currentCity = "chennai";
         init.pending_registrations = JSON.parse(JSON.stringify(initialPendingRegistrations));
         init.audit_logs = [
             { log_id: "LOG-001", actor: "System Administrator", action: "PLATFORM_COLD_BOOT", module: "SYSTEM", time: new Date().toLocaleTimeString(), created_at: new Date().toISOString() },
@@ -595,6 +600,9 @@ class DataStore {
     save() {
         if (typeof localStorage !== "undefined") {
             try {
+                if (this.data) {
+                    this.data.currentCity = this.currentCity;
+                }
                 localStorage.setItem(DB_KEY, JSON.stringify(this.data));
             } catch (e) {
                 console.warn("Local storage write error", e);
@@ -614,6 +622,7 @@ class DataStore {
         const newCityData = JSON.parse(JSON.stringify(target));
         this.data = {
             ...newCityData,
+            currentCity: cityKey,
             pending_registrations: pending,
             audit_logs: audit
         };

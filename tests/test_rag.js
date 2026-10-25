@@ -131,6 +131,43 @@ async function runTests() {
         teamResult.answer.substring(0, 100)
     );
 
+    // TEST 15: General operational inquiry 'what can i do?' returns capabilities walkthrough
+    const whatCanIDoResult = rag.query('what can i do?');
+    assert(
+        whatCanIDoResult.answer.toLowerCase().includes('capabilities') || whatCanIDoResult.answer.toLowerCase().includes('breakdown') || whatCanIDoResult.answer.toLowerCase().includes('operations'),
+        "'what can i do?' returns operational capabilities guide, not fire SOP",
+        whatCanIDoResult.answer.substring(0, 100)
+    );
+    assert(
+        !whatCanIDoResult.answer.toLowerCase().includes('electrical fire'),
+        "'what can i do?' does NOT match electrical fire SOP",
+        whatCanIDoResult.answer.substring(0, 100)
+    );
+
+    // TEST 16: Punctuation greeting 'hi!' works properly
+    const greetPunct = rag.query('hi!');
+    assert(
+        greetPunct.answer.toLowerCase().includes('hello') || greetPunct.answer.toLowerCase().includes('tactical'),
+        "Punctuation greeting 'hi!' correctly recognized as greeting",
+        greetPunct.answer.substring(0, 80)
+    );
+
+    // TEST 17: Electrical fire query correctly retrieves fire SOP
+    const fireResult = rag.query('how to put out an electrical fire?');
+    assert(
+        fireResult.answer.toLowerCase().includes('electrical') || fireResult.answer.toLowerCase().includes('extinguisher') || fireResult.answer.toLowerCase().includes('class c'),
+        "Electrical fire query correctly returns electrical fire extinguisher SOP",
+        fireResult.answer.substring(0, 100)
+    );
+
+    // TEST 18: Map navigation routing
+    const mapResult = rag.query('where is the map?');
+    assert(
+        mapResult.answer.toLowerCase().includes('gis map') || mapResult.answer.toLowerCase().includes('leaflet'),
+        "Map query accurately directs user to Dynamic GIS Map",
+        mapResult.answer.substring(0, 80)
+    );
+
     console.log(`\n--- RESULTS: ${passed} passed, ${failed} failed ---\n`);
     process.exit(failed > 0 ? 1 : 0);
 }
